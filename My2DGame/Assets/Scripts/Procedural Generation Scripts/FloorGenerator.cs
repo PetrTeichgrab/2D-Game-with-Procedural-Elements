@@ -55,15 +55,15 @@ public static class FloorGenerator
     public static void CreateCorridors(HashSet<Vector2Int> floor, HashSet<Vector2Int> rooms
         ,Vector2Int startPosition, int amountOfCorridors, int corridorLength)
     {
-        var currentCorridorPosition = startPosition;
+        var currentCorridorEndPosition = startPosition;
 
-        rooms.Add(currentCorridorPosition);
+        rooms.Add(currentCorridorEndPosition);
 
         for (int i = 0; i < amountOfCorridors; i++)
         {
-            var corridor = RandomWalkAlgorithms.RandomOneDirectionWalk(currentCorridorPosition, corridorLength);
-            currentCorridorPosition = corridor[corridor.Count - 1];
-            rooms.Add(currentCorridorPosition);
+            var corridor = RandomWalkAlgorithms.RandomOneDirectionWalk(currentCorridorEndPosition, corridorLength);
+            currentCorridorEndPosition = corridor[corridor.Count - 1];
+            rooms.Add(currentCorridorEndPosition);
             floor.UnionWith(corridor);
         }
     }
