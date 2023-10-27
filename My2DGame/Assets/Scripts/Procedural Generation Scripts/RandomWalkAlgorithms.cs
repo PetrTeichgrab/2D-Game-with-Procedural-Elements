@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class RandomWalkAlgorithms
 {
+    //Random walk algorithm
     public static HashSet<Vector2Int> RandomWalk(RandomWalkParameters parameters, Vector2Int startingPosition)
     {
         var currentWalkPosition = startingPosition;
@@ -27,6 +28,8 @@ public static class RandomWalkAlgorithms
         }
         return floorPosition;
     }
+
+    //Method that creates corridor
     public static List<Vector2Int> RandomOneDirectionWalk(Vector2Int startingPosition, int length)
     {
         List<Vector2Int> corridor = new List<Vector2Int>();

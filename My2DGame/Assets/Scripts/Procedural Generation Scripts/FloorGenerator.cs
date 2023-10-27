@@ -7,6 +7,7 @@ using UnityEngine;
 
 public static class FloorGenerator
 {
+    
     public static void CreateRooms(RandomWalkParameters parameters, HashSet<Vector2Int> rooms)
     {
         HashSet<Vector2Int> roomsTmp = new HashSet<Vector2Int>();
@@ -19,6 +20,8 @@ public static class FloorGenerator
         rooms.UnionWith(roomsTmp);
     }
 
+    //TODO: optimalization
+    //Algorithm for filling holes
     public static void FillHoles(HashSet<Vector2Int> floor)
     {
         HashSet<Vector2Int> holes = new HashSet<Vector2Int>();

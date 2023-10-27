@@ -34,17 +34,21 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         HashSet<Vector2Int> rooms = new HashSet<Vector2Int>();
 
+        //Corridor creation
         FloorGenerator.CreateCorridors(floor, rooms, startPosition, amountOfCorridors, corridorLength);
 
+        //Room creation
         FloorGenerator.CreateRooms(randomWalkParameters, rooms);
 
         floor.UnionWith(rooms);
 
+        //Filling holes in floor
         FloorGenerator.FillHoles(floor);
 
+        //FloorDrawing
         tileMap.DrawFloor(floor);
 
+        //Creating and Drawing walls
         WallGenerator.CreateAndDrawWalls(floor, tileMap);
-
     }
 }

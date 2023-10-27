@@ -37,11 +37,7 @@ public class DiagonalWallRuleTile : RuleTile<DiagonalWallRuleTile.Neighbor>
 
     bool CheckThis(TileBase tile)
     {
-        if (tile == null)
-        {
-            return tile == this;
-        }
-        return tilesList.Contains(tile) || tile == this;
+        return tile == this;
     }
 
     bool CheckNotThis(TileBase tile)
