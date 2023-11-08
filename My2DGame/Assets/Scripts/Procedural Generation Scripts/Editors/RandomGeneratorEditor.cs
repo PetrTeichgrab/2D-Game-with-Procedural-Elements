@@ -18,7 +18,7 @@ public class RandomGeneratorEditor : Editor
         base.OnInspectorGUI();
         if(GUILayout.Button("Generate"))
         {
-            generator.GenerateDungeon();
+            generator.GenerateDungeons();
         }
     }
 }

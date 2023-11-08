@@ -22,20 +22,24 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [SerializeField]
     private int amountOfCorridors = 20;
 
-    public void GenerateDungeon()
+    public void GenerateDungeons()
     {
         tileMap.ClearGeneration();
-        RunProceduralGeneration();
+        PinkDungeon pinkDungeon = new PinkDungeon();
+        GenerateOneColorDungeon(pinkDungeon);
+        BlueDungeon blueDungeon = new BlueDungeon();
+        blueDungeon.StartPosition = pinkDungeon.Floor.floorList.Last() + new Vector2Int(150,150);
+        GenerateOneColorDungeon(blueDungeon);
     }
 
-    public void RunProceduralGeneration()
+    public void GenerateOneColorDungeon(IDungeon dungeon)
     {
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floor = dungeon.Floor.floorList;
 
         HashSet<Vector2Int> rooms = new HashSet<Vector2Int>();
 
         //Corridor creation
-        FloorGenerator.CreateCorridors(floor, rooms, startPosition, amountOfCorridors, corridorLength);
+        FloorGenerator.CreateCorridors(floor, rooms, dungeon.StartPosition, amountOfCorridors, corridorLength);
 
         //Room creation
         FloorGenerator.CreateRooms(randomWalkParameters, rooms);
@@ -46,9 +50,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         FloorGenerator.FillHoles(floor);
 
         //FloorDrawing
-        tileMap.DrawFloor(floor);
+        tileMap.DrawFloor(floor, dungeon.Color);
 
         //Creating and Drawing walls
-        WallGenerator.CreateAndDrawWalls(floor, tileMap);
+        WallGenerator.CreateAndDrawWalls(floor, tileMap, dungeon.Color);
     }
+
 }

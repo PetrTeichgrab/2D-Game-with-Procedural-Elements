@@ -12,35 +12,71 @@ public class MapCreator : MonoBehaviour
     private Tilemap map;
 
     [SerializeField]
-    private TileBase floorTile;
+    private TileBase pinkFloorTile;
 
     [SerializeField]
-    private RuleTile wallRuleTile;
+    private TileBase blueFloorTile;
 
     [SerializeField]
-    private RuleTile diagonalWallRuleTile;
+    private RuleTile cardinalPinkWallRuleTile;
 
-    public void DrawFloor(HashSet<Vector2Int> floorPositions)
+    [SerializeField]
+    private RuleTile cardinalBlueWallRuleTile;
+
+    [SerializeField]
+    private RuleTile diagonalPinkWallRuleTile;
+
+    [SerializeField]
+    private RuleTile diagonalBlueWallRuleTile;
+
+    public void DrawFloor(HashSet<Vector2Int> floorPositions, Color color)
     {
         foreach (Vector2Int floor in floorPositions)
         {
-            DrawTile(this.floorTile, floor);
+            switch (color)
+            {
+                case Color.Pink:
+                    DrawTile(this.pinkFloorTile, floor);
+                    break;
+                case Color.Blue:
+                    DrawTile(this.blueFloorTile, floor);
+                    break;
+            }
+        
         }
     }
 
-    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions)
+    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions, Color color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
-            DrawTile(this.wallRuleTile, wall);
+            switch (color)
+            {
+                case Color.Pink:
+                    DrawTile(this.cardinalPinkWallRuleTile, wall);
+                    break;
+                case Color.Blue:
+                    DrawTile(this.cardinalBlueWallRuleTile, wall);
+                    break;
+            }
+        
         }
     }
 
-    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions)
+    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions, Color color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
-            DrawTile(this.diagonalWallRuleTile, wall);
+            switch (color)
+            {
+                case Color.Pink:
+                    DrawTile(this.diagonalPinkWallRuleTile, wall);
+                    break;
+                case Color.Blue:
+                    DrawTile(this.diagonalBlueWallRuleTile, wall);
+                    break;
+            }
+
         }
     }
 

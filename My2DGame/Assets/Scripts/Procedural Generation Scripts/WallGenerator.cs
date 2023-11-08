@@ -6,15 +6,15 @@ using UnityEngine;
 
 public static class WallGenerator
 {
-    public static void CreateAndDrawWalls(HashSet<Vector2Int> floor, MapCreator mapCreator)
+    public static void CreateAndDrawWalls(HashSet<Vector2Int> floor, MapCreator mapCreator, Color color)
     {
         HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(floor);
 
         HashSet<Vector2Int> diagonalWalls = FindWallsInDiagonalDirections(floor, cardinalWalls);
 
-        mapCreator.DrawCardinalWalls(cardinalWalls);
+        mapCreator.DrawCardinalWalls(cardinalWalls, color);
 
-        mapCreator.DrawDiagonalWalls(diagonalWalls);
+        mapCreator.DrawDiagonalWalls(diagonalWalls, color);
     }
 
     private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor)

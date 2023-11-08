@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb13f96d518f57346b31462619c9eccb, type: 3}
-  m_Name: CardinalWallRuleTile
+  m_Name: CardinalWallRuleTilePink
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: 0}
   m_DefaultGameObject: {fileID: 0}

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32911b4562ffe1643b2cb944a365b74b, type: 3}
-  m_Name: DiagonalWallRuleTile
+  m_Name: DiagonalWallRuleTileBlue
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 0}
+  m_DefaultSprite: {fileID: 21300000, guid: 27757e60088d9dc4db695bfa43496859, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:

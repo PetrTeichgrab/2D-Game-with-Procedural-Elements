@@ -5,6 +5,6 @@ using UnityEngine;
 
 public interface IDungeonGenerator
 {
-    public void GenerateDungeon();
-    public void RunProceduralGeneration();
+    public void GenerateDungeons();
+    public void GenerateOneColorDungeon(IDungeon dungeon);
 }
