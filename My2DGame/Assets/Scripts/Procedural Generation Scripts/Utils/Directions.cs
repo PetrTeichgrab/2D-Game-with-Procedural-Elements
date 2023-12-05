@@ -33,6 +33,27 @@ public class Directions : MonoBehaviour
         return DirectionsDic.Values.ToList()[Random.Range(0, DirectionsDic.Count)];
     }
 
+
+    public static void Shuffle(List<Vector2Int> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = Random.Range(0, n + 1);
+            var value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+
+    }
+
+    public static List<Vector2Int> GetRandomDirectionsList()
+    {
+        Shuffle(DirectionsDic.Values.ToList());
+        return DirectionsDic.Values.ToList();
+    }
+
     //Returns Random diagonal direction
     public static Vector2Int GetRandomDiagonalDirection()
     {

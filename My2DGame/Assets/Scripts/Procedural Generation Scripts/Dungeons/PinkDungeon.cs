@@ -7,11 +7,11 @@ public class PinkDungeon : IDungeon
     public Walls Walls { get; set; }
     public Floor Floor { get; set; }
     public Color Color { get; }
-    public Vector2Int StartPosition { get; set; }
+    public BoundsInt DungeonBounds { get; set; }
 
-    public PinkDungeon()
+    public PinkDungeon(BoundsInt bounds)
     {
-        StartPosition = Vector2Int.zero;
+        DungeonBounds = bounds;
         Color = Color.Pink;
         Floor = new Floor();
         Walls = new Walls();
