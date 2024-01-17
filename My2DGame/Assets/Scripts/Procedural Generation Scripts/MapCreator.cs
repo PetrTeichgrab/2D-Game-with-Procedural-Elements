@@ -12,6 +12,12 @@ public class MapCreator : MonoBehaviour
     private Tilemap map;
 
     [SerializeField]
+    private Tilemap colliderMap;
+
+    [SerializeField]
+    private TileBase emptyTile;
+
+    [SerializeField]
     private TileBase pinkFloorTile;
 
     [SerializeField]
@@ -53,6 +59,7 @@ public class MapCreator : MonoBehaviour
             switch (color)
             {
                 case Color.Pink:
+                    AddCollider(emptyTile, wall);
                     DrawTile(this.cardinalPinkWallRuleTile, wall);
                     break;
                 case Color.Blue:
@@ -80,14 +87,21 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    public void DrawTile(TileBase tile, Vector2Int floorPosition)
+    public void DrawTile(TileBase tile, Vector2Int position)
     {
-        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)floorPosition);
+        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
         this.map.SetTile(tilePosition, tile);
+    }
+
+    public void AddCollider(TileBase tile, Vector2Int position)
+    {
+        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
+        this.colliderMap.SetTile(tilePosition, tile);
     }
 
     public void ClearGeneration()
     {
         map.ClearAllTiles();
+        colliderMap.ClearAllTiles();
     }
 }

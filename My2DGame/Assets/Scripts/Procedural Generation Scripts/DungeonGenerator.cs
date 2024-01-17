@@ -10,6 +10,9 @@ using System.Drawing;
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
     [SerializeField]
+    Player player;
+
+    [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
 
     [SerializeField]
@@ -54,6 +57,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         IDungeon pinkDungeon = new PinkDungeon(dungeons[0]);
         InitDungeon(pinkDungeon);
+        player.position = (Vector2)pinkDungeon.Floor.RoomCentersList[0];
 
         IDungeon blueDungeon = new BlueDungeon(dungeons[1]);
         InitDungeon(blueDungeon);
