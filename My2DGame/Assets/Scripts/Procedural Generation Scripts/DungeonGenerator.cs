@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
+using System.Drawing;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
@@ -17,112 +18,117 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [SerializeField]
     protected Vector2Int startPosition = Vector2Int.zero;
 
-    //Pozdeji hodit do Parameters
     [SerializeField]
-    private int corridorLength = 30;
+    protected Vector3Int mapSize = new Vector3Int(400, 400, 0);
 
     [SerializeField]
-    private int amountOfCorridors = 20;
+    private int dungeonWidth = 120;
+
+    [SerializeField]
+    private int dungeonHeight = 120;
+
+    [SerializeField]
+    private int minRoomWidth = 20;
+
+    [SerializeField]
+    private int minRoomHeight = 20;
+
+    [SerializeField]
+    [Range(0, 10)]
+    private int offset = 1;
 
     public void GenerateDungeons()
     {
         tileMap.ClearGeneration();
-        var dungeonList = BSP(new BoundsInt(new Vector3Int(0, 0, 0), new Vector3Int(1000, 1000, 0)), 200, 200);
-        Debug.Log("Hello");
-        Console.WriteLine(dungeonList.ToList().ToString());
-        PinkDungeon pinkDungeon = new PinkDungeon(dungeonList[0]);
-        GenerateOneColorDungeon(pinkDungeon);
-        BlueDungeon blueDungeon = new BlueDungeon(dungeonList[1]);
-        GenerateOneColorDungeon(blueDungeon);
+        CreateDungeons();
     }
 
-    public void GenerateOneColorDungeon(IDungeon dungeon)
+    private void CreateDungeons()
     {
-        HashSet<Vector2Int> floor = dungeon.Floor.floorList;
+        HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
+        while (dungeonList.Count < 2)
+        {
+            dungeonList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), dungeonWidth, dungeonHeight);
+        }
+        List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
-        HashSet<Vector2Int> rooms = new HashSet<Vector2Int>();
+        IDungeon pinkDungeon = new PinkDungeon(dungeons[0]);
+        InitDungeon(pinkDungeon);
 
-        //Corridor creation
-        FloorGenerator.CreateCorridors(floor, rooms, amountOfCorridors, corridorLength, dungeon.DungeonBounds);
+        IDungeon blueDungeon = new BlueDungeon(dungeons[1]);
+        InitDungeon(blueDungeon);
 
-        //Room creation
-        FloorGenerator.CreateRooms(randomWalkParameters, rooms);
+        ConnectDungeons(pinkDungeon, blueDungeon);
 
-        floor.UnionWith(rooms);
+        tileMap.DrawFloor(pinkDungeon);
+        tileMap.DrawFloor(blueDungeon);
 
-        //Filling holes in floor
+        WallGenerator.CreateAndDrawWalls(pinkDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(blueDungeon, tileMap);
+    }
+
+    private void InitDungeon(IDungeon dungeon)
+    {
+        GetRoomsPositions(dungeon);
+        GetRoomsCenters(dungeon);
+        CreateDungeonFloor(dungeon);
+    }
+
+    private void GetRoomsPositions(IDungeon dungeon)
+    {
+        dungeon.Floor.RoomList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int
+            (dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)), minRoomWidth, minRoomHeight);
+    }
+
+    private void CreateDungeonFloor(IDungeon dungeon)
+    {
+        HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.Floor.RoomList.ToList(), randomWalkParameters, offset);
+
+        HashSet<Vector2Int> corridors = FloorGenerator.ConnectRooms(new List<Vector2Int>(dungeon.Floor.RoomCentersList));
+
+        floor.UnionWith(corridors);
+
         FloorGenerator.FillHoles(floor);
 
-        //FloorDrawing
-        tileMap.DrawFloor(floor, dungeon.Color);
-
-        //Creating and Drawing walls
-        WallGenerator.CreateAndDrawWalls(floor, tileMap, dungeon.Color);
+        dungeon.Floor.FloorList = floor;
     }
 
-    public List<BoundsInt> BSP(BoundsInt spaceToSplit, int minWidth, int minHeight)
+    private void GetRoomsCenters(IDungeon dungeon)
     {
-        Queue<BoundsInt> dungeonsQueue = new Queue<BoundsInt>();
-        List<BoundsInt> dungeonsList = new List<BoundsInt>();
-        dungeonsQueue.Enqueue(spaceToSplit);
-
-        while(dungeonsQueue.Count > 0)
+        List<Vector2Int> centerRoomList = new List<Vector2Int>();
+        foreach (var room in dungeon.Floor.RoomList)
         {
-            var dungeon = dungeonsQueue.Dequeue();
-            if (dungeon.size.y >= minHeight && dungeon.size.x >= minWidth)
+            centerRoomList.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
+        }
+        dungeon.Floor.RoomCentersList = centerRoomList;
+    }
+
+    private void ConnectDungeons(IDungeon firstDungeon, IDungeon secondDungeon)
+    {
+        var firstDungeonCenters = firstDungeon.Floor.RoomCentersList;
+        var secondDungeonCenters = secondDungeon.Floor.RoomCentersList;
+        var currentRoomCenter = firstDungeonCenters[0];
+        firstDungeonCenters.Remove(currentRoomCenter);
+        float minDistance = float.MaxValue;
+        Vector2Int minDistancePoint1 = Vector2Int.zero;
+        Vector2Int minDistancePoint2 = Vector2Int.zero;
+        for(int i = 0; i < firstDungeonCenters.Count; i++){
+            currentRoomCenter = firstDungeonCenters[i];
+            Vector2Int currentClosestPoint = FloorGenerator.FindClosestPoint(currentRoomCenter, secondDungeonCenters);
+            float distance = Vector2Int.Distance(currentRoomCenter, currentClosestPoint);
+            if (minDistance > distance)
             {
-                if(UnityEngine.Random.value < 0.5f)
-                {
-                    if(dungeon.size.y >= minHeight * 2)
-                    {
-                        SplitHorizontally(minWidth, dungeonsQueue, dungeon);
-                    }
-                    else if(dungeon.size.x >= minWidth*2)
-                    {
-                        SplitVertically(minHeight, dungeonsQueue, dungeon);
-                    }
-                    else
-                    {
-                        dungeonsList.Add(dungeon);
-                    }
-                }
-                else
-                {
-                    if (dungeon.size.x >= minWidth * 2)
-                    {
-                        SplitVertically(minWidth, dungeonsQueue, dungeon);
-                    }
-                    else if (dungeon.size.y >= minHeight * 2)
-                    {
-                        SplitHorizontally(minHeight, dungeonsQueue, dungeon);
-                    }
-                    else
-                    {
-                        dungeonsList.Add(dungeon);
-                    }
-                }
+                minDistance = distance;
+                minDistancePoint1 = currentRoomCenter;
+                minDistancePoint2 = currentClosestPoint;
             }
         }
-        return dungeonsList;
+        HashSet<Vector2Int> connectingCorridor = FloorGenerator.CreateCorridor(minDistancePoint1, minDistancePoint2);
+        int middleIndex = (connectingCorridor.Count) / 2; //11/2 = 5         0 1 2 3 4 5 6 7 8 9 10
+        firstDungeon.Floor.FloorList.UnionWith(connectingCorridor.Take(middleIndex));
+        secondDungeon.Floor.FloorList.UnionWith(connectingCorridor.Skip(middleIndex));
+        firstDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex]);
+        secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex-1]);
     }
 
-    private void SplitVertically(int minWidth, Queue<BoundsInt> dungeonsQueue, BoundsInt dungeon)
-    {
-        var xSplit = UnityEngine.Random.Range(1, dungeon.size.x);
-        BoundsInt dungeon1 = new BoundsInt(dungeon.min, new Vector3Int(xSplit, dungeon.min.y, dungeon.min.z));
-        BoundsInt dungeon2 = new BoundsInt(new Vector3Int(dungeon.min.x + xSplit, dungeon.min.y, dungeon.min.z),
-            new Vector3Int(dungeon.size.x - xSplit, dungeon.size.y, dungeon.size.z));
-        dungeonsQueue.Enqueue(dungeon1);
-        dungeonsQueue.Enqueue(dungeon2);
-    }
-
-    private void SplitHorizontally(int minHeight, Queue<BoundsInt> dungeonsQueue, BoundsInt dungeon)
-    {
-        var ySplit = UnityEngine.Random.Range(1, dungeon.size.y);
-        BoundsInt dungeon1 = new BoundsInt(dungeon.min, new Vector3Int(dungeon.size.x, ySplit, dungeon.size.z));
-        BoundsInt dungeon2 = new BoundsInt(new Vector3Int(dungeon.min.x, dungeon.min.y + ySplit, dungeon.min.z),
-            new Vector3Int(dungeon.size.x, dungeon.size.y - ySplit, dungeon.size.z));
-        dungeonsQueue.Enqueue(dungeon1);
-        dungeonsQueue.Enqueue(dungeon2);
-    }
 }

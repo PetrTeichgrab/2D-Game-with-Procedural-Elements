@@ -20,6 +20,77 @@ public static class FloorGenerator
         rooms.UnionWith(roomsTmp);
     }
 
+    public static HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
+    {
+        HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
+        var currentRoomCenter = roomCenters[UnityEngine.Random.Range(0, roomCenters.Count)];
+        roomCenters.Remove(currentRoomCenter);
+
+        while (roomCenters.Count > 0)
+        {
+            Vector2Int closest = FindClosestPoint(currentRoomCenter, roomCenters);
+            roomCenters.Remove(closest);
+            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoomCenter, closest);
+            currentRoomCenter = closest;
+            corridors.UnionWith(newCorridor);
+        }
+        return corridors;
+    }
+
+
+    public static HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int closest)
+    {
+        HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+        var position = currentRoomCenter;
+        corridor.Add(position);
+        while (position.y != closest.y)
+        {
+            if (closest.y > position.y)
+            {
+                position += Vector2Int.up;
+            }
+            else if (closest.y < position.y)
+            {
+                position += Vector2Int.down;
+            }
+            corridor.Add((Vector2Int)position);
+        }
+        while (position.x != closest.x)
+        {
+            if (closest.x > position.x)
+            {
+                position += Vector2Int.right;
+            }
+            else if (closest.x < position.x)
+            {
+                position += Vector2Int.left;
+            }
+            corridor.Add((Vector2Int)position);
+        }
+        return corridor;
+    }
+
+
+    public static HashSet<Vector2Int> CreateRandomRooms(List<BoundsInt> roomList, RandomWalkParameters randomWalkParameters, int offset)
+    {
+        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            var roomBounds = roomList[i];
+            var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
+            var roomFloor = RandomWalkAlgorithms.RandomWalk(randomWalkParameters, roomCenter);
+            foreach (var pos in roomFloor)
+            {
+                if (pos.x >= (roomBounds.xMin + offset) && pos.x <= (roomBounds.xMax - offset) &&
+                    pos.y <= (roomBounds.yMax - offset) && pos.y >= (roomBounds.yMin + offset))
+                {
+                    floor.Add(pos);
+                }
+            }
+        }
+        return floor;
+    }
+
     //TODO: optimalization
     //Algorithm for filling holes
     public static void FillHoles(HashSet<Vector2Int> floor)
@@ -69,5 +140,21 @@ public static class FloorGenerator
             rooms.Add(currentCorridorEndPosition);
             floor.UnionWith(corridor);
         }
+    }
+
+    public static Vector2Int FindClosestPoint(Vector2Int startingPoint, List<Vector2Int> listOfPoints)
+    {
+        Vector2Int closest = Vector2Int.zero;
+        float distance = float.MaxValue;
+        foreach (var position in listOfPoints)
+        {
+            float currentDistance = Vector2.Distance(position, startingPoint);
+            if (currentDistance < distance)
+            {
+                distance = currentDistance;
+                closest = position;
+            }
+        }
+        return closest;
     }
 }

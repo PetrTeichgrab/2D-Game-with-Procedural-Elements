@@ -29,11 +29,11 @@ public class MapCreator : MonoBehaviour
     [SerializeField]
     private RuleTile diagonalBlueWallRuleTile;
 
-    public void DrawFloor(HashSet<Vector2Int> floorPositions, Color color)
+    public void DrawFloor(IDungeon dungeon)
     {
-        foreach (Vector2Int floor in floorPositions)
+        foreach (Vector2Int floor in dungeon.Floor.FloorList)
         {
-            switch (color)
+            switch (dungeon.Color)
             {
                 case Color.Pink:
                     DrawTile(this.pinkFloorTile, floor);

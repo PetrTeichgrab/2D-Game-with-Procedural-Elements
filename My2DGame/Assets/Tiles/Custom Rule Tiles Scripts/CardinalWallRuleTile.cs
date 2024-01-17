@@ -15,6 +15,7 @@ public class CardinalWallRuleTile : RuleTile<CardinalWallRuleTile.Neighbor> {
         public const int Any = 3;
         public const int Floor = 4;
         public const int Nothing = 5;
+        public const int NeighboursTile = 6;
     }
 
     public override bool RuleMatch(int neighbor, TileBase tile) {
@@ -24,7 +25,7 @@ public class CardinalWallRuleTile : RuleTile<CardinalWallRuleTile.Neighbor> {
             case Neighbor.Any: return CheckAny(tile);
             case Neighbor.Floor: return CheckFloorTile(tile);
             case Neighbor.Nothing: return CheckNothing(tile);
-
+            case Neighbor.NeighboursTile: return CheckAnotherDungeonsFloorTile(tile);
         }
         return base.RuleMatch(neighbor, tile);
     }
@@ -52,6 +53,11 @@ public class CardinalWallRuleTile : RuleTile<CardinalWallRuleTile.Neighbor> {
     bool CheckNothing(TileBase tile)
     {
         return tile == null;
+    }
+
+    bool CheckAnotherDungeonsFloorTile(TileBase tile)
+    {
+        return tilesList.Skip(1).Contains(tile);
     }
 
 }
