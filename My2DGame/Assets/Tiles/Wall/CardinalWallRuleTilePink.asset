@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb13f96d518f57346b31462619c9eccb, type: 3}
   m_Name: CardinalWallRuleTilePink
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 9944e615a88a7f74081574d3311e2f0a, type: 3}
+  m_DefaultSprite: {fileID: 21300000, guid: 27757e60088d9dc4db695bfa43496859, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
@@ -63,7 +63,7 @@ MonoBehaviour:
     - {x: -1, y: 0, z: 0}
     - {x: 0, y: 1, z: 0}
     m_RuleTransform: 0
-  - m_Id: 0
+  - m_Id: 30
     m_Sprites:
     - {fileID: 21300000, guid: f374c58686d6d5242a12520275c611de, type: 3}
     m_GameObject: {fileID: 0}
@@ -517,3 +517,4 @@ MonoBehaviour:
   alwaysConnect: 0
   tilesList:
   - {fileID: 11400000, guid: a8312c974a75a1a448747227e7b8e153, type: 2}
+  - {fileID: 11400000, guid: 1f65e59345cb6ff4e889c8cc889639d8, type: 2}
