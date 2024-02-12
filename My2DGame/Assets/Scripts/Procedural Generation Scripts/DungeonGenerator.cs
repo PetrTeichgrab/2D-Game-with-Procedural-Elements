@@ -6,11 +6,19 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System;
 using System.Drawing;
+using System.Linq.Expressions;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
     [SerializeField]
-    Player player;
+    public Player Player;
+
+    [SerializeField]
+    public EnemyMushroomPink PinkMushroom;
+
+    public IDungeon PinkDungeon { get; set; }
+
+    public IDungeon BlueDungeon { get; set; }
 
     [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
@@ -40,6 +48,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [Range(0, 10)]
     private int offset = 1;
 
+    //public void Start()
+    //{
+    //    tileMap.ClearGeneration();
+    //    CreateDungeons();
+    //}
     public void GenerateDungeons()
     {
         tileMap.ClearGeneration();
@@ -55,20 +68,27 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         }
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
-        IDungeon pinkDungeon = new PinkDungeon(dungeons[0]);
-        InitDungeon(pinkDungeon);
-        player.position = (Vector2)pinkDungeon.Floor.RoomCentersList[0];
+        PinkDungeon = new PinkDungeon(dungeons[0]);
+        InitDungeon(PinkDungeon);
+        SetCharactersPositions();
 
-        IDungeon blueDungeon = new BlueDungeon(dungeons[1]);
-        InitDungeon(blueDungeon);
+        BlueDungeon = new BlueDungeon(dungeons[1]);
+        InitDungeon(BlueDungeon);
 
-        ConnectDungeons(pinkDungeon, blueDungeon);
+        ConnectDungeons(PinkDungeon, BlueDungeon);
 
-        tileMap.DrawFloor(pinkDungeon);
-        tileMap.DrawFloor(blueDungeon);
+        tileMap.DrawFloor(PinkDungeon);
+        tileMap.DrawFloor(BlueDungeon);
 
-        WallGenerator.CreateAndDrawWalls(pinkDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(blueDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
+
+    }
+
+    private void SetCharactersPositions()
+    {
+        Player.transform.position = (Vector2)PinkDungeon.Floor.RoomCentersList[0];
+        PinkMushroom.transform.position = (Vector2)Player.transform.position + new Vector2(3, 3);
     }
 
     private void InitDungeon(IDungeon dungeon)
