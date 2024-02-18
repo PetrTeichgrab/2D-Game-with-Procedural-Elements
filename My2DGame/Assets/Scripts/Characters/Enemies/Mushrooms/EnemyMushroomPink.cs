@@ -8,15 +8,19 @@ public class EnemyMushroomPink : MonoBehaviour
     public Animator animator;
     public bool Appeard { get; set; } = false;
 
+
     void Start()
     {
-        GetComponent<EdgeCollider2D>().enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Appeard)
+        if (!Appeard)
+        {
+            GetComponent<EdgeCollider2D>().enabled = false;
+        }
+        else
         {
             GetComponent<EdgeCollider2D>().enabled = true;
         }

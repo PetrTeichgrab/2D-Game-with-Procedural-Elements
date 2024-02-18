@@ -1,0 +1,4 @@
+repository "My2DGame@Pitrssn@cloud"
+  path "/"
+    br "/main"
+    co "/main"

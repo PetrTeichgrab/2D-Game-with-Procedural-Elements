@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     private float moveX, moveY;
     private bool canDash = true;
     private bool isDashing;
+    public CastSpell spell;
 
     [SerializeField]
     private float dashSpeed = 12f;
@@ -22,7 +23,11 @@ public class Player : MonoBehaviour
     private TrailRenderer trailRenderer;
 
     public float movementSpeed = 2;
+
     public Rigidbody2D rb;
+
+    public GameObject castPoint;
+
     void Start()
     {
         resetTrailRendered();
@@ -43,10 +48,11 @@ public class Player : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
         if(isDashing) { 
-            return ; 
+            return; 
         }
         Move();
     }
