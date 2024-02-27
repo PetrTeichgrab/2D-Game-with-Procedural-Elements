@@ -58,7 +58,7 @@ public class MapCreator : MonoBehaviour
     [SerializeField]
     private RuleTile diagonalBlueWallRuleTile;
 
-    public void DrawFloor(IDungeon dungeon)
+    public void DrawFloor(Dungeon dungeon)
     {
         foreach (Vector2Int floor in dungeon.Floor.FloorList)
         {
@@ -79,7 +79,6 @@ public class MapCreator : MonoBehaviour
     {
         System.Random rnd= new System.Random();
         int random = rnd.Next(0,101);
-        Debug.Log("Random" + random);
         if(random <= 97)
         {
            DrawTile(tile1, position);

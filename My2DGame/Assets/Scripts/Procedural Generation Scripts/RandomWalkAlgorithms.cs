@@ -12,19 +12,20 @@ public static class RandomWalkAlgorithms
 
         HashSet<Vector2Int> floorPosition = new HashSet<Vector2Int>();
 
-        for (int i = 0; i < parameters.iterations; i++)
+        for (int i = 0; i < 1000; i++)
         {
+            currentWalkPosition = startingPosition;
             floorPosition.Add(currentWalkPosition);
-            for (int j = 0; j < parameters.length; j++)
+            for (int j = 0; j < 30; j++)
             {
-                Vector2Int newPosition = currentWalkPosition + Directions.GetRandomDirection();
+                Vector2Int newPosition = currentWalkPosition + Directions.GetRandomCardinalDirection();
                 floorPosition.Add(newPosition);
                 currentWalkPosition = newPosition;
             }
-            if (parameters.startRandom)
-            {
-                currentWalkPosition = floorPosition.ElementAt(Random.Range(0, floorPosition.Count));
-            }
+            //if (parameters.startRandom)
+            //{
+            //    currentWalkPosition = floorPosition.ElementAt(Random.Range(0, floorPosition.Count));
+            //}
         }
         return floorPosition;
     }
@@ -33,7 +34,7 @@ public static class RandomWalkAlgorithms
     public static List<Vector2Int> RandomOneDirectionWalk(Vector2Int startingPosition, int length)
     {
         List<Vector2Int> corridor = new List<Vector2Int>();
-        Vector2Int direction = Directions.GetRandomDirection();
+        Vector2Int direction = Directions.GetRandomCardinalDirection();
         Vector2Int currentPosition = startingPosition;
         corridor.Add(currentPosition);
 

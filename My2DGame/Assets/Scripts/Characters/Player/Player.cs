@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     Vector2 moveDirection = new Vector2();
     public Animator animator;
@@ -28,8 +28,11 @@ public class Player : MonoBehaviour
 
     public GameObject castPoint;
 
+
     void Start()
     {
+        maxHP = 100;
+        currentHP = maxHP;
         resetTrailRendered();
     }
 
@@ -47,7 +50,6 @@ public class Player : MonoBehaviour
             StartCoroutine(Dash());
         }
     }
-
 
     void FixedUpdate()
     {

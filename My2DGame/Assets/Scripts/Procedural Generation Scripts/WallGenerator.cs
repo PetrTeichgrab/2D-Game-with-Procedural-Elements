@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class WallGenerator
 {
-    public static void CreateAndDrawWalls(IDungeon dungeon, MapCreator mapCreator)
+    public static void CreateAndDrawWalls(Dungeon dungeon, MapCreator mapCreator)
     {
         HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(dungeon.Floor.FloorList, dungeon.Floor.AnotherDungeonsEntrances);
 
@@ -23,7 +23,7 @@ public static class WallGenerator
 
         foreach (Vector2Int position in floor) { 
 
-            foreach (Vector2Int direction in Directions.DirectionsDic.Values)
+            foreach (Vector2Int direction in Directions.CardinalDirectionsDic.Values)
             {
                 if((!floor.Contains(position + direction)) && !anotherDungeonsEntrances.Contains(position + direction))
                 {
@@ -41,7 +41,7 @@ public static class WallGenerator
 
         foreach (Vector2Int position in floor)
         {
-            foreach (Vector2Int direction in Directions.DirectionsDic.Values)
+            foreach (Vector2Int direction in Directions.CardinalDirectionsDic.Values)
             {
                 if (anotherDungeonsEntrances.Contains(position + direction))
                 {

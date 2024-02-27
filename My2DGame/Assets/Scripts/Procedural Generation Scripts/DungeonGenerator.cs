@@ -7,18 +7,22 @@ using UnityEngine.UIElements;
 using System;
 using System.Drawing;
 using System.Linq.Expressions;
+using JetBrains.Annotations;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
     [SerializeField]
     public Player Player;
 
-    [SerializeField]
     public EnemyMushroomPink PinkMushroom;
 
-    public IDungeon PinkDungeon { get; set; }
+    public BlueSlime BlueSlime;
 
-    public IDungeon BlueDungeon { get; set; }
+    public Dungeon PinkDungeon { get; set; }
+
+    public Dungeon BlueDungeon { get; set; }
+
+    private List<Enemy> enemyList = new List<Enemy>();
 
     [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
@@ -56,6 +60,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void GenerateDungeons()
     {
         tileMap.ClearGeneration();
+        ClearGeneratedObjects();
         CreateDungeons();
     }
 
@@ -68,11 +73,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         }
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
-        PinkDungeon = new PinkDungeon(dungeons[0]);
+        PinkDungeon = new Dungeon(dungeons[0], Color.Pink);
         InitDungeon(PinkDungeon);
-        SetCharactersPositions();
 
-        BlueDungeon = new BlueDungeon(dungeons[1]);
+        BlueDungeon = new Dungeon(dungeons[1], Color.Blue);
         InitDungeon(BlueDungeon);
 
         ConnectDungeons(PinkDungeon, BlueDungeon);
@@ -83,41 +87,93 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
 
+        SetCharactersPositions();
+
     }
 
     private void SetCharactersPositions()
     {
-        Player.transform.position = (Vector2)PinkDungeon.Floor.RoomCentersList[0];
-        PinkMushroom.transform.position = (Vector2)Player.transform.position + new Vector2(3, 3);
+        for (int i = 0; i < 25; i++)
+        {
+            EnemyMushroomPink pinkMushroom = Instantiate(PinkMushroom, PinkMushroom.transform.position, PinkMushroom.transform.rotation);
+            SetToRandomPositionInRandomRoom(pinkMushroom.transform, PinkDungeon, 1);
+            enemyList.Add(pinkMushroom);
+            BlueSlime blueSlime = Instantiate(BlueSlime, BlueSlime.transform.position, BlueSlime.transform.rotation);
+            SetToRandomPositionInRandomRoom(blueSlime.transform, BlueDungeon, 1);
+            enemyList.Add(blueSlime);
+        }
+        SetToRandomPositionInRandomRoom(Player.transform, BlueDungeon, 1);
     }
 
-    private void InitDungeon(IDungeon dungeon)
+    private void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
+    {
+        int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
+        var room = dungeon.RoomList[randomRoom].FloorList.ToList();
+        var newPos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
+        if(!IsPositionAndItsSurroundingsInList(room, newPos, 3))
+        {
+            SetToRandomPositionInRandomRoom(transformObject, dungeon, offset);
+        }
+        else
+        {
+            transformObject.position = (Vector2)newPos;
+        }
+    }
+
+    bool IsPositionAndItsSurroundingsInList(List<Vector2Int> list, Vector2Int position, int offset)
+    {
+        if (list.Contains(position))
+        {
+            foreach (Vector2Int direction in Directions.AllDirectionsDic.Values)
+            {
+                var surroundingPos = position;
+
+                for (int i = 0; i < offset; i++)
+                {
+                    surroundingPos += direction;
+                    if (!list.Contains(surroundingPos))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void InitDungeon(Dungeon dungeon)
     {
         GetRoomsPositions(dungeon);
         GetRoomsCenters(dungeon);
         CreateDungeonFloor(dungeon);
     }
 
-    private void GetRoomsPositions(IDungeon dungeon)
+    private void GetRoomsPositions(Dungeon dungeon)
     {
         dungeon.Floor.RoomList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int
             (dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)), minRoomWidth, minRoomHeight);
     }
 
-    private void CreateDungeonFloor(IDungeon dungeon)
+    private void CreateDungeonFloor(Dungeon dungeon)
     {
-        HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.Floor.RoomList.ToList(), randomWalkParameters, offset);
+        dungeon.RoomList = new List<Room>();
+
+        HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.RoomList, dungeon.Floor.RoomList.ToList(), randomWalkParameters, offset);
 
         HashSet<Vector2Int> corridors = FloorGenerator.ConnectRooms(new List<Vector2Int>(dungeon.Floor.RoomCentersList));
 
         floor.UnionWith(corridors);
 
-        FloorGenerator.FillHoles(floor);
+        //FloorGenerator.FillHoles(floor);
 
         dungeon.Floor.FloorList = floor;
     }
 
-    private void GetRoomsCenters(IDungeon dungeon)
+    private void GetRoomsCenters(Dungeon dungeon)
     {
         List<Vector2Int> centerRoomList = new List<Vector2Int>();
         foreach (var room in dungeon.Floor.RoomList)
@@ -127,7 +183,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         dungeon.Floor.RoomCentersList = centerRoomList;
     }
 
-    private void ConnectDungeons(IDungeon firstDungeon, IDungeon secondDungeon)
+    private void ConnectDungeons(Dungeon firstDungeon, Dungeon secondDungeon)
     {
         var firstDungeonCenters = firstDungeon.Floor.RoomCentersList;
         var secondDungeonCenters = secondDungeon.Floor.RoomCentersList;
@@ -153,6 +209,16 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         secondDungeon.Floor.FloorList.UnionWith(connectingCorridor.Skip(middleIndex));
         firstDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex]);
         secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex-1]);
+    }
+
+    private void ClearGeneratedObjects() {
+        foreach (Enemy enemy in enemyList)
+        {
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
     }
 
 }

@@ -70,13 +70,12 @@ public static class FloorGenerator
         return corridor;
     }
 
-
-    public static HashSet<Vector2Int> CreateRandomRooms(List<BoundsInt> roomList, RandomWalkParameters randomWalkParameters, int offset)
+    public static HashSet<Vector2Int> CreateRandomRooms(List<Room> roomList, List<BoundsInt> roomBoundsList, RandomWalkParameters randomWalkParameters, int offset)
     {
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
-        for (int i = 0; i < roomList.Count; i++)
+        for (int i = 0; i < roomBoundsList.Count; i++)
         {
-            var roomBounds = roomList[i];
+            var roomBounds = roomBoundsList[i];
             var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
             var roomFloor = RandomWalkAlgorithms.RandomWalk(randomWalkParameters, roomCenter);
             foreach (var pos in roomFloor)
@@ -86,6 +85,7 @@ public static class FloorGenerator
                 {
                     floor.Add(pos);
                 }
+                roomList.Add(new Room(floor));
             }
         }
         return floor;
@@ -100,15 +100,15 @@ public static class FloorGenerator
         foreach (var position in floor)
         {
             Vector2Int hole = Vector2Int.zero;
-            foreach (Vector2Int direction in Directions.DirectionsDic.Values)
+            int counter = 0;
+
+            foreach (Vector2Int direction in Directions.AllDirectionsDic.Values)
             {
                 hole = position + direction;
 
-                int counter = 0;
-
                 if (!floor.Contains(hole))
                 {
-                    foreach (var holeDireciton in Directions.DirectionsDic.Values)
+                    foreach (var holeDireciton in Directions.AllDirectionsDic.Values)
                     {
                         if (floor.Contains(holeDireciton))
                         {
@@ -116,7 +116,7 @@ public static class FloorGenerator
                         }
                     }
                 }
-                if (counter >= 3)
+                if (counter >= 4)
                 {
                     holes.Add(hole);
                 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CastSpell : MonoBehaviour
@@ -15,13 +16,13 @@ public class CastSpell : MonoBehaviour
 
     Vector2 mousePostion;
 
-    public Camera camera;
+    public Camera cam;
 
     public GameObject hitEffect;
 
     void Update()
     {
-        mousePostion = camera.ScreenToWorldPoint(Input.mousePosition);
+        mousePostion = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 lookDirection = mousePostion - (Vector2)rb.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90f;
         castPoint.transform.rotation = Quaternion.Euler(0, 0, angle);
