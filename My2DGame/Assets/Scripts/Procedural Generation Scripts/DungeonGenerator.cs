@@ -8,6 +8,7 @@ using System;
 using System.Drawing;
 using System.Linq.Expressions;
 using JetBrains.Annotations;
+using UnityEngine.XR;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
@@ -22,7 +23,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Dungeon BlueDungeon { get; set; }
 
-    private List<Enemy> enemyList = new List<Enemy>();
+    private List<Character> enemyList = new List<Character>();
 
     [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
@@ -73,10 +74,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         }
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
-        PinkDungeon = new Dungeon(dungeons[0], Color.Pink);
+        PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
         InitDungeon(PinkDungeon);
 
-        BlueDungeon = new Dungeon(dungeons[1], Color.Blue);
+        BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
         InitDungeon(BlueDungeon);
 
         ConnectDungeons(PinkDungeon, BlueDungeon);
@@ -99,6 +100,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             SetToRandomPositionInRandomRoom(pinkMushroom.transform, PinkDungeon, 1);
             enemyList.Add(pinkMushroom);
             BlueSlime blueSlime = Instantiate(BlueSlime, BlueSlime.transform.position, BlueSlime.transform.rotation);
+            blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
             SetToRandomPositionInRandomRoom(blueSlime.transform, BlueDungeon, 1);
             enemyList.Add(blueSlime);
         }
@@ -212,7 +214,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     }
 
     private void ClearGeneratedObjects() {
-        foreach (Enemy enemy in enemyList)
+        foreach (RangeEnemy enemy in enemyList)
         {
             if (enemy != null)
             {

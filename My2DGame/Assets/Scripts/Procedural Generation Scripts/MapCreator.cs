@@ -64,10 +64,10 @@ public class MapCreator : MonoBehaviour
         {
             switch (dungeon.Color)
             {
-                case Color.Pink:
+                case DungeonColor.Pink:
                     DrawTilesRandomly(this.pinkFloorTile, this.crackedPinkFloor1, this.crackedPinkFloor2, this.crackedPinkFloor3, floor);
                     break;
-                case Color.Blue:
+                case DungeonColor.Blue:
                     DrawTilesRandomly(this.blueFloorTile, this.crackedBlueFloor1, this.crackedBlueFloor2, this.crackedBlueFloor3, floor);
                     break;
             }
@@ -100,17 +100,17 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions, Color color)
+    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions, DungeonColor color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
             switch (color)
             {
-                case Color.Pink:
+                case DungeonColor.Pink:
                     AddCollider(emptyTile, wall);
                     DrawTile(this.cardinalPinkWallRuleTile, wall);
                     break;
-                case Color.Blue:
+                case DungeonColor.Blue:
                     DrawTile(this.cardinalBlueWallRuleTile, wall);
                     break;
             }
@@ -118,16 +118,16 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions, Color color)
+    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions, DungeonColor color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
             switch (color)
             {
-                case Color.Pink:
+                case DungeonColor.Pink:
                     DrawTile(this.diagonalPinkWallRuleTile, wall);
                     break;
-                case Color.Blue:
+                case DungeonColor.Blue:
                     DrawTile(this.diagonalBlueWallRuleTile, wall);
                     break;
             }

@@ -8,7 +8,7 @@ public class CastBehaviour : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Enemy character = collision.gameObject.GetComponent<Enemy>();
+            RangeEnemy character = collision.gameObject.GetComponent<RangeEnemy>();
             if (character != null)
             {
                 character.TakeDamage(50);

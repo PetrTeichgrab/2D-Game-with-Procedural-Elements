@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMushroomPink : Enemy
+public class EnemyMushroomPink : RangeEnemy
 {
     public Animator animator;
     public bool Appeard { get; set; } = false;
