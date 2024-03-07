@@ -2,18 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//public class PinkDungeon : Dungeon
-//{
-//    public Walls Walls { get; set; }
-//    public Floor Floor { get; set; }
-//    public Color Color { get; }
-//    public BoundsInt DungeonBounds { get; set; }
+public class PinkDungeon : MonoBehaviour
+{
+    [SerializeField]
+    DungeonGenerator generator;
 
-//    //public PinkDungeon(BoundsInt bounds)
-//    //{
-//    //    DungeonBounds = bounds;
-//    //    Color = Color.Pink;
-//    //    Floor = new Floor();
-//    //    Walls = new Walls();
-//    //}
-//}
+    [SerializeField]
+    EnemyMushroomPink pinkMushroom;
+
+    Dungeon pinkDungeon;
+
+    public void Create()
+    {
+        pinkDungeon = generator.PinkDungeon;
+        CreateAndSetCharactersPositions();
+    }
+
+    private void CreateAndSetCharactersPositions()
+    {
+        Debug.Log("got here");
+        for (int i = 0; i < 30; i++)
+        {
+            EnemyMushroomPink pinkMushroom = Instantiate(this.pinkMushroom, this.pinkMushroom.transform.position,
+                this.pinkMushroom.transform.rotation);
+            generator.allEnemiesList.Add(pinkMushroom);
+            generator.SetToRandomPositionInRandomRoom(pinkMushroom.transform, pinkDungeon, 5);
+        }
+    }
+}

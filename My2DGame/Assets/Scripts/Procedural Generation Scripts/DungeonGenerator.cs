@@ -23,7 +23,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Dungeon BlueDungeon { get; set; }
 
-    private List<Character> enemyList = new List<Character>();
+    public List<Character> allEnemiesList = new List<Character>();
 
     [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
@@ -88,26 +88,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
 
-        SetCharactersPositions();
-
-    }
-
-    private void SetCharactersPositions()
-    {
-        for (int i = 0; i < 25; i++)
-        {
-            EnemyMushroomPink pinkMushroom = Instantiate(PinkMushroom, PinkMushroom.transform.position, PinkMushroom.transform.rotation);
-            SetToRandomPositionInRandomRoom(pinkMushroom.transform, PinkDungeon, 1);
-            enemyList.Add(pinkMushroom);
-            BlueSlime blueSlime = Instantiate(BlueSlime, BlueSlime.transform.position, BlueSlime.transform.rotation);
-            blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
-            SetToRandomPositionInRandomRoom(blueSlime.transform, BlueDungeon, 1);
-            enemyList.Add(blueSlime);
-        }
         SetToRandomPositionInRandomRoom(Player.transform, BlueDungeon, 1);
+
     }
 
-    private void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
+    public void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
     {
         int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
         var room = dungeon.RoomList[randomRoom].FloorList.ToList();
@@ -214,7 +199,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     }
 
     private void ClearGeneratedObjects() {
-        foreach (RangeEnemy enemy in enemyList)
+        foreach (RangeEnemy enemy in allEnemiesList)
         {
             if (enemy != null)
             {

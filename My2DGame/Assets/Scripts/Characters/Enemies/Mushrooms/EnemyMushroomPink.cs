@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EnemyMushroomPink : RangeEnemy
 {
-    public Animator animator;
     public bool Appeard { get; set; } = false;
 
     void Update()

@@ -9,6 +9,8 @@ public abstract class Character : MonoBehaviour
     public int currentHP;
 
     public bool isAlive;
+
+    public Animator animator;
     private void Start()
     {
         isAlive = true;
@@ -20,7 +22,10 @@ public abstract class Character : MonoBehaviour
         if (currentHP <= 0)
         {
             isAlive = false;
-            Destroy(gameObject);
+            if(animator != null)
+            {
+                animator.SetTrigger("takeDamage");
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 public class Player : Character
 {
     Vector2 moveDirection = new Vector2();
-    public Animator animator;
     private float moveX, moveY;
     private bool canDash = true;
     private bool isDashing;

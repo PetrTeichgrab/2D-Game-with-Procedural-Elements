@@ -4,14 +4,49 @@ using UnityEngine;
 
 public class BlueSlime : MeleeEnemy
 {
-    public Animator animator;
-
-
     void Update()
     {
-        BasicEnemyMovement();
-        dashAttack();
-        animator.SetFloat("movementSpeed", movementSpeed);
+        if(isDashing) {
+            return;
+        }
+
+        if (isAlive)
+        {
+            if (IsInApproachDistance())
+            {
+                animator.SetTrigger("move");
+                MoveToPlayer(movementSpeed);
+                dashAttack();
+            }
+            else
+            {
+                animator.SetTrigger("idle");
+            }
+        }
+        else
+        {
+            Die();
+        }
+
+        if (animator != null)
+        {
+            animator.SetFloat("movementSpeed", movementSpeed);
+            animator.SetBool("isAlive", isAlive);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Player character = collision.gameObject.GetComponent<Player>();
+            if (character != null && isAlive)
+            {
+                animator.SetTrigger("attack");
+                character.TakeDamage(10);
+            }
+        }
+
     }
 
 }

@@ -16,43 +16,53 @@ public abstract class MeleeEnemy : Character
     public int damage;
     public float dashTime;
     public float dashSpeed;
-    public CapsuleCollider2D capsuleCollider;
+    public Collider2D characterCollider;
     private float attackCooldownTimer = Mathf.Infinity;
     public Transform player;
     public TrailRenderer trailRenderer;
-    private bool canDash;
-    private bool isDashing;
     public Rigidbody2D rb;
     public float attackCooldown;
-    private float startMovementSpeed;
+    protected float startMovementSpeed;
+    protected bool isDashing;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         attackCooldownTimer = 0;
         trailRenderer.enabled = false;
+        isAlive = true;
         startMovementSpeed = movementSpeed;
     }
     private IEnumerator Dash()
     {
+        isDashing = true;
         trailRenderer.enabled = true;
-        movementSpeed = dashSpeed;
+
+        Vector2 direction = (player.position - transform.position).normalized;
+
+        rb.velocity = direction * dashSpeed;
+
         yield return new WaitForSeconds(dashTime);
+
+        rb.velocity = direction.normalized * movementSpeed;
         trailRenderer.enabled = false;
-        movementSpeed = startMovementSpeed;
+        isDashing = false;
     }
 
-    protected void BasicEnemyMovement()
+
+    protected void MoveToPlayer(float approachMovementSpeed)
     {
-        if (IsInApproachDistance())
-        {
-            MoveToPlayer();
-        }
+        transform.position = Vector2.MoveTowards(transform.position, player.position, approachMovementSpeed * Time.deltaTime);
     }
 
-    protected void MoveToPlayer()
+    protected void StopOnCurrentPosition()
     {
-        transform.position = Vector2.MoveTowards(transform.position, player.position, movementSpeed * Time.deltaTime);
+        transform.position = this.transform.position;
+    }
+
+    protected void Die()
+    {
+        rb.velocity = new Vector2 (0, 0);
     }
 
     protected bool IsInApproachDistance()
@@ -69,6 +79,10 @@ public abstract class MeleeEnemy : Character
         {
             StartCoroutine(Dash());
             attackCooldownTimer = 0;
+            if (animator != null)
+            {
+                animator.SetTrigger("attack");
+            }
         }
     }
 
