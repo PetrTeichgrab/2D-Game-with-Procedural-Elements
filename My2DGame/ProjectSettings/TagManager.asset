@@ -46,3 +46,9 @@ TagManager:
   - name: trailLayer
     uniqueID: 2523866457
     locked: 0
+  - name: Enemy
+    uniqueID: 2645918603
+    locked: 0
+  - name: Player
+    uniqueID: 1622336859
+    locked: 0
