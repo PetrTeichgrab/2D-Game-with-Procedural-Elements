@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -47,16 +48,55 @@ public class MapCreator : MonoBehaviour
     private TileBase blueFloorTile;
 
     [SerializeField]
-    private RuleTile cardinalPinkWallRuleTile;
+    private TileBase pinkWallTop, 
+            pinkSideWallRight, 
+            pinkSideWallLeft, 
+            pinkWallBottom, 
+            pinkFullWall, 
+            pinkWallBottomCornerLeft, 
+            pinkWallBottomCornerRight,
+            pinkDiagonalCornerBottomRight, 
+            pinkDiagonalCornerBottomLeft, 
+            pinkDiagonalCornerUpRight, 
+            pinkDiagonalCornerUpLeft;
 
     [SerializeField]
-    private RuleTile cardinalBlueWallRuleTile;
-
+    private TileBase blueWallTop,
+            blueSideWallRight,
+            blueSideWallLeft,
+            blueWallBottom,
+            blueFullWall,
+            blueWallBottomCornerLeft,
+            blueWallBottomCornerRight,
+            blueDiagonalCornerBottomRight,
+            blueDiagonalCornerBottomLeft,
+            blueDiagonalCornerUpRight,
+            blueDiagonalCornerUpLeft;
     [SerializeField]
-    private RuleTile diagonalPinkWallRuleTile;
-
+    private TileBase redWallTop,
+            redSideWallRight,
+            redSideWallLeft,
+            redWallBottom,
+            redFullWall,
+            redWallBottomCornerLeft,
+            redWallBottomCornerRight,
+            redDiagonalCornerBottomRight,
+            redDiagonalCornerBottomLeft,
+            redDiagonalCornerUpRight,
+            redDiagonalCornerUpLeft;
     [SerializeField]
-    private RuleTile diagonalBlueWallRuleTile;
+    private TileBase greenWallTop,
+            greenSideWallRight,
+            greenSideWallLeft,
+            greenWallBottom,
+            greenFullWall,
+            greenWallBottomCornerLeft,
+            greenWallBottomCornerRight,
+            greenDiagonalCornerBottomRight,
+            greenDiagonalCornerBottomLeft,
+            greenDiagonalCornerUpRight,
+            greenDiagonalCornerUpLeft;
+
 
     public void DrawFloor(Dungeon dungeon)
     {
@@ -100,43 +140,292 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions, DungeonColor color)
+    public void DrawCardinalWalls(HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> floorPositions,  DungeonColor color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
-            switch (color)
+            string neighbourBinary = "";
+            foreach (var direction in Directions.CardinalDirectionsDic.Values)
             {
-                case DungeonColor.Pink:
-                    AddCollider(emptyTile, wall);
-                    DrawTile(this.cardinalPinkWallRuleTile, wall);
-                    break;
-                case DungeonColor.Blue:
-                    DrawTile(this.cardinalBlueWallRuleTile, wall);
-                    break;
+                var neighbourPosition = wall + direction;
+                if (floorPositions.Contains(neighbourPosition))
+                {
+                    neighbourBinary += "1";
+                }
+                else
+                {
+                    neighbourBinary += "0";
+                }
+                DrawCardinalWallTile(wall, neighbourBinary, color);
             }
         
         }
     }
 
-    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions, DungeonColor color)
+    public void DrawDiagonalWalls(HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> floorPositions, DungeonColor color)
     {
         foreach (Vector2Int wall in wallPositions)
         {
-            switch (color)
+            string neighbourBinary = "";
+            foreach (var direction in Directions.AllDirectionsDic.Values)
             {
-                case DungeonColor.Pink:
-                    DrawTile(this.diagonalPinkWallRuleTile, wall);
-                    break;
-                case DungeonColor.Blue:
-                    DrawTile(this.diagonalBlueWallRuleTile, wall);
-                    break;
+                var neighbourPosition = wall + direction;
+                if (floorPositions.Contains(neighbourPosition))
+                {
+                    neighbourBinary += "1";
+                }
+                else
+                {
+                    neighbourBinary += "0";
+                }
+                DrawDiagonalWallTile(wall, neighbourBinary, color);
             }
-
         }
     }
 
     public void DrawTile(TileBase tile, Vector2Int position)
     {
+        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
+        this.map.SetTile(tilePosition, tile);
+    }
+
+    public void DrawCardinalWallTile(Vector2Int position, string binary, DungeonColor color)
+    {
+        int binaryNumber = Convert.ToInt32(binary, 2);
+        TileBase tile = null;
+        if (WallByteTypes.wallTop.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallTop;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallTop;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallTop;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallSideRight.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkSideWallRight;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueSideWallRight;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenSideWallRight;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallSideLeft.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkSideWallLeft;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueSideWallLeft;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenSideWallLeft;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallBottom.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottom;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottom;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottom;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallBottomCornerLeft.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottomCornerLeft;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottomCornerLeft;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottomCornerLeft;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallBottomCornerRight.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottomCornerRight;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottomCornerRight;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottomCornerRight;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallFull.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkFullWall;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueFullWall;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenFullWall;
+                    break;
+            }
+        }
+        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
+        this.map.SetTile(tilePosition, tile);
+    }
+
+    public void DrawDiagonalWallTile(Vector2Int position, string binary, DungeonColor color)
+    {
+        int binaryNumber = Convert.ToInt32(binary, 2);
+        TileBase tile = null;
+        if (WallByteTypes.wallInnerCornerDownLeft.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottomCornerLeft;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottomCornerLeft;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottomCornerLeft;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallInnerCornerDownRight.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottomCornerRight;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottomCornerRight;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottomCornerRight;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallDiagonalCornerDownLeft.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkDiagonalCornerBottomLeft;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueDiagonalCornerBottomLeft;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenDiagonalCornerBottomLeft;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallDiagonalCornerDownRight.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkDiagonalCornerBottomRight;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueDiagonalCornerBottomRight;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenDiagonalCornerBottomRight;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallDiagonalCornerUpRight.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkDiagonalCornerUpRight;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueDiagonalCornerUpRight;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenDiagonalCornerUpRight;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallDiagonalCornerUpLeft.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkDiagonalCornerUpLeft;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueDiagonalCornerUpLeft;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenDiagonalCornerUpLeft;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallFullEightDirections.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkFullWall;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueFullWall;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenFullWall;
+                    break;
+            }
+        }
+        else if (WallByteTypes.wallBottmEightDirections.Contains(binaryNumber))
+        {
+            switch (color)
+            {
+                case DungeonColor.Pink:
+                    tile = pinkWallBottom;
+                    break;
+                case DungeonColor.Blue:
+                    tile = blueWallBottom;
+                    break;
+                case DungeonColor.Green:
+                    tile = greenWallBottom;
+                    break;
+            }
+        }
         Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
         this.map.SetTile(tilePosition, tile);
     }

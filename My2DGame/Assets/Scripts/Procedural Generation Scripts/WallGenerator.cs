@@ -12,9 +12,9 @@ public static class WallGenerator
 
         HashSet<Vector2Int> diagonalWalls = FindWallsInDiagonalDirections(dungeon.Floor.FloorList, cardinalWalls, dungeon.Floor.AnotherDungeonsEntrances);
 
-        mapCreator.DrawCardinalWalls(cardinalWalls, dungeon.Color);
+        mapCreator.DrawCardinalWalls(cardinalWalls, dungeon.Floor.FloorList, dungeon.Color);
 
-        mapCreator.DrawDiagonalWalls(diagonalWalls, dungeon.Color);
+        mapCreator.DrawDiagonalWalls(diagonalWalls, dungeon.Floor.FloorList, dungeon.Color);
     }
 
     private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor, List<Vector2Int> anotherDungeonsEntrances)
@@ -23,7 +23,7 @@ public static class WallGenerator
 
         foreach (Vector2Int position in floor) { 
 
-            foreach (Vector2Int direction in Directions.CardinalDirectionsDic.Values)
+            foreach (Vector2Int direction in Directions.cardinalDirectionsList)
             {
                 if((!floor.Contains(position + direction)) && !anotherDungeonsEntrances.Contains(position + direction))
                 {
@@ -41,7 +41,7 @@ public static class WallGenerator
 
         foreach (Vector2Int position in floor)
         {
-            foreach (Vector2Int direction in Directions.CardinalDirectionsDic.Values)
+            foreach (Vector2Int direction in Directions.cardinalDirectionsList)
             {
                 if (anotherDungeonsEntrances.Contains(position + direction))
                 {
@@ -49,7 +49,7 @@ public static class WallGenerator
                     break;
                 }
             }
-            foreach (Vector2Int direction in Directions.DiagonalDirectionsDic.Values)
+            foreach (Vector2Int direction in Directions.diagonalDirectionsList)
             {
                 if (!floor.Contains(position + direction) && !cardinalWalls.Contains(position + direction) && !isEntrance)
                 {

@@ -12,8 +12,8 @@ public class Directions : MonoBehaviour
     {
         { "top", new Vector2Int(0,1) },
         { "right", new Vector2Int(1,0) },
-        { "down", new Vector2Int(-1,0) },
-        { "left", new Vector2Int(0,-1) },
+        { "down", new Vector2Int(0,-1) },
+        { "left", new Vector2Int(-1,0) },
 
     };
 
@@ -21,22 +21,51 @@ public class Directions : MonoBehaviour
     public static Dictionary<string, Vector2Int> DiagonalDirectionsDic = new Dictionary<string, Vector2Int>()
     {
         { "top-right", new Vector2Int(1,1) },
-        { "top-left", new Vector2Int(-1,1) },
         { "bottom-right", new Vector2Int(1,-1) },
         { "bottom-left", new Vector2Int(-1,-1) },
+        { "top-left", new Vector2Int(-1,1) },
 
     };
 
     public static Dictionary<string, Vector2Int> AllDirectionsDic = new Dictionary<string, Vector2Int>()
     {
         { "top", new Vector2Int(0,1) },
-        { "right", new Vector2Int(1,0) },
-        { "down", new Vector2Int(-1,0) },
-        { "left", new Vector2Int(0,-1) },
         { "top-right", new Vector2Int(1,1) },
-        { "top-left", new Vector2Int(-1,1) },
+        { "right", new Vector2Int(1,0) },
         { "bottom-right", new Vector2Int(1,-1) },
+        { "down", new Vector2Int(0,-1) },
         { "bottom-left", new Vector2Int(-1,-1) },
+        { "left", new Vector2Int(-1,0) },
+        { "top-left", new Vector2Int(-1,1) },
+
+    };
+
+    public static List<Vector2Int> cardinalDirectionsList = new List<Vector2Int>
+    {
+        new Vector2Int(0,1), //UP
+        new Vector2Int(1,0), //RIGHT
+        new Vector2Int(0, -1), // DOWN
+        new Vector2Int(-1, 0) //LEFT
+    };
+
+    public static List<Vector2Int> diagonalDirectionsList = new List<Vector2Int>
+    {
+        new Vector2Int(1,1), //UP-RIGHT
+        new Vector2Int(1,-1), //RIGHT-DOWN
+        new Vector2Int(-1, -1), // DOWN-LEFT
+        new Vector2Int(-1, 1) //LEFT-UP
+    };
+
+    public static List<Vector2Int> eightDirectionsList = new List<Vector2Int>
+    {
+        new Vector2Int(0,1), //UP
+        new Vector2Int(1,1), //UP-RIGHT
+        new Vector2Int(1,0), //RIGHT
+        new Vector2Int(1,-1), //RIGHT-DOWN
+        new Vector2Int(0, -1), // DOWN
+        new Vector2Int(-1, -1), // DOWN-LEFT
+        new Vector2Int(-1, 0), //LEFT
+        new Vector2Int(-1, 1) //LEFT-UP
 
     };
 
