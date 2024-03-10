@@ -9,6 +9,7 @@ public class Dungeon
     public List<Room> RoomList { get; set; }
     public DungeonColor Color { get; }
     public BoundsInt DungeonBounds { get; set; }
+    public List<Dungeon> connectedDungeons { get; set; } = new List<Dungeon>();
     public Dungeon(BoundsInt bounds, DungeonColor color)
     {
         DungeonBounds = bounds;

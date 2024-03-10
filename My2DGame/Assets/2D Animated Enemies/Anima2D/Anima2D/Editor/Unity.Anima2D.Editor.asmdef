@@ -1,0 +1,24 @@
+{
+    "name": "Unity.Anima2D.Editor",
+    "references": [
+        "GUID:2c573e6b271651846a79655161004c5b",
+        "GUID:46f56344e320e4649941e23f81a70a2c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.2d.animation",
+            "expression": "",
+            "define": "ANIMA2D_2D_ANIMATION"
+        }
+    ],
+    "noEngineReferences": false
+}

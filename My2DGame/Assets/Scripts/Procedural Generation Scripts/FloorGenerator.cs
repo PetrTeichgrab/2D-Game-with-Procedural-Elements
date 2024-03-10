@@ -41,6 +41,7 @@ public static class FloorGenerator
     public static HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int closest)
     {
         HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> corridorFloorTmp = new HashSet<Vector2Int>();
         var position = currentRoomCenter;
         corridor.Add(position);
         while (position.y != closest.y)
@@ -48,24 +49,36 @@ public static class FloorGenerator
             if (closest.y > position.y)
             {
                 position += Vector2Int.up;
+                corridor.Add(position);
+                corridor.Add(position + Vector2Int.right);
+                corridor.Add(position + Vector2Int.left);
             }
             else if (closest.y < position.y)
             {
                 position += Vector2Int.down;
+
+                corridor.Add(position + Vector2Int.right);
+                corridor.Add(position + Vector2Int.left);
+                corridor.Add(position);
             }
-            corridor.Add((Vector2Int)position);
         }
         while (position.x != closest.x)
         {
             if (closest.x > position.x)
             {
                 position += Vector2Int.right;
+                corridor.Add(position + Vector2Int.right);
+                corridor.Add(position + Vector2Int.up);
+                corridor.Add(position);
             }
             else if (closest.x < position.x)
             {
                 position += Vector2Int.left;
+
+                corridor.Add(position + Vector2Int.left);
+                corridor.Add(position + Vector2Int.up);
+                corridor.Add(position);
             }
-            corridor.Add((Vector2Int)position);
         }
         return corridor;
     }
@@ -156,5 +169,27 @@ public static class FloorGenerator
             }
         }
         return closest;
+    }
+
+    public static Vector2Int FindNearestPoint(Vector2Int origin, List<Vector2Int> points)
+    {
+        Vector2Int nearestPoint = Vector2Int.zero;
+        float shortestDistance = float.MaxValue;
+
+        foreach (Vector2Int point in points)
+        {
+            // Spoèítáme Manhattanovu vzdálenost
+            float distance = Mathf.Abs(point.x - origin.x) + Mathf.Abs(point.y - origin.y);
+
+            // Pokud je nová vzdálenost kratší než aktuální nejkratší vzdálenost
+            // aktualizujeme nejbližší bod a nejkratší vzdálenost
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestPoint = point;
+            }
+        }
+
+        return nearestPoint;
     }
 }

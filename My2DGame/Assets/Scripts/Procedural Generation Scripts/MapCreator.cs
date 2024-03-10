@@ -24,28 +24,15 @@ public class MapCreator : MonoBehaviour
     private TileBase emptyTile;
 
     [SerializeField]
-    private TileBase crackedPinkFloor1;
+    private TileBase pinkFloorTile, crackedPinkFloor1, crackedPinkFloor2, crackedPinkFloor3;
+
 
     [SerializeField]
-    private TileBase crackedPinkFloor2;
+    private TileBase blueFloorTile, crackedBlueFloor1, crackedBlueFloor2, crackedBlueFloor3;
 
     [SerializeField]
-    private TileBase crackedPinkFloor3;
+    private TileBase greenFloorTile, crackedGreenFloor1, crackedGreenFloor2, crackedGreenFloor3;
 
-    [SerializeField]
-    private TileBase crackedBlueFloor1;
-
-    [SerializeField]
-    private TileBase crackedBlueFloor2;
-
-    [SerializeField]
-    private TileBase crackedBlueFloor3;
-
-    [SerializeField]
-    private TileBase pinkFloorTile;
-
-    [SerializeField]
-    private TileBase blueFloorTile;
 
     [SerializeField]
     private TileBase pinkWallTop, 
@@ -109,6 +96,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Blue:
                     DrawTilesRandomly(this.blueFloorTile, this.crackedBlueFloor1, this.crackedBlueFloor2, this.crackedBlueFloor3, floor);
+                    break;
+                case DungeonColor.Green:
+                    DrawTilesRandomly(this.greenFloorTile, this.crackedGreenFloor1, this.crackedGreenFloor2, this.crackedGreenFloor3, floor);
                     break;
             }
         

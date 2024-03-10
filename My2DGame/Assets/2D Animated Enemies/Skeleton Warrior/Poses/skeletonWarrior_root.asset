@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae0543fe805424df99fe08ce744cbe49, type: 3}
+  m_Name: skeletonWarrior_root
+  m_EditorClassIdentifier: 
+  m_PoseEntries:
+  - path: Bones/Hips
+    localPosition: {x: 0.58110845, y: -1.2154013, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.7190319, w: 0.69497716}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/Torso
+    localPosition: {x: 0.96256524, y: 0, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.004955182, w: 0.9999877}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/Torso/Head
+    localPosition: {x: 1.15269, y: -0.0000000058361707, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.052152373, w: 0.99863917}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/LeftArm
+    localPosition: {x: 1.821758, y: 0.80190027, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.99091595, w: 0.13448286}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/RightArm
+    localPosition: {x: 1.9270064, y: -0.17935503, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.9565479, w: -0.2915753}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/RightArm/Sword
+    localPosition: {x: 1.4236579, y: 0.00000047683716, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.67492926, w: 0.73788244}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/LeftFoot
+    localPosition: {x: 0.06067242, y: 0.6387111, z: 0}
+    localRotation: {x: 0, y: 0, z: 0.9868916, w: 0.16138467}
+    localScale: {x: 1, y: 1, z: 1}
+  - path: Bones/Hips/RightFoot
+    localPosition: {x: 0.017909465, y: -0.2992586, z: 0}
+    localRotation: {x: 0, y: 0, z: -0.99131894, w: 0.13147919}
+    localScale: {x: 1, y: 1, z: 1}

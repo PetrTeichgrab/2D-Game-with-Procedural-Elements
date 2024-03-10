@@ -23,6 +23,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Dungeon BlueDungeon { get; set; }
 
+    public Dungeon GreenDungeon { get; set; }
+
     public List<Character> allEnemiesList = new List<Character>();
 
     [SerializeField]
@@ -68,28 +70,45 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private void CreateDungeons()
     {
         HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
-        while (dungeonList.Count < 2)
+        while (dungeonList.Count < 3)
         {
             dungeonList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), dungeonWidth, dungeonHeight);
         }
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
+        List<Dungeon> createdDungeonsList = new List<Dungeon>();
+
         PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
         InitDungeon(PinkDungeon);
+        createdDungeonsList.Add(PinkDungeon);
 
         BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
         InitDungeon(BlueDungeon);
+        createdDungeonsList.Add(BlueDungeon);
 
-        ConnectDungeons(PinkDungeon, BlueDungeon);
+        GreenDungeon = new Dungeon(dungeons[2], DungeonColor.Green);
+        InitDungeon(GreenDungeon);
+        createdDungeonsList.Add(GreenDungeon);
+
+        for (int i = 0; i < createdDungeonsList.Count; i++ )
+        {
+            var NearestDungeon = FindNearestBounds(createdDungeonsList[i], createdDungeonsList);
+            if (!createdDungeonsList[i].connectedDungeons.Contains(NearestDungeon))
+            {
+                ConnectDungeons(createdDungeonsList[i], NearestDungeon);
+            }
+        }
 
         tileMap.DrawFloor(PinkDungeon);
         tileMap.DrawFloor(BlueDungeon);
+        tileMap.DrawFloor(GreenDungeon);
+
 
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
 
-        SetToRandomPositionInRandomRoom(Player.transform, BlueDungeon, 1);
-
+        SetToRandomPositionInRandomRoom(Player.transform, GreenDungeon, 1);
     }
 
     public void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
@@ -181,7 +200,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         Vector2Int minDistancePoint2 = Vector2Int.zero;
         for(int i = 0; i < firstDungeonCenters.Count; i++){
             currentRoomCenter = firstDungeonCenters[i];
-            Vector2Int currentClosestPoint = FloorGenerator.FindClosestPoint(currentRoomCenter, secondDungeonCenters);
+            Vector2Int currentClosestPoint = FloorGenerator.FindNearestPoint(currentRoomCenter, secondDungeonCenters);
             float distance = Vector2Int.Distance(currentRoomCenter, currentClosestPoint);
             if (minDistance > distance)
             {
@@ -191,11 +210,54 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             }
         }
         HashSet<Vector2Int> connectingCorridor = FloorGenerator.CreateCorridor(minDistancePoint1, minDistancePoint2);
-        int middleIndex = (connectingCorridor.Count) / 2; //11/2 = 5         0 1 2 3 4 5 6 7 8 9 10
-        firstDungeon.Floor.FloorList.UnionWith(connectingCorridor.Take(middleIndex));
-        secondDungeon.Floor.FloorList.UnionWith(connectingCorridor.Skip(middleIndex));
-        firstDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex]);
-        secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[middleIndex-1]);
+        for (int i = 0; i < connectingCorridor.Count; i++)
+        {
+            var corridorPoint = connectingCorridor.ToList()[i];
+            bool isInFirstDungeon = ((corridorPoint.x < firstDungeon.DungeonBounds.xMax) && (corridorPoint.x > firstDungeon.DungeonBounds.xMin) &&
+                (corridorPoint.y < firstDungeon.DungeonBounds.yMax) && (corridorPoint.y > firstDungeon.DungeonBounds.yMin));
+            bool isInSecondDungeon = ((corridorPoint.x < secondDungeon.DungeonBounds.xMax) && (corridorPoint.x > secondDungeon.DungeonBounds.xMin) &&
+                (corridorPoint.y < secondDungeon.DungeonBounds.yMax) && (corridorPoint.y > secondDungeon.DungeonBounds.yMin));
+            if (isInFirstDungeon) 
+            {
+                firstDungeon.Floor.FloorList.Add(corridorPoint);
+            }
+            else if (isInSecondDungeon)
+            {
+                secondDungeon.Floor.FloorList.Add(corridorPoint);
+            }
+            if(!isInSecondDungeon && !isInFirstDungeon)
+            {
+                secondDungeon.Floor.FloorList.Add(corridorPoint);
+                firstDungeon.Floor.AnotherDungeonsEntrances.Add(corridorPoint);
+                firstDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i+2]);
+                firstDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i+1]);
+                secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i - 1]);
+                secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i - 2]);
+                secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i - 3]);
+            }
+        }
+        firstDungeon.connectedDungeons.Add(secondDungeon);
+        secondDungeon.connectedDungeons.Add(firstDungeon);
+    }
+
+    public Dungeon FindNearestBounds(Dungeon targetDungeon, List<Dungeon> otherDungeons)
+    {
+        var otherDungeonsCopy = otherDungeons.Where((v, i) => i != otherDungeons.IndexOf(targetDungeon)).ToList();
+        Dungeon nearestDungeon = otherDungeonsCopy[0];
+        float shortestDistance = Vector3.Distance(targetDungeon.DungeonBounds.center, otherDungeonsCopy[0].DungeonBounds.center);
+
+        foreach (Dungeon dungeon in otherDungeonsCopy)
+        {
+            float distance = Vector3.Distance(targetDungeon.DungeonBounds.center, dungeon.DungeonBounds.center);
+
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestDungeon = dungeon;
+            }
+        }
+
+        return nearestDungeon;
     }
 
     private void ClearGeneratedObjects() {
