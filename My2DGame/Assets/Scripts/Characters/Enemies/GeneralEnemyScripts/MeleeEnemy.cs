@@ -29,15 +29,20 @@ public abstract class MeleeEnemy : Character
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         attackCooldownTimer = 0;
-        trailRenderer.enabled = false;
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
         isAlive = true;
         startMovementSpeed = movementSpeed;
     }
     private IEnumerator Dash()
     {
         isDashing = true;
-        trailRenderer.enabled = true;
-
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = true;
+        }
         Vector2 direction = (player.position - transform.position).normalized;
 
         rb.velocity = direction * dashSpeed;
@@ -45,7 +50,10 @@ public abstract class MeleeEnemy : Character
         yield return new WaitForSeconds(dashTime);
 
         rb.velocity = direction.normalized * movementSpeed;
-        trailRenderer.enabled = false;
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
         isDashing = false;
     }
 

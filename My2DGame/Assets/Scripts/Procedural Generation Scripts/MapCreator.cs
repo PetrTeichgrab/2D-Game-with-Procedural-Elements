@@ -33,6 +33,9 @@ public class MapCreator : MonoBehaviour
     [SerializeField]
     private TileBase greenFloorTile, crackedGreenFloor1, crackedGreenFloor2, crackedGreenFloor3;
 
+    [SerializeField]
+    private TileBase purpleFloorTile, crackedPurpleFloor1, crackedPurpleFloor2, crackedPurpleFloor3;
+
 
     [SerializeField]
     private TileBase pinkWallTop, 
@@ -83,6 +86,18 @@ public class MapCreator : MonoBehaviour
             greenDiagonalCornerBottomLeft,
             greenDiagonalCornerUpRight,
             greenDiagonalCornerUpLeft;
+    [SerializeField]
+    private TileBase purpleWallTop,
+        purpleSideWallRight,
+        purpleSideWallLeft,
+        purpleWallBottom,
+        purpleFullWall,
+        purpleWallBottomCornerLeft,
+        purpleWallBottomCornerRight,
+        purpleDiagonalCornerBottomRight,
+        purpleDiagonalCornerBottomLeft,
+        purpleDiagonalCornerUpRight,
+        purpleDiagonalCornerUpLeft;
 
 
     public void DrawFloor(Dungeon dungeon)
@@ -99,6 +114,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     DrawTilesRandomly(this.greenFloorTile, this.crackedGreenFloor1, this.crackedGreenFloor2, this.crackedGreenFloor3, floor);
+                    break;
+                case DungeonColor.Purple:
+                    DrawTilesRandomly(this.purpleFloorTile, this.crackedPurpleFloor1, this.crackedPurpleFloor2, this.crackedPurpleFloor3, floor);
                     break;
             }
         
@@ -196,6 +214,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenWallTop;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleWallTop;
+                    break;
             }
         }
         else if (WallByteTypes.wallSideRight.Contains(binaryNumber))
@@ -210,6 +231,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenSideWallRight;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleSideWallRight;
                     break;
             }
         }
@@ -226,6 +250,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenSideWallLeft;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleSideWallLeft;
+                    break;
             }
         }
         else if (WallByteTypes.wallBottom.Contains(binaryNumber))
@@ -240,6 +267,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenWallBottom;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottom;
                     break;
             }
         }
@@ -256,6 +286,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenWallBottomCornerLeft;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottomCornerLeft;
+                    break;
             }
         }
         else if (WallByteTypes.wallBottomCornerRight.Contains(binaryNumber))
@@ -271,6 +304,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenWallBottomCornerRight;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottomCornerRight;
+                    break;
             }
         }
         else if (WallByteTypes.wallFull.Contains(binaryNumber))
@@ -285,6 +321,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenFullWall;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleFullWall;
                     break;
             }
         }
@@ -309,6 +348,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenWallBottomCornerLeft;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottomCornerLeft;
+                    break;
             }
         }
         else if (WallByteTypes.wallInnerCornerDownRight.Contains(binaryNumber))
@@ -323,6 +365,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenWallBottomCornerRight;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottomCornerRight;
                     break;
             }
         }
@@ -339,6 +384,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenDiagonalCornerBottomLeft;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleDiagonalCornerBottomLeft;
+                    break;
             }
         }
         else if (WallByteTypes.wallDiagonalCornerDownRight.Contains(binaryNumber))
@@ -353,6 +401,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenDiagonalCornerBottomRight;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleDiagonalCornerBottomRight;
                     break;
             }
         }
@@ -369,6 +420,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenDiagonalCornerUpRight;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleDiagonalCornerUpRight;
+                    break;
             }
         }
         else if (WallByteTypes.wallDiagonalCornerUpLeft.Contains(binaryNumber))
@@ -383,6 +437,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenDiagonalCornerUpLeft;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleDiagonalCornerUpLeft;
                     break;
             }
         }
@@ -399,6 +456,9 @@ public class MapCreator : MonoBehaviour
                 case DungeonColor.Green:
                     tile = greenFullWall;
                     break;
+                case DungeonColor.Purple:
+                    tile = purpleFullWall;
+                    break;
             }
         }
         else if (WallByteTypes.wallBottmEightDirections.Contains(binaryNumber))
@@ -413,6 +473,9 @@ public class MapCreator : MonoBehaviour
                     break;
                 case DungeonColor.Green:
                     tile = greenWallBottom;
+                    break;
+                case DungeonColor.Purple:
+                    tile = purpleWallBottom;
                     break;
             }
         }

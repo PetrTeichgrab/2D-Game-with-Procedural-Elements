@@ -181,8 +181,6 @@ public static class FloorGenerator
             // Spoèítáme Manhattanovu vzdálenost
             float distance = Mathf.Abs(point.x - origin.x) + Mathf.Abs(point.y - origin.y);
 
-            // Pokud je nová vzdálenost kratší než aktuální nejkratší vzdálenost
-            // aktualizujeme nejbližší bod a nejkratší vzdálenost
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;

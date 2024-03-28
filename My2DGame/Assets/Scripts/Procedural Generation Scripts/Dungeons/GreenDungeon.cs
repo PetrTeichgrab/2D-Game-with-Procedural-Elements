@@ -7,31 +7,31 @@ public class GreenDungeon : MonoBehaviour
     [SerializeField]
     DungeonGenerator generator;
 
-    //[SerializeField]
-    //GreenSlime greenSlime;
+    [SerializeField]
+    GreenSlime greenSlime;
 
     //[SerializeField]
     //GreenBossSlime greenBossSlime;
 
     Dungeon greenDungeon;
 
-    //public void Create()
-    //{
-    //    blueDungeon = generator.BlueDungeon;
-    //    CreateAndSetCharactersPositions();
-    //}
+    public void Create()
+    {
+        greenDungeon = generator.GreenDungeon;
+        CreateAndSetCharactersPositions();
+    }
 
-    //private void CreateAndSetCharactersPositions()
-    //{
-    //    for (int i = 0; i < 15; i++)
-    //    {
-    //        BlueSlime blueSlime = Instantiate(this.blueSlime, this.blueSlime.transform.position, this.blueSlime.transform.rotation);
-    //        blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
-    //        generator.SetToRandomPositionInRandomRoom(blueSlime.transform, blueDungeon, 1);
-    //        generator.allEnemiesList.Add(blueSlime);
-    //    }
-    //    BlueBossSlime blueBossSlime = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position, this.blueBossSlime.transform.rotation);
-    //    generator.SetToRandomPositionInRandomRoom(blueBossSlime.transform, blueDungeon, 1);
-    //    generator.allEnemiesList.Add(blueBossSlime);
-    //}
+    private void CreateAndSetCharactersPositions()
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            GreenSlime greenSlime = Instantiate(this.greenSlime, Vector2.zero, Quaternion.identity);
+            greenSlime.attackCooldown = UnityEngine.Random.Range(greenSlime.attackMinCD, greenSlime.attackMaxCD);
+            generator.SetToRandomPositionInRandomRoom(greenSlime.transform, greenDungeon, 1);
+            generator.allEnemiesList.Add(greenSlime);
+        }
+        //GreenBossSlime greenBossSlime = Instantiate(this.greenBossSlime, this.greenBossSlime.transform.position, this.greenBossSlime.transform.rotation);
+        //generator.SetToRandomPositionInRandomRoom(greenBossSlime.transform, greenDungeon, 1);
+        //generator.allEnemiesList.Add(greenBossSlime);
+    }
 }

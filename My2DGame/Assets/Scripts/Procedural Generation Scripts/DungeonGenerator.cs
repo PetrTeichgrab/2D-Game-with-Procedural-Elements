@@ -25,6 +25,9 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Dungeon GreenDungeon { get; set; }
 
+    public Dungeon PurpleDungeon { get; set; }
+
+
     public List<Character> allEnemiesList = new List<Character>();
 
     [SerializeField]
@@ -70,7 +73,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private void CreateDungeons()
     {
         HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
-        while (dungeonList.Count < 3)
+        while (dungeonList.Count < 4)
         {
             dungeonList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), dungeonWidth, dungeonHeight);
         }
@@ -90,6 +93,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         InitDungeon(GreenDungeon);
         createdDungeonsList.Add(GreenDungeon);
 
+        PurpleDungeon = new Dungeon(dungeons[3], DungeonColor.Purple);
+        InitDungeon(PurpleDungeon);
+        createdDungeonsList.Add(PurpleDungeon);
+
         for (int i = 0; i < createdDungeonsList.Count; i++ )
         {
             var NearestDungeon = FindNearestBounds(createdDungeonsList[i], createdDungeonsList);
@@ -102,13 +109,16 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         tileMap.DrawFloor(PinkDungeon);
         tileMap.DrawFloor(BlueDungeon);
         tileMap.DrawFloor(GreenDungeon);
+        tileMap.DrawFloor(PurpleDungeon);
 
 
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
 
-        SetToRandomPositionInRandomRoom(Player.transform, GreenDungeon, 1);
+
+        SetToRandomPositionInRandomRoom(Player.transform, BlueDungeon, 1);
     }
 
     public void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)

@@ -6,5 +6,9 @@ public enum DungeonColor
 {
     Pink,
     Blue,
-    Green
+    Green,
+    Purple,
+    Yellow,
+    Red,
+    Black
 }

@@ -24,7 +24,7 @@ public abstract class Character : MonoBehaviour
             isAlive = false;
             if(animator != null)
             {
-                animator.SetTrigger("takeDamage");
+                animator.SetTrigger("hit");
             }
         }
     }

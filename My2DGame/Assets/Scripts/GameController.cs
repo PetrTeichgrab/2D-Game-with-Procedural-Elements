@@ -14,11 +14,16 @@ public class GameController : MonoBehaviour
     [SerializeField]
     BlueDungeon blueDungeon;
 
+    [SerializeField]
+    GreenDungeon greenDungeon;
+
     void Start()
     {
         generator.GenerateDungeons();
         pinkDungeon.Create();
         blueDungeon.Create();
+        greenDungeon.Create();
+        pinkDungeon.Create();
     }
 
     // Update is called once per frame
