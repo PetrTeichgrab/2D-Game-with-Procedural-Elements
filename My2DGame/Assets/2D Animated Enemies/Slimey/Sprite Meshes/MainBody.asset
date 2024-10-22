@@ -12,53 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
   m_Name: MainBody
   m_EditorClassIdentifier: 
-  m_ApiVersion: 3
+  m_ApiVersion: 5
   m_Sprite: {fileID: 21300006, guid: db1e94177cb7a76479f4a1637eab123d, type: 3}
   m_SharedMesh: {fileID: 43586845778721048}
-  m_SharedMaterials:
-  - {fileID: 21736436254519456}
-  pivotPoint: {x: 0, y: 0}
-  texVertices: []
-  edges: []
-  holes: []
-  indices: 
-  bindPoses: []
---- !u!21 &21736436254519456
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: MainBody_0
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: db1e94177cb7a76479f4a1637eab123d, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
+  m_SharedMaterials: []
 --- !u!43 &43586845778721048
 Mesh:
   m_ObjectHideFlags: 1
@@ -66,7 +23,7 @@ Mesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MainBody
-  serializedVersion: 10
+  serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
     firstByte: 0
@@ -393,6 +350,7 @@ Mesh:
     m_Center: {x: 0.05933416, y: 0.01684928, z: 0}
     m_Extent: {x: 2.9994226, y: 2.0929396, z: 0}
   m_MeshUsageFlags: 0
+  m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshMetrics[0]: 1
@@ -713,11 +671,7 @@ MonoBehaviour:
     boneLength: 1.3913188
     path: 
     name: Body
-    color:
-      r: 1
-      g: 0
-      b: 0
-      a: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: -0.091128826
@@ -739,11 +693,7 @@ MonoBehaviour:
     boneLength: 1.6476235
     path: Body 2
     name: Body 2
-    color:
-      r: 1
-      g: 0.75
-      b: 0
-      a: 1
+    color: {r: 1, g: 0.75, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: -0.99665594
@@ -765,11 +715,7 @@ MonoBehaviour:
     boneLength: 1.308912
     path: Body 2/Mouth
     name: Mouth
-    color:
-      r: 0.5
-      g: 1
-      b: 0
-      a: 1
+    color: {r: 0.5, g: 1, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: -0.991004
@@ -791,11 +737,7 @@ MonoBehaviour:
     boneLength: 1
     path: Body 2/Mouth/Mouth 2
     name: Mouth 2
-    color:
-      r: 0
-      g: 1
-      b: 0.25
-      a: 1
+    color: {r: 0, g: 1, b: 0.25, a: 1}
     zOrder: 0
   - bindPose:
       e00: -0.996113
@@ -817,11 +759,7 @@ MonoBehaviour:
     boneLength: 1.6273477
     path: Jaw
     name: Jaw
-    color:
-      r: 0
-      g: 1
-      b: 1
-      a: 1
+    color: {r: 0, g: 1, b: 1, a: 1}
     zOrder: 1
   - bindPose:
       e00: -0.94255733
@@ -843,11 +781,7 @@ MonoBehaviour:
     boneLength: 1
     path: Jaw/Jaw 2
     name: Jaw 2
-    color:
-      r: 0
-      g: 0.25
-      b: 1
-      a: 1
+    color: {r: 0, g: 0.25, b: 1, a: 1}
     zOrder: 1
   - bindPose:
       e00: -0.99996805
@@ -869,11 +803,7 @@ MonoBehaviour:
     boneLength: 1.6123565
     path: Jaw/JawStill
     name: JawStill
-    color:
-      r: 0.5
-      g: 0
-      b: 1
-      a: 1
+    color: {r: 0.5, g: 0, b: 1, a: 1}
     zOrder: 1
   - bindPose:
       e00: -0.9651261
@@ -895,11 +825,7 @@ MonoBehaviour:
     boneLength: 1.6
     path: Jaw/JawStill/JawStill 2
     name: JawStill 2
-    color:
-      r: 1
-      g: 0
-      b: 0.75
-      a: 1
+    color: {r: 1, g: 0, b: 0.75, a: 1}
     zOrder: 1
   - bindPose:
       e00: 0.9923421
@@ -921,11 +847,7 @@ MonoBehaviour:
     boneLength: 0.6441617
     path: Tail
     name: Tail
-    color:
-      r: 1
-      g: 0.33333334
-      b: 0
-      a: 1
+    color: {r: 1, g: 0.33333334, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: 0.9937313
@@ -947,10 +869,6 @@ MonoBehaviour:
     boneLength: 1
     path: Tail/Tail 2
     name: Tail 2
-    color:
-      r: 0.91666675
-      g: 1
-      b: 0
-      a: 1
+    color: {r: 0.91666675, g: 1, b: 0, a: 1}
     zOrder: 0
   m_Blendshapes: []

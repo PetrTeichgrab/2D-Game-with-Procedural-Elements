@@ -12,53 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
   m_Name: LeftWing
   m_EditorClassIdentifier: 
-  m_ApiVersion: 3
+  m_ApiVersion: 5
   m_Sprite: {fileID: 21300008, guid: 7c8e2c84b7bb93d4ea6d7493af5a8848, type: 3}
   m_SharedMesh: {fileID: 43750886831303828}
-  m_SharedMaterials:
-  - {fileID: 21827966845951490}
-  pivotPoint: {x: 0, y: 0}
-  texVertices: []
-  edges: []
-  holes: []
-  indices: 
-  bindPoses: []
---- !u!21 &21827966845951490
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: LeftWing_0
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 7c8e2c84b7bb93d4ea6d7493af5a8848, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
+  m_SharedMaterials: []
 --- !u!43 &43750886831303828
 Mesh:
   m_ObjectHideFlags: 1
@@ -66,7 +23,7 @@ Mesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LeftWing
-  serializedVersion: 10
+  serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
     firstByte: 0
@@ -321,6 +278,7 @@ Mesh:
     m_Center: {x: 0.015148997, y: -0.0051609874, z: 0}
     m_Extent: {x: 2.4220352, y: 1.2970469, z: 0}
   m_MeshUsageFlags: 0
+  m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshMetrics[0]: 1
@@ -531,11 +489,7 @@ MonoBehaviour:
     boneLength: 1.3093939
     path: LeftWing
     name: LeftWing
-    color:
-      r: 1
-      g: 0
-      b: 0
-      a: 1
+    color: {r: 1, g: 0, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: -0.9904801
@@ -557,11 +511,7 @@ MonoBehaviour:
     boneLength: 1
     path: LeftWing/LeftWing 2
     name: LeftWing 2
-    color:
-      r: 1
-      g: 0.75
-      b: 0
-      a: 1
+    color: {r: 1, g: 0.75, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: 0.9999398
@@ -583,11 +533,7 @@ MonoBehaviour:
     boneLength: 0.9899488
     path: Mouth
     name: Mouth
-    color:
-      r: 0.5
-      g: 1
-      b: 0
-      a: 1
+    color: {r: 0.5, g: 1, b: 0, a: 1}
     zOrder: 0
   - bindPose:
       e00: 0.98225063
@@ -609,11 +555,7 @@ MonoBehaviour:
     boneLength: 1
     path: Mouth/Mouth 2
     name: Mouth 2
-    color:
-      r: 0
-      g: 1
-      b: 0.25
-      a: 1
+    color: {r: 0, g: 1, b: 0.25, a: 1}
     zOrder: 0
   - bindPose:
       e00: 0.9996879
@@ -635,11 +577,7 @@ MonoBehaviour:
     boneLength: 1.0000006
     path: MouthKeeper
     name: MouthKeeper
-    color:
-      r: 0
-      g: 1
-      b: 1
-      a: 1
+    color: {r: 0, g: 1, b: 1, a: 1}
     zOrder: 0
   - bindPose:
       e00: 0.9996879
@@ -661,10 +599,6 @@ MonoBehaviour:
     boneLength: 1
     path: MouthKeeper/MouthKeeper2
     name: MouthKeeper2
-    color:
-      r: 0
-      g: 0.25
-      b: 1
-      a: 1
+    color: {r: 0, g: 0.25, b: 1, a: 1}
     zOrder: 0
   m_Blendshapes: []

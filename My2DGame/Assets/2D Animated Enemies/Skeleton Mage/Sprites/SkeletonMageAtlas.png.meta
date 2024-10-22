@@ -175,13 +175,102 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Head
+        guid: 
+        position: {x: 116, y: 128, z: 0}
+        rotation: {x: 0, y: 0, z: -0.75754213, w: 0.6527862}
+        length: 204
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 02305410000000000800000000000000
       internalID: 21300000
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 227, y: 155}
+      - {x: 224, y: 5}
+      - {x: 227, y: 10}
+      - {x: 187, y: 251}
+      - {x: 98, y: 5}
+      - {x: 20, y: 251}
+      - {x: 5, y: 209}
+      - {x: 5, y: 43}
+      indices: 070000000600000004000000050000000400000006000000030000000400000005000000010000000400000003000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 7, y: 6}
+      - {x: 5, y: 6}
+      - {x: 7, y: 4}
+      - {x: 3, y: 5}
+      - {x: 0, y: 3}
+      - {x: 1, y: 4}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: Torso
       rect:
@@ -196,13 +285,112 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Torso
+        guid: 
+        position: {x: 83, y: 75, z: 0}
+        rotation: {x: 0, y: 0, z: -0.74839634, w: 0.66325176}
+        length: 97.96724
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 22305410000000000800000000000000
       internalID: 21300002
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 148, y: 145}
+      - {x: 162, y: 13}
+      - {x: 162, y: 127}
+      - {x: 145, y: 5}
+      - {x: 41, y: 145}
+      - {x: 39, y: 5}
+      - {x: 10, y: 29}
+      - {x: 5, y: 121}
+      - {x: 5, y: 37}
+      indices: 080000000700000006000000040000000600000007000000050000000600000004000000030000000500000004000000000000000300000004000000010000000300000000000000020000000100000000000000
+      edges:
+      - {x: 8, y: 7}
+      - {x: 4, y: 7}
+      - {x: 8, y: 6}
+      - {x: 0, y: 4}
+      - {x: 5, y: 6}
+      - {x: 3, y: 5}
+      - {x: 2, y: 0}
+      - {x: 1, y: 3}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: Hips
       rect:
@@ -217,13 +405,102 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Hips
+        guid: 
+        position: {x: 89.5, y: 57, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7287831, w: 0.6847446}
+        length: 88.54142
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 42305410000000000800000000000000
       internalID: 21300004
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 151, y: 104}
+      - {x: 174, y: 5}
+      - {x: 174, y: 99}
+      - {x: 124, y: 109}
+      - {x: 41, y: 5}
+      - {x: 14, y: 109}
+      - {x: 5, y: 106}
+      - {x: 5, y: 49}
+      indices: 070000000600000004000000050000000400000006000000030000000400000005000000010000000400000003000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 7, y: 6}
+      - {x: 5, y: 6}
+      - {x: 7, y: 4}
+      - {x: 3, y: 5}
+      - {x: 0, y: 3}
+      - {x: 1, y: 4}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: LeftArm
       rect:
@@ -238,13 +515,92 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: LeftArm
+        guid: 
+        position: {x: 80.5, y: 112, z: 0}
+        rotation: {x: 0, y: 0, z: 0.8700558, w: 0.49295315}
+        length: 187
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 62305410000000000800000000000000
       internalID: 21300006
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 151, y: 219}
+      - {x: 156, y: 163}
+      - {x: 156, y: 218}
+      - {x: 102, y: 5}
+      - {x: 101, y: 219}
+      - {x: 5, y: 158}
+      - {x: 5, y: 5}
+      indices: 060000000500000003000000040000000300000005000000000000000300000004000000010000000300000000000000020000000100000000000000
+      edges:
+      - {x: 6, y: 5}
+      - {x: 4, y: 5}
+      - {x: 6, y: 3}
+      - {x: 0, y: 4}
+      - {x: 2, y: 0}
+      - {x: 1, y: 3}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: Cloak
       rect:
@@ -259,13 +615,101 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Hips
+        guid: 
+        position: {x: 214, y: 203.5, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7287831, w: 0.6847446}
+        length: 88.54142
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: Torso
+        guid: 
+        position: {x: 0, y: 0, z: 0}
+        rotation: {x: 0, y: 0, z: -0.02909367, w: 0.9995767}
+        length: 97.96724
+        parentId: 0
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 82305410000000000800000000000000
       internalID: 21300008
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 408, y: 350}
+      - {x: 423, y: 5}
+      - {x: 423, y: 286}
+      - {x: 378, y: 402}
+      - {x: 110, y: 402}
+      - {x: 5, y: 363}
+      - {x: 5, y: 5}
+      indices: 060000000500000001000000040000000100000005000000030000000100000004000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 6, y: 5}
+      - {x: 4, y: 5}
+      - {x: 6, y: 1}
+      - {x: 3, y: 4}
+      - {x: 0, y: 3}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 0.8280119
+        weight[1]: 0.17198816
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 1
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 0.6053268
+        weight[1]: 0.39467323
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 1
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 0.9182888
+        weight[1]: 0.081711195
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 1
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 0.87814647
+        weight[1]: 0.121853486
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 1
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 0.7516856
+        weight[1]: 0.24831441
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 1
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 0.9644591
+        weight[1]: 0.03554089
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 1
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: Staff
       rect:
@@ -280,13 +724,92 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Staff
+        guid: 
+        position: {x: 64, y: 220, z: 0}
+        rotation: {x: 0, y: 0, z: -0.66305107, w: 0.74857396}
+        length: 183
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: a2305410000000000800000000000000
       internalID: 21300010
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 123, y: 435}
+      - {x: 55, y: 9}
+      - {x: 123, y: 305}
+      - {x: 49, y: 5}
+      - {x: 47, y: 435}
+      - {x: 5, y: 409}
+      - {x: 5, y: 5}
+      indices: 060000000500000003000000040000000300000005000000000000000300000004000000010000000300000000000000020000000100000000000000
+      edges:
+      - {x: 6, y: 5}
+      - {x: 4, y: 5}
+      - {x: 6, y: 3}
+      - {x: 0, y: 4}
+      - {x: 2, y: 0}
+      - {x: 1, y: 3}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: LeftEye
       rect:
@@ -301,13 +824,102 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Head
+        guid: 
+        position: {x: 46.5, y: 46, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7575422, w: 0.6527862}
+        length: 204
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: c2305410000000000800000000000000
       internalID: 21300012
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 85, y: 47}
+      - {x: 88, y: 5}
+      - {x: 88, y: 29}
+      - {x: 22, y: 87}
+      - {x: 11, y: 5}
+      - {x: 7, y: 6}
+      - {x: 5, y: 87}
+      - {x: 5, y: 18}
+      indices: 070000000600000005000000030000000500000006000000040000000500000003000000010000000400000003000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 7, y: 6}
+      - {x: 3, y: 6}
+      - {x: 7, y: 5}
+      - {x: 0, y: 3}
+      - {x: 4, y: 5}
+      - {x: 1, y: 4}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: RightEye
       rect:
@@ -322,13 +934,102 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Head
+        guid: 
+        position: {x: 32, y: 42.5, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7575422, w: 0.6527862}
+        length: 204
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: e2305410000000000800000000000000
       internalID: 21300014
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 59, y: 58}
+      - {x: 53, y: 5}
+      - {x: 59, y: 9}
+      - {x: 49, y: 80}
+      - {x: 37, y: 80}
+      - {x: 9, y: 5}
+      - {x: 5, y: 47}
+      - {x: 5, y: 7}
+      indices: 070000000600000005000000040000000500000006000000010000000500000004000000030000000100000004000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 7, y: 6}
+      - {x: 4, y: 6}
+      - {x: 7, y: 5}
+      - {x: 3, y: 4}
+      - {x: 1, y: 5}
+      - {x: 0, y: 3}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: LeftFoot
       rect:
@@ -343,13 +1044,92 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: LeftFoot
+        guid: 
+        position: {x: 57, y: 90, z: 0}
+        rotation: {x: 0, y: -0, z: 0.7933828, w: 0.6087227}
+        length: 146
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 03305410000000000800000000000000
       internalID: 21300016
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 105, y: 175}
+      - {x: 109, y: 5}
+      - {x: 109, y: 171}
+      - {x: 69, y: 175}
+      - {x: 60, y: 173}
+      - {x: 5, y: 82}
+      - {x: 5, y: 5}
+      indices: 060000000500000001000000040000000100000005000000030000000100000004000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 6, y: 5}
+      - {x: 4, y: 5}
+      - {x: 6, y: 1}
+      - {x: 3, y: 4}
+      - {x: 0, y: 3}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: RightFoot
       rect:
@@ -364,13 +1144,82 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: RightFoot
+        guid: 
+        position: {x: 59, y: 80, z: 0}
+        rotation: {x: 0, y: -0, z: 0.5829805, w: 0.8124861}
+        length: 128
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 23305410000000000800000000000000
       internalID: 21300018
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 43, y: 155}
+      - {x: 113, y: 5}
+      - {x: 113, y: 118}
+      - {x: 11, y: 5}
+      - {x: 5, y: 155}
+      - {x: 5, y: 83}
+      indices: 050000000400000003000000000000000300000004000000010000000300000000000000020000000100000000000000
+      edges:
+      - {x: 5, y: 4}
+      - {x: 0, y: 4}
+      - {x: 5, y: 3}
+      - {x: 2, y: 0}
+      - {x: 1, y: 3}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: RightArm
       rect:
@@ -385,13 +1234,102 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: RightArm
+        guid: 
+        position: {x: 109.5, y: 82.5, z: 0}
+        rotation: {x: 0, y: 0, z: 0.19474539, w: 0.9808538}
+        length: 164.79343
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 43305410000000000800000000000000
       internalID: 21300020
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 214, y: 105}
+      - {x: 196, y: 5}
+      - {x: 214, y: 35}
+      - {x: 123, y: 5}
+      - {x: 76, y: 160}
+      - {x: 13, y: 160}
+      - {x: 5, y: 156}
+      - {x: 5, y: 87}
+      indices: 070000000600000003000000050000000300000006000000040000000300000005000000000000000300000004000000010000000300000000000000020000000100000000000000
+      edges:
+      - {x: 7, y: 6}
+      - {x: 5, y: 6}
+      - {x: 7, y: 3}
+      - {x: 4, y: 5}
+      - {x: 0, y: 4}
+      - {x: 2, y: 0}
+      - {x: 1, y: 3}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: LeftDeadEye
       rect:
@@ -406,13 +1344,92 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Head
+        guid: 
+        position: {x: 40, y: 34.5, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7575422, w: 0.6527862}
+        length: 204
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 63305410000000000800000000000000
       internalID: 21300022
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 75, y: 35}
+      - {x: 24, y: 5}
+      - {x: 75, y: 23}
+      - {x: 18, y: 64}
+      - {x: 9, y: 5}
+      - {x: 5, y: 64}
+      - {x: 5, y: 9}
+      indices: 060000000500000004000000030000000400000005000000010000000400000003000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 6, y: 5}
+      - {x: 3, y: 5}
+      - {x: 6, y: 4}
+      - {x: 0, y: 3}
+      - {x: 1, y: 4}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     - serializedVersion: 2
       name: RightDeadEye
       rect:
@@ -427,17 +1444,126 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: 0
-      bones: []
+      bones:
+      - name: Head
+        guid: 
+        position: {x: 32, y: 33.5, z: 0}
+        rotation: {x: 0, y: 0, z: -0.7575422, w: 0.6527862}
+        length: 204
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
       spriteID: 83305410000000000800000000000000
       internalID: 21300024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+      vertices:
+      - {x: 57, y: 52}
+      - {x: 59, y: 5}
+      - {x: 59, y: 47}
+      - {x: 51, y: 62}
+      - {x: 48, y: 5}
+      - {x: 42, y: 62}
+      - {x: 11, y: 15}
+      - {x: 7, y: 32}
+      - {x: 5, y: 28}
+      - {x: 5, y: 18}
+      indices: 090000000800000006000000070000000600000008000000050000000600000007000000040000000600000005000000030000000400000005000000010000000400000003000000000000000100000003000000020000000100000000000000
+      edges:
+      - {x: 9, y: 8}
+      - {x: 7, y: 8}
+      - {x: 9, y: 6}
+      - {x: 5, y: 7}
+      - {x: 3, y: 5}
+      - {x: 4, y: 6}
+      - {x: 0, y: 3}
+      - {x: 1, y: 4}
+      - {x: 2, y: 0}
+      - {x: 2, y: 1}
+      weights:
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
+      - weight[0]: 1
+        weight[1]: 0
+        weight[2]: 0
+        weight[3]: 0
+        boneIndex[0]: 0
+        boneIndex[1]: 0
+        boneIndex[2]: 0
+        boneIndex[3]: 0
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b633346321219944b8199164226370b5
     internalID: 0
     vertices: []
     indices: 
