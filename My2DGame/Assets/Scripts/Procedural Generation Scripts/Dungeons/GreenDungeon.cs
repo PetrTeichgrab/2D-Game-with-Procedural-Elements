@@ -27,8 +27,7 @@ public class GreenDungeon : MonoBehaviour
         {
             GreenSlime greenSlime = Instantiate(this.greenSlime, Vector2.zero, Quaternion.identity);
             greenSlime.attackCooldown = UnityEngine.Random.Range(greenSlime.attackMinCD, greenSlime.attackMaxCD);
-            generator.SetToRandomPositionInRandomRoom(greenSlime.transform, greenDungeon, 1);
-            generator.allEnemiesList.Add(greenSlime);
+            generator.setCharacterToRandomPosition(greenSlime, greenDungeon, 1);
         }
         //GreenBossSlime greenBossSlime = Instantiate(this.greenBossSlime, this.greenBossSlime.transform.position, this.greenBossSlime.transform.rotation);
         //generator.SetToRandomPositionInRandomRoom(greenBossSlime.transform, greenDungeon, 1);

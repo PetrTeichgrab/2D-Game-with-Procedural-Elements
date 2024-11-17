@@ -28,7 +28,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public Dungeon PurpleDungeon { get; set; }
 
 
-    public List<Character> allEnemiesList = new List<Character>();
+    private List<Character> allEnemiesList = new List<Character>();
+
+    private List<Item> allItems = new List<Item>();
+
+    private List<Vector2Int> occupiedPositions = new List<Vector2Int>();
 
     [SerializeField]
     protected RandomWalkParameters randomWalkParameters;
@@ -58,6 +62,15 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [Range(0, 10)]
     private int offset = 1;
 
+    [SerializeField]
+    PinkDungeon pinkDungeon;
+
+    [SerializeField]
+    BlueDungeon blueDungeon;
+
+    [SerializeField]
+    GreenDungeon greenDungeon;
+
     //public void Start()
     //{
     //    tileMap.ClearGeneration();
@@ -67,13 +80,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     {
         tileMap.ClearGeneration();
         ClearGeneratedObjects();
+        allEnemiesList.Clear();
+        allItems.Clear();
         CreateDungeons();
+        pinkDungeon.Create();
+        //blueDungeon.Create();
+        //greenDungeon.Create();
     }
 
     private void CreateDungeons()
     {
         HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
-        while (dungeonList.Count < 4)
+        while (dungeonList.Count < 5)
         {
             dungeonList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), dungeonWidth, dungeonHeight);
         }
@@ -85,56 +103,160 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         InitDungeon(PinkDungeon);
         createdDungeonsList.Add(PinkDungeon);
 
-        BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
-        InitDungeon(BlueDungeon);
-        createdDungeonsList.Add(BlueDungeon);
+        //BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
+        //InitDungeon(BlueDungeon);
+        //createdDungeonsList.Add(BlueDungeon);
 
-        GreenDungeon = new Dungeon(dungeons[2], DungeonColor.Green);
-        InitDungeon(GreenDungeon);
-        createdDungeonsList.Add(GreenDungeon);
+        //GreenDungeon = new Dungeon(dungeons[2], DungeonColor.Green);
+        //InitDungeon(GreenDungeon);
+        //createdDungeonsList.Add(GreenDungeon);
 
-        PurpleDungeon = new Dungeon(dungeons[3], DungeonColor.Purple);
-        InitDungeon(PurpleDungeon);
-        createdDungeonsList.Add(PurpleDungeon);
+        //PurpleDungeon = new Dungeon(dungeons[3], DungeonColor.Purple);
+        //InitDungeon(PurpleDungeon);
+        //createdDungeonsList.Add(PurpleDungeon);
 
-        for (int i = 0; i < createdDungeonsList.Count; i++ )
-        {
-            var NearestDungeon = FindNearestBounds(createdDungeonsList[i], createdDungeonsList);
-            if (!createdDungeonsList[i].connectedDungeons.Contains(NearestDungeon))
-            {
-                ConnectDungeons(createdDungeonsList[i], NearestDungeon);
-            }
-        }
+        //for (int i = 0; i < createdDungeonsList.Count; i++)
+        //{
+        //    for (int j = createdDungeonsList.Count; j > 0; j--)
+        //    {
+        //        var NearestDungeon = FindNearestBounds(createdDungeonsList[i], createdDungeonsList);
+        //        if (!createdDungeonsList[i].connectedDungeons.Contains(NearestDungeon))
+        //        {
+        //            ConnectDungeons(createdDungeonsList[i], NearestDungeon);
+        //        }
+        //    }
+        //}
 
         tileMap.DrawFloor(PinkDungeon);
-        tileMap.DrawFloor(BlueDungeon);
-        tileMap.DrawFloor(GreenDungeon);
-        tileMap.DrawFloor(PurpleDungeon);
+        //tileMap.DrawFloor(BlueDungeon);
+        //tileMap.DrawFloor(GreenDungeon);
+        //tileMap.DrawFloor(PurpleDungeon);
 
 
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
+        //WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
+        //WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
+        //WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
 
-
-        SetToRandomPositionInRandomRoom(Player.transform, BlueDungeon, 1);
+        SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
     }
 
-    public void SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
+    public Vector2Int SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
     {
-        int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
-        var room = dungeon.RoomList[randomRoom].FloorList.ToList();
-        var newPos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
-        if(!IsPositionAndItsSurroundingsInList(room, newPos, 3))
+        for (int attempt = 0; attempt < 100; attempt++)
         {
-            SetToRandomPositionInRandomRoom(transformObject, dungeon, offset);
+            int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
+            var room = dungeon.RoomList[randomRoom].FloorList.ToList();
+
+            var newPos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
+
+            if (IsPositionAndItsSurroundingsInList(room, newPos, 3))
+            {
+                transformObject.position = (Vector2)newPos;
+                return newPos;
+            }
         }
-        else
-        {
-            transformObject.position = (Vector2)newPos;
-        }
+
+        Debug.LogWarning("Nepodaøilo se najít platnou náhodnou pozici.");
+        return Vector2Int.zero;
     }
+
+
+    public Vector2Int SetToEdgeOfRoom(Transform transformObject, Dungeon dungeon)
+    {
+        var edgePositions = dungeon.Floor.Edges.ToList();
+        if (edgePositions.Count == 0)
+        {
+            Debug.LogWarning("Nebyla nalezena žádná pozice na okraji místnosti.");
+            return Vector2Int.zero;
+        }
+
+        for (int i = 0; i < edgePositions.Count; i++)
+        {
+            var newPos = edgePositions[UnityEngine.Random.Range(0, edgePositions.Count)];
+
+            if (!GetAllOccupiedPositions().Contains(newPos))
+            {
+                Vector2 centeredPos = new Vector2(newPos.x + 0.5f, newPos.y + 0.5f);
+                transformObject.position = centeredPos;
+                return newPos;
+            }
+        }
+
+        Debug.LogWarning("Všechny pozice na okraji místnosti jsou obsazené.");
+        return Vector2Int.zero;
+    }
+
+    public List<Vector2Int> SetLargeObjectToRandomPosition(Transform transformObject, Dungeon dungeon, int width, int height, int offset)
+    {
+        List<Vector2Int> itemsOccupiedPositions= new List<Vector2Int>();
+        for (int attempt = 0; attempt < 100; attempt++) // Limit pokusù
+        {
+            int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
+            var room = dungeon.RoomList[randomRoom].FloorList.ToList();
+
+            var basePos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
+
+            occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
+
+            if (occupiedPositions.All(pos => room.Contains(pos) && !GetAllOccupiedPositions().Contains(pos)))
+            {
+                transformObject.position = (Vector2)basePos;
+                itemsOccupiedPositions.Add(basePos);
+                itemsOccupiedPositions.Union(occupiedPositions);
+                return occupiedPositions;
+            }
+        }
+
+        Debug.LogWarning("Nepodaøilo se najít volnou pozici pro velký objekt.");
+        return occupiedPositions;
+    }
+
+    private List<Vector2Int> GetOccupiedPositionsForLargeObject(Vector2Int basePos, int width, int height)
+    {
+        var positions = new List<Vector2Int>();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                positions.Add(new Vector2Int(basePos.x + x, basePos.y + y));
+            }
+        }
+        return positions;
+    }
+
+    public void setCharacterToRandomPosition(Character character, Dungeon dungeon, int offset)
+    {
+        var position = SetToRandomPositionInRandomRoom(character.transform, dungeon, offset);
+        character.Position = position;
+        allEnemiesList.Add(character);
+        occupiedPositions.Add(position);
+    }
+
+    public void SetItemToEdgeOfRoom(Item item, Dungeon dungeon)
+    {
+        var position = SetToEdgeOfRoom(item.transform, dungeon);
+        item.Position = position;
+        occupiedPositions.Add(position);
+        allItems.Add(item);
+    }
+
+    public void SetItemToRandomPosition(Item item, Dungeon dungeon, int offset)
+    {
+        var position = SetToRandomPositionInRandomRoom(item.transform, dungeon, offset);
+        item.Position = position;
+        occupiedPositions.Add(position);
+        allItems.Add(item);
+    }
+
+    public void SetLargeItemToRandomPosition(Item item, Dungeon dungeon, int width, int height, int offset)
+    {
+        var positions = SetLargeObjectToRandomPosition(item.transform, dungeon, width, height, offset);
+        item.Position = positions[0];
+        occupiedPositions.Union(positions);
+        allItems.Add(item);
+    }
+
 
     bool IsPositionAndItsSurroundingsInList(List<Vector2Int> list, Vector2Int position, int offset)
     {
@@ -271,13 +393,37 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     }
 
     private void ClearGeneratedObjects() {
-        foreach (RangeEnemy enemy in allEnemiesList)
+        foreach (Character enemy in allEnemiesList)
         {
             if (enemy != null)
             {
-                Destroy(enemy.gameObject);
+                DestroyImmediate(enemy.gameObject);
             }
         }
+        foreach (Item item in allItems)
+        {
+            if (item != null)
+            {
+                DestroyImmediate(item.gameObject);
+            }
+        }
+    }
+
+    public List<Vector2Int> GetAllOccupiedPositions()
+    {
+        List<Vector2Int> occupiedPositions = new List<Vector2Int>();
+
+        foreach (var enemy in allEnemiesList)
+        {
+            occupiedPositions.Add(enemy.Position);
+        }
+
+        foreach (var item in allItems)
+        {
+            occupiedPositions.Add(item.Position);
+        }
+
+        return occupiedPositions;
     }
 
 }

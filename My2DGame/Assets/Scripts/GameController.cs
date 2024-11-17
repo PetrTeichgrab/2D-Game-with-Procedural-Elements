@@ -19,8 +19,12 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        generateGameContent();
+    }
+
+    public void generateGameContent()
+    {
         generator.GenerateDungeons();
-        pinkDungeon.Create();
         blueDungeon.Create();
         greenDungeon.Create();
         pinkDungeon.Create();

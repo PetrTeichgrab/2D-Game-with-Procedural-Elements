@@ -27,11 +27,9 @@ public class BlueDungeon : MonoBehaviour
         {
             BlueSlime blueSlime = Instantiate(this.blueSlime, this.blueSlime.transform.position, this.blueSlime.transform.rotation);
             blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
-            generator.SetToRandomPositionInRandomRoom(blueSlime.transform, blueDungeon, 1);
-            generator.allEnemiesList.Add(blueSlime);
+            generator.setCharacterToRandomPosition(blueSlime, blueDungeon, 1);
         }
         BlueBossSlime blueBossSlime = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position, this.blueBossSlime.transform.rotation);
-        generator.SetToRandomPositionInRandomRoom(blueBossSlime.transform, blueDungeon, 1);
-        generator.allEnemiesList.Add(blueBossSlime);
+        generator.setCharacterToRandomPosition(blueBossSlime, blueDungeon, 1);
     }
 }

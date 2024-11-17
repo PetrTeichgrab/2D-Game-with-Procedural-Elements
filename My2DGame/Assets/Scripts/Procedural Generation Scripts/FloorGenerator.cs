@@ -86,9 +86,8 @@ public static class FloorGenerator
     public static HashSet<Vector2Int> CreateRandomRooms(List<Room> roomList, List<BoundsInt> roomBoundsList, RandomWalkParameters randomWalkParameters, int offset)
     {
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
-        for (int i = 0; i < roomBoundsList.Count; i++)
+        foreach (var roomBounds in roomBoundsList)
         {
-            var roomBounds = roomBoundsList[i];
             var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
             var roomFloor = RandomWalkAlgorithms.RandomWalk(randomWalkParameters, roomCenter);
             foreach (var pos in roomFloor)
@@ -103,6 +102,7 @@ public static class FloorGenerator
         }
         return floor;
     }
+
 
     //TODO: optimalization
     //Algorithm for filling holes

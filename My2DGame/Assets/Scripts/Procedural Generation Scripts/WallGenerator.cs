@@ -8,7 +8,7 @@ public static class WallGenerator
 {
     public static void CreateAndDrawWalls(Dungeon dungeon, MapCreator mapCreator)
     {
-        HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(dungeon.Floor.FloorList, dungeon.Floor.AnotherDungeonsEntrances);
+        HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(dungeon.Floor.FloorList, dungeon.Floor.Edges ,dungeon.Floor.AnotherDungeonsEntrances);
 
         HashSet<Vector2Int> diagonalWalls = FindWallsInDiagonalDirections(dungeon.Floor.FloorList, cardinalWalls, dungeon.Floor.AnotherDungeonsEntrances);
 
@@ -17,7 +17,7 @@ public static class WallGenerator
         mapCreator.DrawDiagonalWalls(diagonalWalls, dungeon.Floor.FloorList, dungeon.Color);
     }
 
-    private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor, List<Vector2Int> anotherDungeonsEntrances)
+    private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor, HashSet<Vector2Int> edges,  List<Vector2Int> anotherDungeonsEntrances)
     {
         HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
 
@@ -28,6 +28,7 @@ public static class WallGenerator
                 if((!floor.Contains(position + direction)) && !anotherDungeonsEntrances.Contains(position + direction))
                 {
                     walls.Add(position + direction);
+                    edges.Add(position);
                 }
             }
         }
