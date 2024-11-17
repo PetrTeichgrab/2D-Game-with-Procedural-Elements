@@ -97,7 +97,7 @@ public static class FloorGenerator
                 {
                     floor.Add(pos);
                 }
-                roomList.Add(new Room(floor));
+                roomList.Add(new Room(floor, roomCenter));
             }
         }
         return floor;

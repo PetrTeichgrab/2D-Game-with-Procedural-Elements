@@ -209,6 +209,33 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         }
 
         Debug.LogWarning("Nepodaøilo se najít volnou pozici pro velký objekt.");
+        return itemsOccupiedPositions;
+    }
+
+    public List<Vector2Int> SetLargeObjectToRoomCenter(Transform transformObject, Dungeon dungeon, int width, int height)
+    {
+        List<Vector2Int> itemsOccupiedPositions = new List<Vector2Int>();
+        for (int attempt = 0; attempt < 100; attempt++)
+        {
+            int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
+
+            Room room = dungeon.RoomList[randomRoom];
+            var roomList = room.FloorList.ToList();
+
+            var basePos = room.Center;
+
+            occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
+
+            if (occupiedPositions.All(pos => roomList.Contains(pos) && !GetAllOccupiedPositions().Contains(pos)))
+            {
+                transformObject.position = (Vector2)basePos;
+                itemsOccupiedPositions.Add(basePos);
+                itemsOccupiedPositions.Union(occupiedPositions);
+                return occupiedPositions;
+            }
+        }
+
+        Debug.LogWarning("Nepodaøilo se najít volnou pozici pro velký objekt.");
         return occupiedPositions;
     }
 
@@ -252,6 +279,14 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void SetLargeItemToRandomPosition(Item item, Dungeon dungeon, int width, int height, int offset)
     {
         var positions = SetLargeObjectToRandomPosition(item.transform, dungeon, width, height, offset);
+        item.Position = positions[0];
+        occupiedPositions.Union(positions);
+        allItems.Add(item);
+    }
+
+    public void SetLargeItemToRoomCenter(Item item, Dungeon dungeon, int width, int height)
+    {
+        var positions = SetLargeObjectToRoomCenter(item.transform, dungeon, width, height);
         item.Position = positions[0];
         occupiedPositions.Union(positions);
         allItems.Add(item);

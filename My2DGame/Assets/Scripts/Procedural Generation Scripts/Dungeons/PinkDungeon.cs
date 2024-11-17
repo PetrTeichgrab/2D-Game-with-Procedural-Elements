@@ -29,6 +29,7 @@ public class PinkDungeon : MonoBehaviour
 
     private void CreateAndSetCharactersPositions()
     {
+        generator.SetLargeItemToRoomCenter(Instantiate(this.pinkStatue), pinkDungeon, 10, 7);
         for (int i = 0; i < 30; i++)
         {
             EnemyMushroomPink pinkMushroom = Instantiate(this.pinkMushroom, this.pinkMushroom.transform.position,
@@ -38,10 +39,6 @@ public class PinkDungeon : MonoBehaviour
             generator.setCharacterToRandomPosition(pinkMushroom, pinkDungeon, 5);
             generator.SetItemToEdgeOfRoom(barel, pinkDungeon);
             generator.SetItemToRandomPosition(pinkCrystal, pinkDungeon, 3);
-        }
-        for (int i = 0; i < 10; i++)
-        {
-            generator.SetLargeItemToRandomPosition(Instantiate(this.pinkStatue), pinkDungeon, 10, 7, 10);
         }
     }
 }
