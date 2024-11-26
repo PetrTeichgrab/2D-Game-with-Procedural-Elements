@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq.Expressions;
 using JetBrains.Annotations;
 using UnityEngine.XR;
+using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 {
@@ -27,6 +28,9 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Dungeon PurpleDungeon { get; set; }
 
+    public Tile greenTile;
+
+    public Tile blueTile;
 
     private List<Character> allEnemiesList = new List<Character>();
 
@@ -150,7 +154,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             var newPos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
 
-            if (IsPositionAndItsSurroundingsInList(room, newPos, 3))
+            if (IsPositionAndItsSurroundingsInList(room, newPos, offset) && !this.occupiedPositions.Contains(newPos))
             {
                 transformObject.position = (Vector2)newPos;
                 return newPos;
@@ -197,12 +201,13 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             var basePos = room[UnityEngine.Random.Range(0 + offset, room.Count - offset)];
 
-            occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
+            var occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
 
-            if (occupiedPositions.All(pos => room.Contains(pos) && !GetAllOccupiedPositions().Contains(pos)))
+            if (occupiedPositions.All(pos => room.Contains(pos) && !this.occupiedPositions.Contains(pos)))
             {
                 transformObject.position = (Vector2)basePos;
                 itemsOccupiedPositions.Add(basePos);
+                occupiedPositions.Add(basePos);
                 itemsOccupiedPositions.Union(occupiedPositions);
                 return occupiedPositions;
             }
@@ -214,7 +219,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public List<Vector2Int> SetLargeObjectToRoomCenter(Transform transformObject, Dungeon dungeon, int width, int height)
     {
-        List<Vector2Int> itemsOccupiedPositions = new List<Vector2Int>();
         for (int attempt = 0; attempt < 100; attempt++)
         {
             int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
@@ -224,19 +228,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             var basePos = room.Center;
 
-            occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
+            var occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
 
-            if (occupiedPositions.All(pos => roomList.Contains(pos) && !GetAllOccupiedPositions().Contains(pos)))
+            if (occupiedPositions.All(pos => roomList.Contains(pos) && !this.occupiedPositions.Contains(pos)))
             {
                 transformObject.position = (Vector2)basePos;
-                itemsOccupiedPositions.Add(basePos);
-                itemsOccupiedPositions.Union(occupiedPositions);
+                occupiedPositions.Add(basePos);
                 return occupiedPositions;
             }
         }
 
         Debug.LogWarning("Nepodaøilo se najít volnou pozici pro velký objekt.");
-        return occupiedPositions;
+        return null;
     }
 
     private List<Vector2Int> GetOccupiedPositionsForLargeObject(Vector2Int basePos, int width, int height)
@@ -247,6 +250,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             for (int y = 0; y < height; y++)
             {
                 positions.Add(new Vector2Int(basePos.x + x, basePos.y + y));
+                positions.Add(new Vector2Int(basePos.x - x, basePos.y - y));
+                positions.Add(new Vector2Int(basePos.x + x, basePos.y - y));
+                positions.Add(new Vector2Int(basePos.x - x, basePos.y + y));
+
             }
         }
         return positions;
@@ -255,6 +262,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void setCharacterToRandomPosition(Character character, Dungeon dungeon, int offset)
     {
         var position = SetToRandomPositionInRandomRoom(character.transform, dungeon, offset);
+        tileMap.DrawTile(blueTile, position);
         character.Position = position;
         allEnemiesList.Add(character);
         occupiedPositions.Add(position);
@@ -271,6 +279,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void SetItemToRandomPosition(Item item, Dungeon dungeon, int offset)
     {
         var position = SetToRandomPositionInRandomRoom(item.transform, dungeon, offset);
+        tileMap.DrawTile(blueTile, position);
         item.Position = position;
         occupiedPositions.Add(position);
         allItems.Add(item);
@@ -287,9 +296,19 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void SetLargeItemToRoomCenter(Item item, Dungeon dungeon, int width, int height)
     {
         var positions = SetLargeObjectToRoomCenter(item.transform, dungeon, width, height);
-        item.Position = positions[0];
-        occupiedPositions.Union(positions);
-        allItems.Add(item);
+        foreach (var position in positions)
+        {
+            tileMap.DrawTile(greenTile, position);
+            occupiedPositions.Add(position);
+            Debug.Log(position);
+        }
+
+        if (positions != null)
+        {
+            item.Position = positions[0];
+            occupiedPositions.Union(positions);
+            allItems.Add(item);
+        }
     }
 
 
