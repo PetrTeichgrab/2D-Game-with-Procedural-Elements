@@ -63,6 +63,24 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private int minRoomHeight = 20;
 
     [SerializeField]
+    private int undergoundHeight = 10;
+
+    [SerializeField]
+    private int undergoundWidth = 20;
+
+    [SerializeField]
+    private int startX = 500;
+
+    [SerializeField]
+    private int undergroundSmoothness = 10;
+
+    [SerializeField]
+    private int modifier = 10;
+
+    [SerializeField]
+    private int seed = UnityEngine.Random.Range(-10000, 10000);
+
+    [SerializeField]
     [Range(0, 10)]
     private int offset = 1;
 
@@ -74,6 +92,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     [SerializeField]
     GreenDungeon greenDungeon;
+
+    private Underground undergroundDungeon;
 
     //public void Start()
     //{
@@ -88,6 +108,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         allItems.Clear();
         CreateDungeons();
         pinkDungeon.Create();
+        CreateUnderground();
         //blueDungeon.Create();
         //greenDungeon.Create();
     }
@@ -145,6 +166,13 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
     }
 
+    public void CreateUnderground()
+    {
+        undergroundDungeon = new Underground();
+        ProceduralGenerationAlgorithms.PerlinNoise(undergroundDungeon, undergoundHeight, undergoundWidth, undergroundSmoothness, modifier, startX);
+        tileMap.DrawUndergroundFloor(undergroundDungeon);
+    }
+
     public Vector2Int SetToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int offset)
     {
         for (int attempt = 0; attempt < 100; attempt++)
@@ -156,7 +184,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             if (IsPositionAndItsSurroundingsInList(room, newPos, offset) && !this.occupiedPositions.Contains(newPos))
             {
-                transformObject.position = (Vector2)newPos;
+                transformObject.position = new Vector2 (newPos.x + 0.5f, newPos.y + 0.5f);
                 return newPos;
             }
         }
@@ -205,7 +233,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             if (occupiedPositions.All(pos => room.Contains(pos) && !this.occupiedPositions.Contains(pos)))
             {
-                transformObject.position = (Vector2)basePos;
+                transformObject.position = new Vector2(basePos.x + 0.5f, basePos.y + 0.5f);
                 itemsOccupiedPositions.Add(basePos);
                 occupiedPositions.Add(basePos);
                 itemsOccupiedPositions.Union(occupiedPositions);
@@ -232,7 +260,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             if (occupiedPositions.All(pos => roomList.Contains(pos) && !this.occupiedPositions.Contains(pos)))
             {
-                transformObject.position = (Vector2)basePos;
+                transformObject.position = new Vector2 (basePos.x + 0.5f, basePos.y + 0.5f);
                 occupiedPositions.Add(basePos);
                 return occupiedPositions;
             }
@@ -262,7 +290,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void setCharacterToRandomPosition(Character character, Dungeon dungeon, int offset)
     {
         var position = SetToRandomPositionInRandomRoom(character.transform, dungeon, offset);
-        tileMap.DrawTile(blueTile, position);
+        //tileMap.DrawTile(blueTile, position);
         character.Position = position;
         allEnemiesList.Add(character);
         occupiedPositions.Add(position);
@@ -271,6 +299,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void SetItemToEdgeOfRoom(Item item, Dungeon dungeon)
     {
         var position = SetToEdgeOfRoom(item.transform, dungeon);
+        //tileMap.DrawTile(blueTile, position);
         item.Position = position;
         occupiedPositions.Add(position);
         allItems.Add(item);
@@ -279,7 +308,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     public void SetItemToRandomPosition(Item item, Dungeon dungeon, int offset)
     {
         var position = SetToRandomPositionInRandomRoom(item.transform, dungeon, offset);
-        tileMap.DrawTile(blueTile, position);
+        //tileMap.DrawTile(blueTile, position);
         item.Position = position;
         occupiedPositions.Add(position);
         allItems.Add(item);

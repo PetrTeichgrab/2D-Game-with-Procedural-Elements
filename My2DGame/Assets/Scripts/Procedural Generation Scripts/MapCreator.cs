@@ -6,11 +6,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 public class MapCreator : MonoBehaviour
 {
     [SerializeField]
     private Tilemap map;
+
+    [SerializeField]
+    private Tilemap undergroundMap;
 
     [SerializeField]
     private GameObject backWall;
@@ -97,6 +101,8 @@ public class MapCreator : MonoBehaviour
         purpleDiagonalCornerUpRight,
         purpleDiagonalCornerUpLeft;
 
+    [SerializeField]
+    private TileBase redUndergroundFloorTile, redUndergroundGroundTile;
 
     public void DrawFloor(Dungeon dungeon)
     {
@@ -118,6 +124,14 @@ public class MapCreator : MonoBehaviour
                     break;
             }
         
+        }
+    }
+
+    public void DrawUndergroundFloor(Underground underground)
+    {
+        foreach(var position in underground.Floor){
+            Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
+            this.undergroundMap.SetTile(tilePosition, redUndergroundFloorTile);
         }
     }
 
@@ -489,6 +503,7 @@ public class MapCreator : MonoBehaviour
 
     public void ClearGeneration()
     {
+        undergroundMap.ClearAllTiles();
         map.ClearAllTiles();
         colliderMap.ClearAllTiles();
     }

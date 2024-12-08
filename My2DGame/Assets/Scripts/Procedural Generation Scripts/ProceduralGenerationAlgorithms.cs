@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEditor.UI;
 using UnityEngine;
 
 public static class ProceduralGenerationAlgorithms
@@ -50,6 +52,35 @@ public static class ProceduralGenerationAlgorithms
         }
         return splittedObjects;
     }
+
+    public static HashSet<Vector2Int> PerlinNoise(Underground underground, int height, int width, float smoothness, float modifier, int startX = 0)
+    {
+        int perlinHeight = 0;
+        int seed = UnityEngine.Random.Range(-100000, 100000);
+        HashSet<Vector2Int> undergroundMap = new HashSet<Vector2Int>();
+
+        for (int x = startX; x < width + startX; x++)
+        {
+            float perlinValue = Mathf.PerlinNoise((x / smoothness) + seed, seed);
+            perlinHeight = Mathf.RoundToInt(perlinValue * (height / 2)) + (height / 2);
+            underground.Floor.Add(new Vector2Int(x, 0));
+
+            for (int y = 0; y < perlinHeight; y++)
+            {
+                float caveValue = Mathf.PerlinNoise((x / smoothness * modifier) + seed, (y / smoothness * modifier) + seed);
+
+                if (caveValue > 0.5f)
+                {
+                    underground.Floor.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return undergroundMap;
+    }
+
+
+
 
     private static void SplitVertically(int minWidth, Queue<BoundsInt> objectsQueue, BoundsInt objectBounds)
     {
