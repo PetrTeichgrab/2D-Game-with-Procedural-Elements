@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5760477864435188043}
   - component: {fileID: 4243254446339074830}
   m_Layer: 0
-  m_Name: SpellHit
+  m_Name: PlayerSpellHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,15 +71,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 427843619
+  m_SortingLayer: 5
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 53a1842734d514cbaa3c63fb01b8a2e5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aaff80617519f274584c29b6a453a95c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.77, y: 0.84}
+  m_Size: {x: 0.6533333, y: 0.6533333}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -95,7 +95,7 @@ Animator:
   m_GameObject: {fileID: 7834466692352800024}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b9ac832f1d9cf1240996ce67c436237a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 57b45c5df2e3b5442bb16a5f0b02e1a5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

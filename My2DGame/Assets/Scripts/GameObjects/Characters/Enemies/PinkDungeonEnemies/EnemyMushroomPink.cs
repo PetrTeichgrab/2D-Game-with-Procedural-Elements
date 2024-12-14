@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class EnemyMushroomPink : RangeEnemy
 {
-    public bool Appeard { get; set; } = false;
+    protected bool Appeard { get; set; } = false;
+
+    [SerializeField]
+     protected float appearenceDistance { get; set; } = 4f;
+
+    [SerializeField]
+    protected int amountOfProjectiles { get; set; } = 8; 
 
     void Update()
     {
@@ -19,14 +25,14 @@ public class EnemyMushroomPink : RangeEnemy
         {
             isAlive = true;
             GetComponent<EdgeCollider2D>().enabled = true;
-            Shoot();
+            ShootMultipleShotsInCircle(amountOfProjectiles, false);
         }
         animator.SetBool("appeard", Appeard);
     }
 
     public void CheckAppearence()
     {
-        if (Vector2.Distance(player.transform.position, transform.position) < 4f)
+        if (Vector2.Distance(player.transform.position, transform.position) < appearenceDistance)
         {
             Appeard = true;
         }

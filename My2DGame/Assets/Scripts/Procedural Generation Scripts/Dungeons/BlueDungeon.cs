@@ -23,13 +23,13 @@ public class BlueDungeon : MonoBehaviour
 
     private void CreateAndSetCharactersPositions()
     {
+        BlueBossSlime blueBossSlime = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position, this.blueBossSlime.transform.rotation);
+        generator.setCharacterToRandomPosition(blueBossSlime, blueDungeon, 1);
         for (int i = 0; i < 15; i++)
         {
             BlueSlime blueSlime = Instantiate(this.blueSlime, this.blueSlime.transform.position, this.blueSlime.transform.rotation);
             blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
             generator.setCharacterToRandomPosition(blueSlime, blueDungeon, 1);
         }
-        BlueBossSlime blueBossSlime = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position, this.blueBossSlime.transform.rotation);
-        generator.setCharacterToRandomPosition(blueBossSlime, blueDungeon, 1);
     }
 }

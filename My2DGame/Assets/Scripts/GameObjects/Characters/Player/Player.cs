@@ -9,7 +9,6 @@ public class Player : Character
     private float moveX, moveY;
     private bool canDash = true;
     private bool isDashing;
-    public CastSpell spell;
 
     [SerializeField]
     private float dashSpeed = 12f;

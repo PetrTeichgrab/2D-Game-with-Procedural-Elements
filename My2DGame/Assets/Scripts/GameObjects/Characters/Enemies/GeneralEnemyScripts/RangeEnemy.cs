@@ -7,18 +7,28 @@ using UnityEngine.UIElements;
 
 public abstract class RangeEnemy : Character
 {
-    public float movementSpeed;
-    public float visionDistance;
-    public float approachDistance;
-    public float retreatDistance;
-    public float shootDistance;
-    public bool waitBeforeFirstShot;
-    public Transform player;
-
-    public GameObject projectile;
-
+    [SerializeField]
+    protected float movementSpeed;
+    [SerializeField]
+    protected float visionDistance;
+    [SerializeField]
+    protected float approachDistance;
+    [SerializeField]
+    protected float retreatDistance;
+    [SerializeField]
+    protected float shootDistance;
+    [SerializeField]
+    protected float projectileMaxLifeTime;
+    [SerializeField]
+    protected bool waitBeforeFirstShot;
+    [SerializeField]
+    protected Transform player;
+    [SerializeField]
+    protected GameObject projectile;
+    [SerializeField]
+    protected float startTimeBetweenShots;
+    [SerializeField]
     private float timeBetweenShots;
-    public float startTimeBetweenShots;
 
     private void Start()
     {
@@ -41,7 +51,33 @@ public abstract class RangeEnemy : Character
         }
     }
 
-    protected void Shoot()
+    private void ShootMultipleProjectiles(int projectileCount, bool followPlayer)
+    {
+        float angleStep = 360f / projectileCount;
+        float angle = 0f;
+
+        for (int i = 0; i < projectileCount; i++)
+        {
+            float projectileDirX = Mathf.Cos(angle * Mathf.Deg2Rad);
+            float projectileDirY = Mathf.Sin(angle * Mathf.Deg2Rad);
+            Vector2 projectileDirection = new Vector2(projectileDirX, projectileDirY).normalized;
+
+            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
+            var mushroomProjectile = projectileObject.GetComponent<MushroomProjectile>();
+
+            if (mushroomProjectile != null)
+            {
+                mushroomProjectile.SetDirection(projectileDirection);
+            }
+
+            Destroy(projectileObject, projectileMaxLifeTime);
+
+            angle += angleStep;
+        }
+    }
+
+
+    protected void ShootMultipleShotsInCircle(int projectileCount, bool followPlayer)
     {
         if (timeBetweenShots <= 0)
         {
@@ -49,8 +85,7 @@ public abstract class RangeEnemy : Character
             {
                 if (Vector2.Distance(player.transform.position, transform.position) < shootDistance)
                 {
-                    var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
-                    Destroy(projectileObject, 4f);
+                    ShootMultipleProjectiles(projectileCount, followPlayer);
                 }
             }
             timeBetweenShots = startTimeBetweenShots;

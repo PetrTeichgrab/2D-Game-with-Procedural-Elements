@@ -270,6 +270,31 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         return null;
     }
 
+    public List<Vector2Int> SetCharacterToCenterOfRoom(Transform transformObject, Dungeon dungeon, int width, int height)
+    {
+        for (int attempt = 0; attempt < 100; attempt++)
+        {
+            int randomRoom = UnityEngine.Random.Range(0, dungeon.RoomList.Count);
+
+            Room room = dungeon.RoomList[randomRoom];
+            var roomList = room.FloorList.ToList();
+
+            var basePos = room.Center;
+
+            var occupiedPositions = GetOccupiedPositionsForLargeObject(basePos, width, height);
+
+            if (occupiedPositions.All(pos => roomList.Contains(pos) && !this.occupiedPositions.Contains(pos)))
+            {
+                transformObject.position = new Vector2(basePos.x + 0.5f, basePos.y + 0.5f);
+                occupiedPositions.Add(basePos);
+                return occupiedPositions;
+            }
+        }
+
+        Debug.LogWarning("Nepodaøilo se najít volnou pozici pro character.");
+        return null;
+    }
+
     private List<Vector2Int> GetOccupiedPositionsForLargeObject(Vector2Int basePos, int width, int height)
     {
         var positions = new List<Vector2Int>();
@@ -296,6 +321,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         occupiedPositions.Add(position);
     }
 
+    public void setCharacterToCenterOfRandomRoom(Character character, Dungeon dungeon, int height, int width)
+    {
+        var positions = SetCharacterToCenterOfRoom(character.transform, dungeon, width, height);
+        foreach (var position in positions)
+        {
+            tileMap.DrawTile(blueTile, position);
+        }
+        character.Position = positions[0];
+        allEnemiesList.Add(character);
+        occupiedPositions = occupiedPositions.Union(positions).ToList();
+    }
+
     public void SetItemToEdgeOfRoom(Item item, Dungeon dungeon)
     {
         var position = SetToEdgeOfRoom(item.transform, dungeon);
@@ -318,7 +355,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     {
         var positions = SetLargeObjectToRandomPosition(item.transform, dungeon, width, height, offset);
         item.Position = positions[0];
-        occupiedPositions.Union(positions);
+        occupiedPositions = occupiedPositions.Union(positions).ToList();
         allItems.Add(item);
     }
 
@@ -328,14 +365,13 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         foreach (var position in positions)
         {
             tileMap.DrawTile(greenTile, position);
-            occupiedPositions.Add(position);
             Debug.Log(position);
         }
 
         if (positions != null)
         {
             item.Position = positions[0];
-            occupiedPositions.Union(positions);
+            occupiedPositions = occupiedPositions.Union(positions).ToList();
             allItems.Add(item);
         }
     }

@@ -9,7 +9,6 @@ public class EnemyShoot : MonoBehaviour
     public GameObject hitEffect;
     protected Transform player;
     protected Vector2 target;
-    public GameObject projectile;
 
     protected void Start()
     {
@@ -24,6 +23,12 @@ public class EnemyShoot : MonoBehaviour
     protected void ShootOnPlayer()
     {
         transform.position = Vector2.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
+    }
+
+    protected void ShootToDirection(Vector2 direction)
+    {
+        transform.position += (Vector3)direction * projectileSpeed * Time.deltaTime;
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

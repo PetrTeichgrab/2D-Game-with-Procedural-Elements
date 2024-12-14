@@ -97,6 +97,14 @@ PrefabInstance:
       value: 0.5471698
       objectReference: {fileID: 0}
     - target: {fileID: 5975763958083537492, guid: 1745e6e72a9bb5142a1be38cc7a96af1, type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5975763958083537492, guid: 1745e6e72a9bb5142a1be38cc7a96af1, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 427843619
+      objectReference: {fileID: 0}
+    - target: {fileID: 5975763958083537492, guid: 1745e6e72a9bb5142a1be38cc7a96af1, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -136,10 +144,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f9ef47eb3dc6347a6526a3f449bdaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 2
-  projectileMaxLifeTime: 0
+  projectileSpeed: 4
+  projectileMaxLifeTime: 4
   hitEffect: {fileID: 7834466692352800024, guid: fd4f0e7e8cc180449a8acc9729445040, type: 3}
-  projectile: {fileID: 0}
 --- !u!58 &5729204180217428237
 CircleCollider2D:
   m_ObjectHideFlags: 0
