@@ -9,6 +9,7 @@ public class StatusBar : MonoBehaviour
     public Character character;
     public Image barFillImage;
     private Slider slider;
+
     void Start()
     {
         slider = GetComponent<Slider>();
@@ -16,14 +17,28 @@ public class StatusBar : MonoBehaviour
 
     void Update()
     {
+        if (!character.isAlive)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
         float barFillValue = (float)character.currentHP / (float)character.maxHP;
         slider.value = barFillValue;
+
         if (slider.value <= slider.minValue)
         {
             barFillImage.enabled = false;
         }
-        if (slider.value >= slider.minValue && barFillImage.enabled) {
+        else
+        {
             barFillImage.enabled = true;
         }
     }
 }
+

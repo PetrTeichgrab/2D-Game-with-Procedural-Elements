@@ -28,6 +28,7 @@ public abstract class Character : MonoBehaviour
             {
                 animator.SetTrigger("hit");
             }
+            GetComponent<EdgeCollider2D>().enabled = false;
         }
     }
 }

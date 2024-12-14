@@ -15,19 +15,7 @@ public class EnemyMushroomPink : RangeEnemy
 
     void Update()
     {
-        CheckAppearence();
-        if (!Appeard)
-        {
-            isAlive = false;
-            GetComponent<EdgeCollider2D>().enabled = false;
-        }
-        else
-        {
-            isAlive = true;
-            GetComponent<EdgeCollider2D>().enabled = true;
-            ShootMultipleShotsInCircle(amountOfProjectiles, false);
-        }
-        animator.SetBool("appeard", Appeard);
+        basicBehaviour();
     }
 
     public void CheckAppearence()
@@ -36,6 +24,30 @@ public class EnemyMushroomPink : RangeEnemy
         {
             Appeard = true;
         }
+    }
+
+    protected void basicBehaviour()
+    {
+        if (isAlive)
+        {
+            CheckAppearence();
+            if (!Appeard)
+            {
+                GetComponent<EdgeCollider2D>().enabled = false;
+            }
+            else
+            {
+                GetComponent<EdgeCollider2D>().enabled = true;
+                shootBehaviour();
+            }
+            animator.SetBool("appeard", Appeard);
+        }
+        animator.SetBool("alive", isAlive);
+    }
+
+    protected void shootBehaviour()
+    {
+        ShootMultipleShotsInCircle(amountOfProjectiles, false);
     }
 
 }

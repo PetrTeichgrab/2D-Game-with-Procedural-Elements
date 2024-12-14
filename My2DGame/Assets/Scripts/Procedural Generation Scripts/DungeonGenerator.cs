@@ -365,7 +365,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         foreach (var position in positions)
         {
             //tileMap.DrawTile(greenTile, position);
-            Debug.Log(position);
         }
 
         if (positions != null)

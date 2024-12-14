@@ -17,6 +17,11 @@ public class GameController : MonoBehaviour
     [SerializeField]
     GreenDungeon greenDungeon;
 
+    [SerializeField]
+    Player player;
+
+    EnemyMushroomPinkBoss pinkDungeonBoss;
+
     void Start()
     {
         generateGameContent();
@@ -25,15 +30,16 @@ public class GameController : MonoBehaviour
     public void generateGameContent()
     {
         generator.GenerateDungeons();
-        blueDungeon.Create();
-        greenDungeon.Create();
-        pinkDungeon.Create();
+        pinkDungeonBoss = pinkDungeon.pinkMushroomBoss;
+        //blueDungeon.Create();
+        //greenDungeon.Create();
+        //pinkDungeon.Create();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+ 
     }
 
 }

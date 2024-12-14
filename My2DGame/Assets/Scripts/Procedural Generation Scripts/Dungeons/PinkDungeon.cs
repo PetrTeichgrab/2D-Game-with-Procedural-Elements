@@ -8,10 +8,10 @@ public class PinkDungeon : MonoBehaviour
     DungeonGenerator generator;
 
     [SerializeField]
-    EnemyMushroomPink pinkMushroom;
+    public EnemyMushroomPink pinkMushroom;
 
     [SerializeField]
-    EnemyMushroomPink pinkMushroomBoss;
+    public EnemyMushroomPinkBoss pinkMushroomBoss;
 
     [SerializeField]
     Item pinkCrystal;
@@ -41,7 +41,7 @@ public class PinkDungeon : MonoBehaviour
 
     private void CreateAndSetCharactersPositions()
     {
-        EnemyMushroomPink pinkMushroomBoss = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
+        pinkMushroomBoss = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);
         generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 2, 2);
         generator.SetLargeItemToRoomCenter(Instantiate(this.pinkRock2large), pinkDungeon, 3, 3);
