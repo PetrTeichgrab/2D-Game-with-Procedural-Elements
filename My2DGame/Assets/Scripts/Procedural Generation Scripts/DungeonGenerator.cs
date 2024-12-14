@@ -326,7 +326,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         var positions = SetCharacterToCenterOfRoom(character.transform, dungeon, width, height);
         foreach (var position in positions)
         {
-            tileMap.DrawTile(blueTile, position);
+            //tileMap.DrawTile(blueTile, position);
         }
         character.Position = positions[0];
         allEnemiesList.Add(character);
@@ -364,7 +364,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         var positions = SetLargeObjectToRoomCenter(item.transform, dungeon, width, height);
         foreach (var position in positions)
         {
-            tileMap.DrawTile(greenTile, position);
+            //tileMap.DrawTile(greenTile, position);
             Debug.Log(position);
         }
 

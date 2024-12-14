@@ -43,8 +43,8 @@ public class PinkDungeon : MonoBehaviour
     {
         EnemyMushroomPink pinkMushroomBoss = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);
-        generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 5, 5);
-        generator.SetLargeItemToRoomCenter(Instantiate(this.pinkRock2large), pinkDungeon, 4, 4);
+        generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 2, 2);
+        generator.SetLargeItemToRoomCenter(Instantiate(this.pinkRock2large), pinkDungeon, 3, 3);
         for (int i = 0; i < 10; i++)
         {
             EnemyMushroomPink pinkMushroom = Instantiate(this.pinkMushroom, this.pinkMushroom.transform.position,
