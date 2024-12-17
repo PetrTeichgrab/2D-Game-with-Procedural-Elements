@@ -33,6 +33,17 @@ public class PinkDungeon : MonoBehaviour
 
     Dungeon pinkDungeon;
 
+
+    private bool completed { get; set; } = false;
+
+    private void Update()
+    {
+        if (!pinkMushroomBoss.isAlive && !completed)
+        {
+            
+        }
+    }
+
     public void Create()
     {
         pinkDungeon = generator.PinkDungeon;
@@ -45,6 +56,7 @@ public class PinkDungeon : MonoBehaviour
                 this.pinkMushroom.transform.rotation);
         generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 2, 2);
         generator.SetLargeItemToRoomCenter(Instantiate(this.pinkRock2large), pinkDungeon, 3, 3);
+        generator.Player.transform.position = pinkMushroomBoss.transform.position + new Vector3(3, 3); 
         for (int i = 0; i < 10; i++)
         {
             EnemyMushroomPink pinkMushroom = Instantiate(this.pinkMushroom, this.pinkMushroom.transform.position,

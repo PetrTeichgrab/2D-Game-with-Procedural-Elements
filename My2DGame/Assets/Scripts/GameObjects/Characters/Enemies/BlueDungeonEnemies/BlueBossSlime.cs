@@ -81,6 +81,5 @@ public class BlueBossSlime : MeleeEnemy
                 character.TakeDamage(10);
             }
         }
-
     }
 }

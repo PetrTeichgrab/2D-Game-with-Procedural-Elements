@@ -163,7 +163,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         //WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
         //WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
 
-        SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
+        //SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
     }
 
     public void CreateUnderground()
