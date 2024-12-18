@@ -80,9 +80,9 @@ public class PinkDungeon : MonoBehaviour
             (this.pinkRock1small, obj => generator.SetItemToEdgeOfRoom(obj, pinkDungeon), 5),
             (this.pinkRock1small, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 10),
             (this.pinkRock1med, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 7),
-            (this.grassSmall, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 100),
-            (this.grassMed, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 100),
-            (this.grassLarge, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 100)
+            (this.grassSmall, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 0), 30),
+            (this.grassMed, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 0), 40),
+            (this.grassLarge, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 0), 50)
         };
 
         var enemyConfigs = new List<(EnemyMushroomPink prefab, Action<EnemyMushroomPink> positionSetter, int count)>()

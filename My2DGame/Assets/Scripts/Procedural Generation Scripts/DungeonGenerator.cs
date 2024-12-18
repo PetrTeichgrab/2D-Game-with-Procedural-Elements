@@ -78,7 +78,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private int modifier = 10;
 
     [SerializeField]
-    private int seed = UnityEngine.Random.Range(-10000, 10000);
+    private int seed;
 
     [SerializeField]
     [Range(0, 10)]
@@ -102,6 +102,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     //}
     public void GenerateDungeons()
     {
+        seed = UnityEngine.Random.Range(-10000, 10000);
         tileMap.ClearGeneration();
         ClearGeneratedObjects();
         allEnemiesList.Clear();

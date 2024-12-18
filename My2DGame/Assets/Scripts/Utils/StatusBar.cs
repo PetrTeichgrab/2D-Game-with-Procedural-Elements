@@ -17,6 +17,10 @@ public class StatusBar : MonoBehaviour
 
     void Update()
     {
+        if(character == null)
+        {
+            return;
+        }
         if (!character.isAlive)
         {
             gameObject.SetActive(false);
