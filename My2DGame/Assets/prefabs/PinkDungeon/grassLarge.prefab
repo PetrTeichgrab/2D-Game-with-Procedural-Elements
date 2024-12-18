@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8971171139939251495}
   - component: {fileID: -7724857345968703152}
   m_Layer: 0
-  m_Name: grass
+  m_Name: grassLarge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 6053485212978174364}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.129, y: 1.672, z: 0}
-  m_LocalScale: {x: 2.168751, y: 2.060631, z: 1}
+  m_LocalPosition: {x: -1.494, y: 1.524, z: 0}
+  m_LocalScale: {x: 2.8361862, y: 2.657155, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

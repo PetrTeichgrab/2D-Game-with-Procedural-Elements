@@ -21827,6 +21827,9 @@ MonoBehaviour:
   pinkRock1small: {fileID: 2312041036081772839, guid: b9cda1353e1295949b144983505aca31, type: 3}
   pinkRock1med: {fileID: 8971171139939251495, guid: 3bcf5f35eb8bc0343907bfca3a28231e, type: 3}
   pinkRock2large: {fileID: 5026928205382571573, guid: 25c67db8b9494a449bce8d9979ae6823, type: 3}
+  grassSmall: {fileID: 8971171139939251495, guid: 2757d6827c2f5ce429c1afea303317e5, type: 3}
+  grassMed: {fileID: 8971171139939251495, guid: 4e762b893d72abe4aad74c39fabb41b6, type: 3}
+  grassLarge: {fileID: 8971171139939251495, guid: 5bb9e64c6bc7e994cbd2da1e6a77b7ac, type: 3}
   pinkColorCore: {fileID: 5768922467599370108, guid: 0f5225d86ac1a2f46a42ed5c1ed3d039, type: 3}
 --- !u!4 &1003858059
 Transform:

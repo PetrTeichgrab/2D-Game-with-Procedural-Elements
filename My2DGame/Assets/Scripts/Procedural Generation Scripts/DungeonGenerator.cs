@@ -420,6 +420,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.RoomList, dungeon.Floor.RoomList.ToList(), randomWalkParameters, offset);
 
+        AddRandomHolesToFloor(floor, minClusters: 20, maxClusters: 30, minClusterSize: 1, maxClusterSize: 7);
+
         HashSet<Vector2Int> corridors = FloorGenerator.ConnectRooms(new List<Vector2Int>(dungeon.Floor.RoomCentersList));
 
         floor.UnionWith(corridors);
@@ -427,6 +429,40 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         //FloorGenerator.FillHoles(floor);
 
         dungeon.Floor.FloorList = floor;
+    }
+
+    private void AddRandomHolesToFloor(HashSet<Vector2Int> floor, int minClusters, int maxClusters, int minClusterSize, int maxClusterSize)
+    {
+        // Poèet shlukù dìr
+        int clusterCount = UnityEngine.Random.Range(minClusters, maxClusters);
+
+        List<Vector2Int> floorList = new List<Vector2Int>(floor);
+
+        for (int i = 0; i < clusterCount; i++)
+        {
+            // Vyber náhodnou poèáteèní pozici pro shluk
+            Vector2Int clusterCenter = floorList[UnityEngine.Random.Range(0, floorList.Count)];
+
+            // Vytvoø díry okolo clusterCenter
+            CreateClusterOfHoles(floor, clusterCenter, UnityEngine.Random.Range(minClusterSize, maxClusterSize));
+        }
+    }
+
+    private void CreateClusterOfHoles(HashSet<Vector2Int> floor, Vector2Int center, int clusterSize)
+    {
+        for (int x = -clusterSize / 2; x <= clusterSize / 2; x++)
+        {
+            for (int y = -clusterSize / 2; y <= clusterSize / 2; y++)
+            {
+                Vector2Int holePosition = center + new Vector2Int(x, y);
+
+                // Odstranìní pozice pouze pokud existuje v podlaze
+                if (floor.Contains(holePosition))
+                {
+                    floor.Remove(holePosition);
+                }
+            }
+        }
     }
 
     private void GetRoomsCenters(Dungeon dungeon)
