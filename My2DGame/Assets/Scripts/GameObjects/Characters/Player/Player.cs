@@ -26,11 +26,14 @@ public class Player : Character
 
     public GameObject castPoint;
 
+    public List<ColorCore> colorCores;
+
 
     void Start()
     {
         maxHP = 100;
         currentHP = maxHP;
+        colorCores = new List<ColorCore>();
         resetTrailRendered();
     }
 

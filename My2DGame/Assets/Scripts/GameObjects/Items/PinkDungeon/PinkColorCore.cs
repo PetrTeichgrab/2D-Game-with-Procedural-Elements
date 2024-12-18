@@ -9,11 +9,12 @@ public class PinkColorCore : ColorCore
         if (collision.gameObject.CompareTag("Player"))
         {
             Player character = collision.gameObject.GetComponent<Player>();
-            if (character != null && isAlive)
+            if (character != null && character.isAlive)
             {
-                animator.SetTrigger("attack");
-                character.TakeDamage(10);
+                character.AddHP(100);
+                character.colorCores.Add(this);
             }
+            gameObject.SetActive(false);
         }
     }
 }

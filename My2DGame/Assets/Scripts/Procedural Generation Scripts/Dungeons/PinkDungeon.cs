@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,12 @@ public class PinkDungeon : MonoBehaviour
     [SerializeField]
     Item pinkRock2large;
 
+    [SerializeField]
+    Item grass;
+
+    [SerializeField]
+    PinkColorCore pinkColorCore;
+
     Dungeon pinkDungeon;
 
 
@@ -40,36 +47,65 @@ public class PinkDungeon : MonoBehaviour
     {
         if (!pinkMushroomBoss.isAlive && !completed)
         {
-            
+            Invoke(nameof(SpawnPinkColorCore), 1.2f);
+            completed = true;
         }
     }
 
     public void Create()
     {
         pinkDungeon = generator.PinkDungeon;
-        CreateAndSetCharactersPositions();
+        CreateAndSetPositions();
     }
 
-    private void CreateAndSetCharactersPositions()
+    private void CreateAndSetPositions()
     {
+        // Inicializace hlavního bosse
         pinkMushroomBoss = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);
         generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 2, 2);
-        generator.SetLargeItemToRoomCenter(Instantiate(this.pinkRock2large), pinkDungeon, 3, 3);
-        generator.Player.transform.position = pinkMushroomBoss.transform.position + new Vector3(3, 3); 
-        for (int i = 0; i < 10; i++)
-        {
-            EnemyMushroomPink pinkMushroom = Instantiate(this.pinkMushroom, this.pinkMushroom.transform.position,
-                this.pinkMushroom.transform.rotation);
-            Item pinkCrystal = Instantiate(this.pinkCrystal);
-            Item pinkRock1sm = Instantiate(this.pinkRock1small);
-            Item pinkRock1med = Instantiate(this.pinkRock1med);
-            generator.setCharacterToRandomPosition(pinkMushroom, pinkDungeon, 5);
-            generator.SetItemToEdgeOfRoom(pinkRock1sm, pinkDungeon);
-            generator.SetItemToRandomPosition(pinkCrystal, pinkDungeon, 3);
-            generator.SetItemToRandomPosition(pinkRock1sm, pinkDungeon, 3);
-            generator.SetItemToRandomPosition(pinkRock1med, pinkDungeon, 3);
+        generator.Player.transform.position = pinkMushroomBoss.transform.position + new Vector3(3, 3);
 
+        // Seznam konfigurací pro generování objektù specifikovaných typem Item
+        var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
+        {
+            (this.pinkRock2large, obj => generator.SetLargeItemToRoomCenter(obj, pinkDungeon, 3, 3), 2),
+            (this.pinkCrystal, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 10),
+            (this.pinkRock1small, obj => generator.SetItemToEdgeOfRoom(obj, pinkDungeon), 5),
+            (this.pinkRock1small, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 10),
+            (this.pinkRock1med, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 7),
+        };
+
+        var enemyConfigs = new List<(EnemyMushroomPink prefab, Action<EnemyMushroomPink> positionSetter, int count)>()
+    {
+        (this.pinkMushroom, obj => generator.setCharacterToRandomPosition(obj, pinkDungeon, 5), 10),
+    };
+
+        // Generování Item objektù
+        foreach (var config in itemConfigs)
+        {
+            for (int i = 0; i < config.count; i++)
+            {
+                Item item = Instantiate(config.prefab);
+                config.positionSetter(item);
+            }
         }
+
+        // Generování Enemy objektù
+        foreach (var config in enemyConfigs)
+        {
+            for (int i = 0; i < config.count; i++)
+            {
+                EnemyMushroomPink enemy = Instantiate(config.prefab);
+                config.positionSetter(enemy);
+            }
+        }
+    }
+
+
+    private void SpawnPinkColorCore()
+    {
+        pinkColorCore = Instantiate(this.pinkColorCore,
+            pinkMushroomBoss.transform.position, this.pinkColorCore.transform.rotation);
     }
 }

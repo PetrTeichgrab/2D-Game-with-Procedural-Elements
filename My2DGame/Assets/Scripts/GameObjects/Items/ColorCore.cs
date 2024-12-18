@@ -5,5 +5,5 @@ using UnityEngine;
 public class ColorCore : Item
 {
     [SerializeField]
-    Animator animator;
+    protected Animator animator;
 }

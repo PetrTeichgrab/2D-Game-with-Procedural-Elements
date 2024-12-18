@@ -31,4 +31,14 @@ public abstract class Character : MonoBehaviour
             GetComponent<EdgeCollider2D>().enabled = false;
         }
     }
+
+    public void AddHP(int healthPoints)
+    {
+        currentHP += healthPoints;
+        if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
+
 }
