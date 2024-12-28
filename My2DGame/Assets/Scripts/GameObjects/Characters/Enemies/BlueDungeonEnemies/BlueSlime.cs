@@ -6,7 +6,8 @@ public class BlueSlime : MeleeEnemy
 {
     void Update()
     {
-        if(isDashing) {
+        if (isDashing)
+        {
             return;
         }
 
@@ -25,7 +26,7 @@ public class BlueSlime : MeleeEnemy
         }
         else
         {
-            Die();
+            StopOnCurrentPosition();
         }
 
         if (animator != null)
@@ -33,20 +34,6 @@ public class BlueSlime : MeleeEnemy
             animator.SetFloat("movementSpeed", movementSpeed);
             animator.SetBool("isAlive", isAlive);
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Player character = collision.gameObject.GetComponent<Player>();
-            if (character != null && isAlive)
-            {
-                animator.SetTrigger("attack");
-                character.TakeDamage(10);
-            }
-        }
-
     }
 
 }

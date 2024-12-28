@@ -177,8 +177,9 @@ public class MapCreator : MonoBehaviour
                     neighbourBinary += "0";
                 }
                 DrawCardinalWallTile(wall, neighbourBinary, color);
+                AddCollider(wall);
             }
-        
+
         }
     }
 
@@ -199,6 +200,7 @@ public class MapCreator : MonoBehaviour
                     neighbourBinary += "0";
                 }
                 DrawDiagonalWallTile(wall, neighbourBinary, color);
+                AddCollider(wall);
             }
         }
     }
@@ -495,10 +497,10 @@ public class MapCreator : MonoBehaviour
         this.map.SetTile(tilePosition, tile);
     }
 
-    public void AddCollider(TileBase tile, Vector2Int position)
+    public void AddCollider(Vector2Int position)
     {
         Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
-        this.colliderMap.SetTile(tilePosition, tile);
+        this.colliderMap.SetTile(tilePosition, emptyTile);
     }
 
     public void ClearGeneration()

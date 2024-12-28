@@ -1,18 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class PinkDungeon : MonoBehaviour
+public class PinkDungeon : DungeonBehaviour
 {
     [SerializeField]
     DungeonGenerator generator;
 
     [SerializeField]
-    public EnemyMushroomPink pinkMushroom;
+    private EnemyMushroomPink pinkMushroom;
 
     [SerializeField]
-    public EnemyMushroomPinkBoss pinkMushroomBoss;
+    private EnemyMushroomPinkBoss pinkMushroomBoss;
 
     [SerializeField]
     Item pinkCrystal;
@@ -44,33 +47,34 @@ public class PinkDungeon : MonoBehaviour
     [SerializeField]
     PinkColorCore pinkColorCore;
 
+    private EnemyMushroomPinkBoss PinkMushroomBossInstance { get; set; }
+
     Dungeon pinkDungeon;
-
-
-    private bool completed { get; set; } = false;
 
     private void Update()
     {
-        if (!pinkMushroomBoss.isAlive && !completed)
+        if (PinkMushroomBossInstance != null)
         {
-            Invoke(nameof(SpawnPinkColorCore), 1.2f);
-            completed = true;
+            if (!PinkMushroomBossInstance.isAlive && !Completed)
+            {
+                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, pinkColorCore, PinkMushroomBossInstance.transform));
+                Completed = true;
+            }
         }
     }
 
-    public void Create()
+    public override void Create()
     {
         pinkDungeon = generator.PinkDungeon;
         CreateAndSetPositions();
     }
 
-    private void CreateAndSetPositions()
+    public override void CreateAndSetPositions()
     {
         // Inicializace hlavního bosse
-        pinkMushroomBoss = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
+        PinkMushroomBossInstance = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);
-        generator.setCharacterToCenterOfRandomRoom(pinkMushroomBoss, pinkDungeon, 2, 2);
-        generator.Player.transform.position = pinkMushroomBoss.transform.position + new Vector3(3, 3);
+        generator.setBossToRandomRoom(PinkMushroomBossInstance, pinkDungeon, 2, 2);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
@@ -87,34 +91,9 @@ public class PinkDungeon : MonoBehaviour
 
         var enemyConfigs = new List<(EnemyMushroomPink prefab, Action<EnemyMushroomPink> positionSetter, int count)>()
     {
-        (this.pinkMushroom, obj => generator.setCharacterToRandomPosition(obj, pinkDungeon, 5), 10),
+        (this.pinkMushroom, obj => generator.setCharacterToRandomPosition(obj, pinkDungeon, 0), 30),
     };
 
-        // Generování Item objektù
-        foreach (var config in itemConfigs)
-        {
-            for (int i = 0; i < config.count; i++)
-            {
-                Item item = Instantiate(config.prefab);
-                config.positionSetter(item);
-            }
-        }
-
-        // Generování Enemy objektù
-        foreach (var config in enemyConfigs)
-        {
-            for (int i = 0; i < config.count; i++)
-            {
-                EnemyMushroomPink enemy = Instantiate(config.prefab);
-                config.positionSetter(enemy);
-            }
-        }
-    }
-
-
-    private void SpawnPinkColorCore()
-    {
-        pinkColorCore = Instantiate(this.pinkColorCore,
-            pinkMushroomBoss.transform.position, this.pinkColorCore.transform.rotation);
+        GenerateDungeonObjects(itemConfigs, enemyConfigs);
     }
 }

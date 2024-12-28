@@ -99,6 +99,6 @@ public class Player : Character
         trailRenderer.startWidth = 0.15f;
         trailRenderer.startColor = new UnityEngine.Color(255f, 255f, 255f, 0.1f);
         trailRenderer.endColor = new UnityEngine.Color(0, 0, 0, 0f);
-        trailRenderer.endWidth = 0.1f;
+        trailRenderer.endWidth = 0f;
     }
 }

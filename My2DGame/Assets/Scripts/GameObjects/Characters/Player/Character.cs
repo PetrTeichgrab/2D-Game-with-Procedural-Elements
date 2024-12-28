@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour
@@ -26,9 +27,16 @@ public abstract class Character : MonoBehaviour
             isAlive = false;
             if(animator != null)
             {
-                animator.SetTrigger("hit");
+                bool hasHitTrigger = animator.parameters.Any(p => p.type == AnimatorControllerParameterType.Trigger && p.name == "hit");
+                if (hasHitTrigger)
+                {
+                    animator.SetTrigger("hit");
+                }
             }
-            GetComponent<EdgeCollider2D>().enabled = false;
+            if (GetComponent<EdgeCollider2D>() != null)
+            {
+                GetComponent<EdgeCollider2D>().enabled = false;
+            }
         }
     }
 

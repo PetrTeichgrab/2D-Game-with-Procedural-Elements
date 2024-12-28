@@ -15,7 +15,7 @@ TagManager:
   - UI
   - Enemy
   - EnemyProjectile
-  - 
+  - EnemyBoss
   - 
   - 
   - 
@@ -51,6 +51,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 2645918603
+    locked: 0
+  - name: PlayerSpell
+    uniqueID: 1049560491
     locked: 0
   - name: Player
     uniqueID: 1622336859

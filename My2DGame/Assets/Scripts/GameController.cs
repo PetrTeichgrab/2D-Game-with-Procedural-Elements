@@ -30,7 +30,6 @@ public class GameController : MonoBehaviour
     public void generateGameContent()
     {
         generator.GenerateDungeons();
-        pinkDungeonBoss = pinkDungeon.pinkMushroomBoss;
         //blueDungeon.Create();
         //greenDungeon.Create();
         //pinkDungeon.Create();

@@ -31,6 +31,7 @@ public class BlueBossSlime : MeleeEnemy
         {
             return;
         }
+
         if (isAlive)
         {
             if (IsInApproachDistance())
@@ -38,11 +39,13 @@ public class BlueBossSlime : MeleeEnemy
                 animator.SetTrigger("move");
                 MoveToPlayer(movementSpeed);
                 spawnSlimesCooldownTimer += Time.deltaTime;
-                if(spawnSlimesCooldownTimer >= spawnSlimesCooldown)
+
+                if (spawnSlimesCooldownTimer >= spawnSlimesCooldown)
                 {
                     SpawnSlimes();
                     spawnSlimesCooldownTimer = 0;
                 }
+
                 dashAttack();
             }
             else
@@ -53,7 +56,9 @@ public class BlueBossSlime : MeleeEnemy
         else
         {
             StopOnCurrentPosition();
+            animator.SetTrigger("die");
         }
+
         if (animator != null)
         {
             animator.SetFloat("movementSpeed", movementSpeed);
@@ -67,19 +72,6 @@ public class BlueBossSlime : MeleeEnemy
         {
             BlueSlime blueSlime = Instantiate(this.blueSlime, transform.position, this.blueSlime.transform.rotation);
             blueSlime.attackCooldown = UnityEngine.Random.Range(blueSlime.attackMinCD, blueSlime.attackMaxCD);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Player character = collision.gameObject.GetComponent<Player>();
-            if (character != null && isAlive)
-            {
-                animator.SetTrigger("attack");
-                character.TakeDamage(10);
-            }
         }
     }
 }

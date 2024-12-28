@@ -12,7 +12,7 @@ public abstract class MeleeEnemy : Character
     public float approachDistance;
     public int attackMaxCD;
     public int attackMinCD;
-    public int damage;
+    public int damage = 5;
     public float dashTime;
     public float dashSpeed;
     public Collider2D characterCollider;
@@ -20,9 +20,12 @@ public abstract class MeleeEnemy : Character
     public Transform player;
     public TrailRenderer trailRenderer;
     public Rigidbody2D rb;
-    public float attackCooldown;
+    public float attackCooldown = 2f;
     protected float startMovementSpeed;
     protected bool isDashing;
+    [SerializeField]
+    private float lastAttackTime = 0f;
+
 
     private void Start()
     {
@@ -64,8 +67,15 @@ public abstract class MeleeEnemy : Character
 
     protected void StopOnCurrentPosition()
     {
-        transform.position = this.transform.position;
+        if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+
+        movementSpeed = 0;
     }
+
 
     protected void Die()
     {
@@ -89,6 +99,24 @@ public abstract class MeleeEnemy : Character
             if (animator != null)
             {
                 animator.SetTrigger("attack");
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Player character = collision.gameObject.GetComponent<Player>();
+            if (character != null && isAlive)
+            {
+                if (Time.time >= lastAttackTime + attackCooldown)
+                {
+                    animator.SetTrigger("attack");
+                    character.TakeDamage(10);
+
+                    lastAttackTime = Time.time;
+                }
             }
         }
     }

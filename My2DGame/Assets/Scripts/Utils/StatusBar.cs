@@ -19,16 +19,19 @@ public class StatusBar : MonoBehaviour
     {
         if(character == null)
         {
+            Debug.Log("character is null");
             return;
         }
         if (!character.isAlive)
         {
+            Debug.Log("not alive");
             gameObject.SetActive(false);
             return;
         }
 
         if (!gameObject.activeSelf)
         {
+            Debug.Log("alive");
             gameObject.SetActive(true);
         }
 
@@ -37,6 +40,7 @@ public class StatusBar : MonoBehaviour
 
         if (slider.value <= slider.minValue)
         {
+            Debug.Log("not enabled");
             barFillImage.enabled = false;
         }
         else
