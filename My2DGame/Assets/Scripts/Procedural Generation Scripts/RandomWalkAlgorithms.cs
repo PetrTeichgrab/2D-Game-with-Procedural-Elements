@@ -10,13 +10,15 @@ public static class RandomWalkAlgorithms
     {
         var currentWalkPosition = startingPosition;
 
+        int length = UnityEngine.Random.Range(parameters.minLength, parameters.maxLength);
+
         HashSet<Vector2Int> floorPosition = new HashSet<Vector2Int>();
 
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < parameters.iterations; i++)
         {
             currentWalkPosition = startingPosition;
             floorPosition.Add(currentWalkPosition);
-            for (int j = 0; j < 30; j++)
+            for (int j = 0; j < length; j++)
             {
                 Vector2Int newPosition = currentWalkPosition + Directions.GetRandomCardinalDirection();
                 floorPosition.Add(newPosition);

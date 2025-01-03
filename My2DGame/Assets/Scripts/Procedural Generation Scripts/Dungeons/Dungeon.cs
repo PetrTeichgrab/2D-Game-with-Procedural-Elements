@@ -10,6 +10,8 @@ public class Dungeon
     public DungeonColor Color { get; }
     public BoundsInt DungeonBounds { get; set; }
     public List<Dungeon> connectedDungeons { get; set; } = new List<Dungeon>();
+  
+    public RandomWalkParameters parameters { get; set; }
     public Dungeon(BoundsInt bounds, DungeonColor color)
     {
         DungeonBounds = bounds;

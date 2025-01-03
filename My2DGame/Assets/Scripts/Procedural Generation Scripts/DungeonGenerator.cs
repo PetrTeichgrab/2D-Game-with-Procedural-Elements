@@ -35,7 +35,16 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private List<Vector2Int> occupiedPositions = new List<Vector2Int>();
 
     [SerializeField]
-    protected RandomWalkParameters randomWalkParameters;
+    protected RandomWalkParameters pinkDungeonParameters;
+
+    [SerializeField]
+    protected RandomWalkParameters blueDungeonParameters;
+
+    [SerializeField]
+    protected RandomWalkParameters greenDungeonParameters;
+
+    [SerializeField]
+    protected RandomWalkParameters purpleDungeonParameters;
 
     [SerializeField]
     protected MapCreator tileMap = null;
@@ -107,7 +116,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         pinkDungeon.Create();
         CreateUnderground();
         blueDungeon.Create();
-        //greenDungeon.Create();
+        greenDungeon.Create();
     }
 
     private void CreateDungeons()
@@ -119,19 +128,30 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         }
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
+        // Najdìte nejvìtší bounds
+        BoundsInt largestBounds = dungeons.OrderByDescending(bounds => bounds.size.x * bounds.size.y).First();
+
         List<Dungeon> createdDungeonsList = new List<Dungeon>();
 
+        GreenDungeon = new Dungeon(largestBounds, DungeonColor.Green);
+        GreenDungeon.parameters = greenDungeonParameters;
+        InitDungeon(GreenDungeon);
+        createdDungeonsList.Add(GreenDungeon);
+        dungeons.Remove(largestBounds);
+
         PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
+        PinkDungeon.parameters = pinkDungeonParameters;
         InitDungeon(PinkDungeon);
         createdDungeonsList.Add(PinkDungeon);
+        dungeons.RemoveAt(0);
 
         BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
+        BlueDungeon.parameters = blueDungeonParameters;
         InitDungeon(BlueDungeon);
         createdDungeonsList.Add(BlueDungeon);
+        dungeons.RemoveAt(1);
 
-        //GreenDungeon = new Dungeon(dungeons[2], DungeonColor.Green);
-        //InitDungeon(GreenDungeon);
-        //createdDungeonsList.Add(GreenDungeon);
+        // Použijte nejvìtší bounds pro zelený dungeon
 
         //PurpleDungeon = new Dungeon(dungeons[3], DungeonColor.Purple);
         //InitDungeon(PurpleDungeon);
@@ -151,16 +171,35 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         tileMap.DrawFloor(PinkDungeon);
         tileMap.DrawFloor(BlueDungeon);
-        //tileMap.DrawFloor(GreenDungeon);
+        tileMap.DrawFloor(GreenDungeon);
         //tileMap.DrawFloor(PurpleDungeon);
-
 
         WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
         WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
-        //WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
+        WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
         //WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
 
         //SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
+        DrawDungeonBounds(dungeonList.ToList());
+    }
+
+
+
+    private void DrawDungeonBounds(List<BoundsInt> dungeons)
+    {
+        foreach (var bounds in dungeons)
+        {
+            Vector3 bottomLeft = new Vector3(bounds.min.x, bounds.min.y, 0);
+            Vector3 bottomRight = new Vector3(bounds.max.x, bounds.min.y, 0);
+            Vector3 topLeft = new Vector3(bounds.min.x, bounds.max.y, 0);
+            Vector3 topRight = new Vector3(bounds.max.x, bounds.max.y, 0);
+
+            // Draw lines to form the rectangle
+            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.red, 10f); // Bottom
+            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.red, 10f);  // Right
+            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.red, 10f);      // Top
+            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.red, 10f);    // Left
+        }
     }
 
     public void CreateUnderground()
@@ -458,15 +497,36 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     {
         dungeon.Floor.RoomList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int
             (dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)), minRoomWidth, minRoomHeight);
+        DrawRoomBounds(dungeon.Floor.RoomList.ToList());
+    }
+
+    private void DrawRoomBounds(List<BoundsInt> roomList)
+    {
+        foreach (var room in roomList)
+        {
+            Vector3 bottomLeft = new Vector3(room.min.x, room.min.y, 0);
+            Vector3 bottomRight = new Vector3(room.max.x, room.min.y, 0);
+            Vector3 topLeft = new Vector3(room.min.x, room.max.y, 0);
+            Vector3 topRight = new Vector3(room.max.x, room.max.y, 0);
+
+            // Kreslení hranic místností žlutou barvou
+            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.yellow, 10f); // Spodní hranice
+            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.yellow, 10f);  // Pravá hranice
+            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.yellow, 10f);      // Horní hranice
+            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.yellow, 10f);    // Levá hranice
+        }
     }
 
     private void CreateDungeonFloor(Dungeon dungeon)
     {
         dungeon.RoomList = new List<Room>();
 
-        HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.RoomList, dungeon.Floor.RoomList.ToList(), randomWalkParameters, offset);
+        HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.RoomList, dungeon.Floor.RoomList.ToList(), dungeon.parameters, offset);
 
-        AddRandomHolesToFloor(floor, minClusters: 10, maxClusters: 25, minClusterSize: 1, maxClusterSize: 4);
+        if (dungeon.Color != DungeonColor.Green)
+        {
+            AddRandomHolesToFloor(floor, minClusters: 10, maxClusters: 25, minClusterSize: 1, maxClusterSize: 4);
+        }
 
         HashSet<Vector2Int> corridors = FloorGenerator.ConnectRooms(new List<Vector2Int>(dungeon.Floor.RoomCentersList));
 

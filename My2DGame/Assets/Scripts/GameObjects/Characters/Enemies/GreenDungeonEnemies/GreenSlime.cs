@@ -21,13 +21,12 @@ public class GreenSlime : MeleeEnemy
             }
             else
             {
-                animator.SetBool("move", false);
                 animator.SetTrigger("idle");
             }
         }
         else
         {
-            Die();
+            StopOnCurrentPosition();
             animator.SetBool("move", false);
         }
 

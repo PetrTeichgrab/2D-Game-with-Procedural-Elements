@@ -5,9 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RandomWalkArguments",menuName = "ProceduralGeneration/RandomWalk")]
 public class RandomWalkParameters : ScriptableObject
 {
-   public int iterations = 1;
+   public int iterations = 1000;
 
-    public int length = 10;
+    public int minLength = 30;
+
+    public int maxLength = 30;
 
     public int corridorLength = 5;
 

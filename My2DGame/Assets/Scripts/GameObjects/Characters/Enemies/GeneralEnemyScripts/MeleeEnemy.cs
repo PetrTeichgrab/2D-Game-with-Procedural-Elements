@@ -96,12 +96,9 @@ public abstract class MeleeEnemy : Character
         {
             StartCoroutine(Dash());
             attackCooldownTimer = 0;
-            if (animator != null)
-            {
-                animator.SetTrigger("attack");
-            }
         }
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -121,5 +118,13 @@ public abstract class MeleeEnemy : Character
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Vector2 pushbackDirection = (transform.position - collision.transform.position).normalized;
+            rb.AddForce(pushbackDirection * 50f); 
+        }
+    }
 
 }

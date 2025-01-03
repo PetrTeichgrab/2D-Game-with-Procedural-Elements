@@ -21,14 +21,15 @@ public class BlueDungeon : DungeonBehaviour
     Item iceObstacle2;
 
     [SerializeField]
+    ColorCore blueColorCore;
+
+    [SerializeField]
     Player player;
 
     [SerializeField]
     ParticleSystem snowGenerator;
 
     public BlueBossSlime BlueBossSlimeInstance { get; set; }
-
-    public BlueSlime blueSlimeInstance;
 
     Dungeon blueDungeon;
 
@@ -42,18 +43,26 @@ public class BlueDungeon : DungeonBehaviour
         {
             StopSnowEffect();
         }
+        if (BlueBossSlimeInstance != null)
+        {
+            if (!BlueBossSlimeInstance.isAlive && !Completed)
+            {
+                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, blueColorCore, BlueBossSlimeInstance.transform));
+                Completed = true;
+            }
+        }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(blueDungeon.DungeonBounds.center, blueDungeon.DungeonBounds.size);
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawWireCube(blueDungeon.DungeonBounds.center, blueDungeon.DungeonBounds.size);
 
-        if (player != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(player.transform.position, 0.5f);
-        }
+        //if (player != null)
+        //{
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawSphere(player.transform.position, 0.5f);
+        //}
     }
 
     public override void Create()
@@ -82,7 +91,6 @@ public class BlueDungeon : DungeonBehaviour
         BlueBossSlimeInstance = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position,
                 this.blueBossSlime.transform.rotation);
         generator.setBossToRandomRoom(BlueBossSlimeInstance, blueDungeon, 2, 2);
-        generator.Player.transform.position = BlueBossSlimeInstance.transform.position + new Vector3(3, 3);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()

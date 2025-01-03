@@ -22,20 +22,17 @@ public abstract class Character : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
-        if (currentHP <= 0)
+        if (animator != null)
         {
+
+                animator.SetTrigger("hit");
+        }
+        if(currentHP <= 0){
             isAlive = false;
-            if(animator != null)
+
+            foreach (var collider in GetComponents<Collider2D>())
             {
-                bool hasHitTrigger = animator.parameters.Any(p => p.type == AnimatorControllerParameterType.Trigger && p.name == "hit");
-                if (hasHitTrigger)
-                {
-                    animator.SetTrigger("hit");
-                }
-            }
-            if (GetComponent<EdgeCollider2D>() != null)
-            {
-                GetComponent<EdgeCollider2D>().enabled = false;
+                collider.enabled = false;
             }
         }
     }
