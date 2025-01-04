@@ -35,7 +35,7 @@ public class BlueDungeon : DungeonBehaviour
 
     private void Update()
     {
-        if (IsPlayerInsideDungeon())
+        if (IsPlayerInsideDungeon(player, blueDungeon))
         {
             StartSnowEffect();
         }
@@ -105,16 +105,6 @@ public class BlueDungeon : DungeonBehaviour
         };
 
         GenerateDungeonObjects(itemConfigs, enemyConfigs);
-    }
-
-    private bool IsPlayerInsideDungeon()
-    {
-        Vector3Int playerPosition = Vector3Int.FloorToInt(player.transform.position);
-
-        return playerPosition.x >= blueDungeon.DungeonBounds.xMin &&
-               playerPosition.x < blueDungeon.DungeonBounds.xMax &&
-               playerPosition.y >= blueDungeon.DungeonBounds.yMin &&
-               playerPosition.y < blueDungeon.DungeonBounds.yMax;
     }
 
     private void StartSnowEffect()

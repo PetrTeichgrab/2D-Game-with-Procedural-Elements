@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class GreenDungeon : DungeonBehaviour
@@ -33,9 +36,6 @@ public class GreenDungeon : DungeonBehaviour
     Item treeBright6;
 
     [SerializeField]
-    Item treeBright7;
-
-    [SerializeField]
     Item treeDark1;
 
     [SerializeField]
@@ -55,6 +55,18 @@ public class GreenDungeon : DungeonBehaviour
 
     [SerializeField]
     Item treeDark7;
+
+    [SerializeField]
+    Item treeDark8;
+
+    [SerializeField]
+    Item treeDark9;
+
+    [SerializeField]
+    Item treeDark10;
+
+    [SerializeField]
+    Item treeDark11;
 
     [SerializeField]
     Item bush1;
@@ -86,7 +98,12 @@ public class GreenDungeon : DungeonBehaviour
     [SerializeField]
     Item bush10;
 
+    [SerializeField]
+    Player player;
+
     Dungeon greenDungeon;
+
+    bool isGenerated;
 
     public override void Create()
     {
@@ -96,34 +113,97 @@ public class GreenDungeon : DungeonBehaviour
 
     public override void CreateAndSetPositions()
     {
-        // Seznam konfigurací pro generování objektù specifikovaných typem Item
+        StartCoroutine(GenerateDungeon());
+    }
+
+    private IEnumerator GenerateDungeon()
+    {
         generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
 
-        var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
-        {
-            (this.bush1, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush2, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush3, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush4, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush5, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush6, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush7, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush8, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush9, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.bush10, obj => generator.SetItemToRandomPosition(obj, greenDungeon, 1), 30),
-            (this.treeBright1, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 1, 2, 2), 80),
-            (this.treeBright2, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 2, 2, 2), 80),
-            (this.treeBright3, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 2, 2, 2), 80),
-            (this.treeBright4, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 2, 2, 2), 80),
-            (this.treeBright5, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 2, 2, 2), 80),
-            (this.treeBright6, obj => generator.SetLargeItemToRandomPosition(obj, greenDungeon, 2, 2, 2), 80),
-        };
+        var brightTrees = new List<(Item prefab, int baseCount, int width, int height, int offset)>
+    {
+        (this.treeBright1, 50, 2, 2, 2),
+        (this.treeBright2, 50, 2, 2, 2),
+        (this.treeBright3, 50, 2, 2, 2),
+        (this.treeBright4, 50, 2, 2, 2),
+        (this.treeBright5, 50, 2, 2, 2),
+        (this.treeBright6, 50, 2, 2, 2),
+    };
 
-        var enemyConfigs = new List<(GreenSlime prefab, Action<GreenSlime> positionSetter, int count)>()
-        {
-            (this.greenSlime, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 30),
-        };
+        var darkTrees = new List<(Item prefab, int baseCount, int width, int height, int offset)>
+    {
+        (this.treeDark1, 30, 2, 2, 2),
+        (this.treeDark2, 30, 2, 2, 2),
+        (this.treeDark3, 30, 2, 2, 2),
+        (this.treeDark4, 30, 2, 2, 2),
+        (this.treeDark5, 30, 2, 2, 2),
+        (this.treeDark6, 30, 2, 2, 2),
+        (this.treeDark7, 30, 2, 2, 2),
+        (this.treeDark8, 30, 2, 2, 2),
+        (this.treeDark9, 30, 2, 2, 2),
+        (this.treeDark10, 30, 2, 2, 2),
+    };
 
-        GenerateDungeonObjects(itemConfigs, enemyConfigs);
+        var bushes = new List<(Item prefab, int baseCount, int offset)>
+    {
+        (this.bush1, 100, 0),
+        (this.bush2, 100, 0),
+        (this.bush3, 100, 0),
+        (this.bush4, 100, 0),
+        (this.bush5, 100, 0),
+    };
+
+        int totalFloorSize = greenDungeon.Floor.FloorList.Count;
+
+        foreach (var room in greenDungeon.RoomList)
+        {
+            int roomSize = room.FloorList.Count;
+
+            var selectedTreeType = UnityEngine.Random.value > 0.5f ? brightTrees : darkTrees;
+
+            foreach (var (prefab, baseCount, width, height, offset) in selectedTreeType)
+            {
+                int itemCount = Mathf.Max(1, Mathf.RoundToInt((float)baseCount * roomSize / totalFloorSize));
+
+                for (int i = 0; i < itemCount; i++)
+                {
+                    var item = Instantiate(prefab);
+
+                    // Kontrola zaplnìní místnosti
+                    if (generator.SetItemToRoomPosition(item, room, width, height, offset) > 0.60f)
+                    {
+                        Debug.Log($"Pøeskakuji místnost, zaplnìno na více než 60 %.");
+                        break;
+                    }
+
+                    yield return null; // Poèkat 1 snímek
+                }
+            }
+
+            foreach (var (prefab, baseCount, offset) in bushes)
+            {
+                int bushCount = Mathf.Max(1, Mathf.RoundToInt((float)baseCount * roomSize / totalFloorSize));
+
+                for (int i = 0; i < bushCount; i++)
+                {
+                    var bush = Instantiate(prefab);
+
+                    // Kontrola zaplnìní místnosti
+                    if (generator.SetItemToRoomPosition(bush, room, 1, 1, offset) > 0.70f)
+                    {
+                        Debug.Log($"Pøeskakuji místnost pøi generování keøù, zaplnìno na více než 70 %.");
+                        break;
+                    }
+
+                    yield return null; // Poèkat 1 snímek
+                }
+            }
+
+            yield return null; // Poèkat 1 snímek po dokonèení místnosti
+        }
+
+        Debug.Log("Dungeon byl kompletnì vygenerován.");
     }
+
+
 }

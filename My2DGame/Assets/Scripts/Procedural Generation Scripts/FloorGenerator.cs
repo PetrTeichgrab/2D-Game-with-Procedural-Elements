@@ -90,15 +90,17 @@ public static class FloorGenerator
         {
             var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
             var roomFloor = RandomWalkAlgorithms.RandomWalk(randomWalkParameters, roomCenter);
+            HashSet<Vector2Int> actualRoomFloor = new HashSet<Vector2Int>();
             foreach (var pos in roomFloor)
             {
                 if (pos.x >= (roomBounds.xMin + offset) && pos.x <= (roomBounds.xMax - offset) &&
                     pos.y <= (roomBounds.yMax - offset) && pos.y >= (roomBounds.yMin + offset))
                 {
                     floor.Add(pos);
+                    actualRoomFloor.Add(pos);
                 }
-                roomList.Add(new Room(floor, roomCenter));
             }
+            roomList.Add(new Room(actualRoomFloor, roomCenter));
         }
         return floor;
     }

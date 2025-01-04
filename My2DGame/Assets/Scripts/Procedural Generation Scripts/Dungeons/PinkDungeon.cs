@@ -79,7 +79,7 @@ public class PinkDungeon : DungeonBehaviour
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
         {
-            (this.pinkRock2large, obj => generator.SetLargeItemToRoomCenter(obj, pinkDungeon, 3, 3), 2),
+            //(this.pinkRock2large, obj => generator.SetLargeItemToRoomCenter(obj, pinkDungeon, 3, 3), 2),
             (this.pinkCrystal, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 10),
             (this.pinkRock1small, obj => generator.SetItemToEdgeOfRoom(obj, pinkDungeon), 5),
             (this.pinkRock1small, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 3), 10),

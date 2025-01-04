@@ -8,6 +8,16 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
 {
     public bool Completed {  get; set; }
 
+    protected bool IsPlayerInsideDungeon(Player player, Dungeon dungeon)
+    {
+        Vector3Int playerPosition = Vector3Int.FloorToInt(player.transform.position);
+
+        return playerPosition.x >= dungeon.DungeonBounds.xMin &&
+               playerPosition.x < dungeon.DungeonBounds.xMax &&
+               playerPosition.y >= dungeon.DungeonBounds.yMin &&
+               playerPosition.y < dungeon.DungeonBounds.yMax;
+    }
+
     protected IEnumerator CallSpawnColorCoreAfterDelay<T>(float delay, T colorCorePrefab, Transform spawnTransform) where T : ColorCore
     {
         yield return new WaitForSeconds(delay);

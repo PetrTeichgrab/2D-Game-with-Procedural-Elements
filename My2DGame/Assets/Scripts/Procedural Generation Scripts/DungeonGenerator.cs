@@ -229,6 +229,70 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         return Vector2Int.zero;
     }
 
+    public float SetItemToRoomPosition(Item item, Room room, int width, int height, int offset)
+    {
+        // Výpoèet aktuální obsazenosti místnosti
+        float occupancy = (float)occupiedPositions.Count(pos => room.FloorList.Contains(pos)) / room.FloorList.Count;
+
+        // Rozdìlení místnosti na dostupné pozice
+        var grid = room.FloorList
+            .Where(pos => !occupiedPositions.Contains(pos))
+            .OrderBy(_ => UnityEngine.Random.value) // Randomizace poøadí
+            .ToList();
+
+        if (grid.Count == 0)
+        {
+            Debug.LogWarning("Žádné volné pozice nejsou k dispozici.");
+            return 1;
+        }
+
+        foreach (var newPos in grid)
+        {
+            bool canPlace = true;
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    var checkPos = new Vector2Int(newPos.x + x, newPos.y + y);
+
+                    if (!room.FloorList.Contains(checkPos) || occupiedPositions.Contains(checkPos))
+                    {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                if (!canPlace)
+                    break;
+            }
+
+            if (canPlace)
+            {
+                // Nastavení pozice objektu
+                item.transform.position = new Vector2(newPos.x + 0.5f, newPos.y + 1f);
+                item.Position = newPos;
+
+                // Aktualizace obsazených pozic
+                var newOccupiedPositions = GetOccupiedPositionsForLargeObject(newPos, width, height);
+                occupiedPositions = occupiedPositions.Union(newOccupiedPositions).ToList();
+                foreach (var pos in newOccupiedPositions)
+                {
+                    tileMap.DrawTile(blueTile, pos);
+                }
+
+                allItems.Add(item);
+                return occupancy;
+            }
+        }
+
+        Debug.LogWarning("Nepodaøilo se najít platnou pozici v místnosti.");
+        return occupancy;
+    }
+
+
+
+
     public List<Vector2Int> SetCharacterToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int width, int height)
     {
         for (int attempt = 0; attempt < 100; attempt++)
@@ -509,11 +573,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             Vector3 topLeft = new Vector3(room.min.x, room.max.y, 0);
             Vector3 topRight = new Vector3(room.max.x, room.max.y, 0);
 
-            // Kreslení hranic místností žlutou barvou
-            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.yellow, 10f); // Spodní hranice
-            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.yellow, 10f);  // Pravá hranice
-            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.yellow, 10f);      // Horní hranice
-            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.yellow, 10f);    // Levá hranice
+            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.yellow, 10f);
+            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.yellow, 10f);
+            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.yellow, 10f);
+            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.yellow, 10f);
         }
     }
 
