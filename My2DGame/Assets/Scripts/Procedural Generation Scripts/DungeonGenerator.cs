@@ -229,60 +229,42 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         return Vector2Int.zero;
     }
 
-    public float SetItemToRoomPosition(Item item, Room room, int width, int height, int offset)
+    public float SetItemToRoomPosition(Item item, Room room, int width, int height, int offset, int spacing = 2)
     {
         // Výpoèet aktuální obsazenosti místnosti
         float occupancy = (float)occupiedPositions.Count(pos => room.FloorList.Contains(pos)) / room.FloorList.Count;
 
         // Rozdìlení místnosti na dostupné pozice
         var grid = room.FloorList
-            .Where(pos => !occupiedPositions.Contains(pos))
+            .Where(pos => IsValidPositionWithOffset(pos, room, offset))
             .OrderBy(_ => UnityEngine.Random.value) // Randomizace poøadí
             .ToList();
 
         if (grid.Count == 0)
         {
             Debug.LogWarning("Žádné volné pozice nejsou k dispozici.");
-            return 1;
+            return 1f; // Místnost je plná
         }
 
         foreach (var newPos in grid)
         {
-            bool canPlace = true;
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    var checkPos = new Vector2Int(newPos.x + x, newPos.y + y);
-
-                    if (!room.FloorList.Contains(checkPos) || occupiedPositions.Contains(checkPos))
-                    {
-                        canPlace = false;
-                        break;
-                    }
-                }
-
-                if (!canPlace)
-                    break;
-            }
-
-            if (canPlace)
+            // Zkontrolujte, zda lze objekt umístit s ohledem na rozestupy
+            if (CanPlaceWithSpacing(newPos, room, width, height, spacing))
             {
                 // Nastavení pozice objektu
-                item.transform.position = new Vector2(newPos.x + 0.5f, newPos.y + 1f);
+                item.transform.position = new Vector2(newPos.x + 0.5f, newPos.y + 0.5f);
                 item.Position = newPos;
 
-                // Aktualizace obsazených pozic
+                // Oznaèení obsazených pozic
                 var newOccupiedPositions = GetOccupiedPositionsForLargeObject(newPos, width, height);
-                occupiedPositions = occupiedPositions.Union(newOccupiedPositions).ToList();
                 foreach (var pos in newOccupiedPositions)
                 {
-                    tileMap.DrawTile(blueTile, pos);
+                    occupiedPositions.Add(pos);
+                    tileMap.DrawTile(blueTile, pos); // Vykreslení na mapì
                 }
 
                 allItems.Add(item);
-                return occupancy;
+                return occupancy; // Vrácení obsazenosti
             }
         }
 
@@ -290,7 +272,61 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         return occupancy;
     }
 
+    private bool CanPlaceWithSpacing(Vector2Int position, Room room, int width, int height, int spacing)
+    {
+        for (int x = -spacing; x <= spacing; x++)
+        {
+            for (int y = -spacing; y <= spacing; y++)
+            {
+                var checkPos = new Vector2Int(position.x + x, position.y + y);
 
+                // Pokud je pozice obsazená nebo není souèástí podlahy, nelze umístit
+                if (occupiedPositions.Contains(checkPos) || !room.FloorList.Contains(checkPos))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    private bool IsValidPositionWithOffset(Vector2Int position, Room room, int offset)
+    {
+        for (int x = -offset; x <= offset; x++)
+        {
+            for (int y = -offset; y <= offset; y++)
+            {
+                var checkPos = new Vector2Int(position.x + x, position.y + y);
+
+                if (!room.FloorList.Contains(checkPos))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private bool CanPlaceObject(Vector2Int position, Room room, int width, int height)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var checkPos = new Vector2Int(position.x + x, position.y + y);
+
+                // Ovìøení, zda pozice je v místnosti a není obsazená
+                if (!room.FloorList.Contains(checkPos) || occupiedPositions.Contains(checkPos))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 
     public List<Vector2Int> SetCharacterToRandomPositionInRandomRoom(Transform transformObject, Dungeon dungeon, int width, int height)

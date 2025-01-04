@@ -1,109 +1,21 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class GreenDungeon : DungeonBehaviour
 {
-    [SerializeField]
-    DungeonGenerator generator;
+    [SerializeField] private DungeonGenerator generator;
 
-    [SerializeField]
-    GreenSlime greenSlime;
+    [SerializeField] private GreenSlime greenSlime;
 
-    //[SerializeField]
-    //GreenBossSlime greenBossSlime;
+    [SerializeField] private Item treeBright1, treeBright2, treeBright3, treeBright4, treeBright5, treeBright6;
+    [SerializeField] private Item treeDark1, treeDark2, treeDark3, treeDark4, treeDark5, treeDark6, treeDark7, treeDark8, treeDark9, treeDark10;
+    [SerializeField] private Item bush1, bush2, bush3, bush4, bush5;
 
-    [SerializeField]
-    Item treeBright1;
+    [SerializeField] private Player player;
 
-    [SerializeField]
-    Item treeBright2;
-
-    [SerializeField]
-    Item treeBright3;
-
-    [SerializeField]
-    Item treeBright4;
-
-    [SerializeField]
-    Item treeBright5;
-
-    [SerializeField]
-    Item treeBright6;
-
-    [SerializeField]
-    Item treeDark1;
-
-    [SerializeField]
-    Item treeDark2;
-
-    [SerializeField]
-    Item treeDark3;
-
-    [SerializeField]
-    Item treeDark4;
-
-    [SerializeField]
-    Item treeDark5;
-
-    [SerializeField]
-    Item treeDark6;
-
-    [SerializeField]
-    Item treeDark7;
-
-    [SerializeField]
-    Item treeDark8;
-
-    [SerializeField]
-    Item treeDark9;
-
-    [SerializeField]
-    Item treeDark10;
-
-    [SerializeField]
-    Item treeDark11;
-
-    [SerializeField]
-    Item bush1;
-
-    [SerializeField]
-    Item bush2;
-
-    [SerializeField]
-    Item bush3;
-
-    [SerializeField]
-    Item bush4;
-
-    [SerializeField]
-    Item bush5;
-
-    [SerializeField]
-    Item bush6;
-
-    [SerializeField]
-    Item bush7;
-
-    [SerializeField]
-    Item bush8;
-
-    [SerializeField]
-    Item bush9;
-
-    [SerializeField]
-    Item bush10;
-
-    [SerializeField]
-    Player player;
-
-    Dungeon greenDungeon;
-
-    bool isGenerated;
+    private Dungeon greenDungeon;
+    private ObjectPool<Item> objectPool;
 
     public override void Create()
     {
@@ -113,97 +25,100 @@ public class GreenDungeon : DungeonBehaviour
 
     public override void CreateAndSetPositions()
     {
-        StartCoroutine(GenerateDungeon());
+        InitializePools();
+
+        // Generování statických èástí dungeonu
+        GenerateStaticDungeon();
+
+        // Spuštìní dynamického generování bìhem hry
+        StartCoroutine(GenerateDynamicDungeon());
     }
 
-    private IEnumerator GenerateDungeon()
+    private void InitializePools()
+    {
+        var prefabs = new Dictionary<string, Item>
+        {
+            { "TreeBright1", treeBright1 },
+            { "TreeBright2", treeBright2 },
+            { "TreeBright3", treeBright3 },
+            { "TreeBright4", treeBright4 },
+            { "TreeBright5", treeBright5 },
+            { "TreeBright6", treeBright6 },
+            { "TreeDark1", treeDark1 },
+            { "TreeDark2", treeDark2 },
+            { "TreeDark3", treeDark3 },
+            { "TreeDark4", treeDark4 },
+            { "TreeDark5", treeDark5 },
+            { "TreeDark6", treeDark6 },
+            { "TreeDark7", treeDark7 },
+            { "TreeDark8", treeDark8 },
+            { "TreeDark9", treeDark9 },
+            { "TreeDark10", treeDark10 },
+            { "Bush1", bush1 },
+            { "Bush2", bush2 },
+            { "Bush3", bush3 },
+            { "Bush4", bush4 },
+            { "Bush5", bush5 },
+        };
+
+        objectPool = new ObjectPool<Item>(prefabs, 20);
+    }
+
+    private void GenerateStaticDungeon()
     {
         generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
 
-        var brightTrees = new List<(Item prefab, int baseCount, int width, int height, int offset)>
-    {
-        (this.treeBright1, 50, 2, 2, 2),
-        (this.treeBright2, 50, 2, 2, 2),
-        (this.treeBright3, 50, 2, 2, 2),
-        (this.treeBright4, 50, 2, 2, 2),
-        (this.treeBright5, 50, 2, 2, 2),
-        (this.treeBright6, 50, 2, 2, 2),
-    };
+        foreach (var room in greenDungeon.RoomList)
+        {
+            bool isBrightTreeType = UnityEngine.Random.value > 0.5f;
+            var selectedTreeType = isBrightTreeType
+                ? new[] { "TreeBright1", "TreeBright2", "TreeBright3", "TreeBright4", "TreeBright5", "TreeBright6" }
+                : new[] { "TreeDark1", "TreeDark2", "TreeDark3", "TreeDark4", "TreeDark5", "TreeDark6", "TreeDark7", "TreeDark8", "TreeDark9", "TreeDark10" };
 
-        var darkTrees = new List<(Item prefab, int baseCount, int width, int height, int offset)>
-    {
-        (this.treeDark1, 30, 2, 2, 2),
-        (this.treeDark2, 30, 2, 2, 2),
-        (this.treeDark3, 30, 2, 2, 2),
-        (this.treeDark4, 30, 2, 2, 2),
-        (this.treeDark5, 30, 2, 2, 2),
-        (this.treeDark6, 30, 2, 2, 2),
-        (this.treeDark7, 30, 2, 2, 2),
-        (this.treeDark8, 30, 2, 2, 2),
-        (this.treeDark9, 30, 2, 2, 2),
-        (this.treeDark10, 30, 2, 2, 2),
-    };
+            foreach (var type in selectedTreeType)
+            {
+                int itemCount = Mathf.RoundToInt((float)25 * room.FloorList.Count / greenDungeon.Floor.FloorList.Count);
 
-        var bushes = new List<(Item prefab, int baseCount, int offset)>
-    {
-        (this.bush1, 100, 0),
-        (this.bush2, 100, 0),
-        (this.bush3, 100, 0),
-        (this.bush4, 100, 0),
-        (this.bush5, 100, 0),
-    };
+                for (int i = 0; i < itemCount; i++)
+                {
+                    var item = objectPool.Get(type);
+                    int height = isBrightTreeType ? 3 : 2;
+                    generator.SetItemToRoomPosition(item, room, 2, height, 0, 1);
+                }
+            }
+        }
 
+        Debug.Log("Statické èásti dungeonu byly vygenerovány.");
+    }
+
+    private IEnumerator GenerateDynamicDungeon()
+    {
         int totalFloorSize = greenDungeon.Floor.FloorList.Count;
 
         foreach (var room in greenDungeon.RoomList)
         {
-            int roomSize = room.FloorList.Count;
-
-            var selectedTreeType = UnityEngine.Random.value > 0.5f ? brightTrees : darkTrees;
-
-            foreach (var (prefab, baseCount, width, height, offset) in selectedTreeType)
+            // Dynamicky generujeme keøe
+            foreach (var type in new[] { "Bush1", "Bush2", "Bush3", "Bush4", "Bush5" })
             {
-                int itemCount = Mathf.Max(1, Mathf.RoundToInt((float)baseCount * roomSize / totalFloorSize));
-
-                for (int i = 0; i < itemCount; i++)
-                {
-                    var item = Instantiate(prefab);
-
-                    // Kontrola zaplnìní místnosti
-                    if (generator.SetItemToRoomPosition(item, room, width, height, offset) > 0.60f)
-                    {
-                        Debug.Log($"Pøeskakuji místnost, zaplnìno na více než 60 %.");
-                        break;
-                    }
-
-                    yield return null; // Poèkat 1 snímek
-                }
-            }
-
-            foreach (var (prefab, baseCount, offset) in bushes)
-            {
-                int bushCount = Mathf.Max(1, Mathf.RoundToInt((float)baseCount * roomSize / totalFloorSize));
+                int bushCount = Mathf.RoundToInt((float)60 * room.FloorList.Count / totalFloorSize);
 
                 for (int i = 0; i < bushCount; i++)
                 {
-                    var bush = Instantiate(prefab);
+                    var bush = objectPool.Get(type);
 
-                    // Kontrola zaplnìní místnosti
-                    if (generator.SetItemToRoomPosition(bush, room, 1, 1, offset) > 0.70f)
+                    if (generator.SetItemToRoomPosition(bush, room, 1, 1, 1, 0) > 0.7f)
                     {
-                        Debug.Log($"Pøeskakuji místnost pøi generování keøù, zaplnìno na více než 70 %.");
+                        objectPool.Return(bush, type);
                         break;
                     }
 
-                    yield return null; // Poèkat 1 snímek
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
 
-            yield return null; // Poèkat 1 snímek po dokonèení místnosti
+            yield return new WaitForSeconds(0.5f);
         }
 
-        Debug.Log("Dungeon byl kompletnì vygenerován.");
+        Debug.Log("Dynamické èásti dungeonu byly vygenerovány.");
     }
-
-
 }
