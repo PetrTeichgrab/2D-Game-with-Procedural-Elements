@@ -8,11 +8,15 @@ public class GreenDungeon : DungeonBehaviour
 
     [SerializeField] private GreenSlime greenSlime;
 
+    [SerializeField] private EnemyMushroomGreen greenMushroom;
+
     [SerializeField] private Item treeBright1, treeBright2, treeBright3, treeBright4, treeBright5, treeBright6;
     [SerializeField] private Item treeDark1, treeDark2, treeDark3, treeDark4, treeDark5, treeDark6, treeDark7, treeDark8, treeDark9, treeDark10;
     [SerializeField] private Item bush1, bush2, bush3, bush4, bush5;
 
     [SerializeField] private Player player;
+
+    [SerializeField] private Item lightBulb;
 
     private Dungeon greenDungeon;
     private ObjectPool<Item> objectPool;
@@ -27,10 +31,10 @@ public class GreenDungeon : DungeonBehaviour
     {
         InitializePools();
 
-        // Generování statických èástí dungeonu
         GenerateStaticDungeon();
 
-        // Spuštìní dynamického generování bìhem hry
+        AddEnemies();
+
         StartCoroutine(GenerateDynamicDungeon());
     }
 
@@ -64,6 +68,26 @@ public class GreenDungeon : DungeonBehaviour
         objectPool = new ObjectPool<Item>(prefabs, 20);
     }
 
+    private void AddEnemies()
+    {
+        var enemyConfigs = new List<(Character prefab, System.Action<Character> positionSetter, int count)>
+        {
+            (greenSlime, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 40),
+            (greenMushroom, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 40)
+        };
+
+        foreach (var (prefab, positionSetter, count) in enemyConfigs)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var enemy = Instantiate(prefab);
+                positionSetter(enemy);
+            }
+        }
+
+        Debug.Log("Nepøátelé byli pøidáni do dungeonu.");
+    }
+
     private void GenerateStaticDungeon()
     {
         generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
@@ -91,13 +115,20 @@ public class GreenDungeon : DungeonBehaviour
         Debug.Log("Statické èásti dungeonu byly vygenerovány.");
     }
 
+    private void setLights()
+    {
+        for (int i = 0; i < 60; i++)
+        {
+            generator.SetItemToRandomPosition(lightBulb, greenDungeon, 0);
+        }
+    }
+
     private IEnumerator GenerateDynamicDungeon()
     {
         int totalFloorSize = greenDungeon.Floor.FloorList.Count;
 
         foreach (var room in greenDungeon.RoomList)
         {
-            // Dynamicky generujeme keøe
             foreach (var type in new[] { "Bush1", "Bush2", "Bush3", "Bush4", "Bush5" })
             {
                 int bushCount = Mathf.RoundToInt((float)60 * room.FloorList.Count / totalFloorSize);
@@ -106,11 +137,7 @@ public class GreenDungeon : DungeonBehaviour
                 {
                     var bush = objectPool.Get(type);
 
-                    if (generator.SetItemToRoomPosition(bush, room, 1, 1, 1, 0) > 0.7f)
-                    {
-                        objectPool.Return(bush, type);
-                        break;
-                    }
+                    generator.SetItemToRoomPosition(bush, room, 1, 1, 1, 0);
 
                     yield return new WaitForSeconds(0.1f);
                 }
@@ -119,6 +146,7 @@ public class GreenDungeon : DungeonBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        Debug.Log("Dynamické èásti dungeonu byly vygenerovány.");
+        Debug.Log("Keøe byly vygenerovány ve všech místnostech.");
     }
+
 }

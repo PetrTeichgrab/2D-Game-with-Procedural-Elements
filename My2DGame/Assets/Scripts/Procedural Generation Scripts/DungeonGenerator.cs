@@ -100,11 +100,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private Underground undergroundDungeon;
 
-    //public void Start()
-    //{
-    //    tileMap.ClearGeneration();
-    //    CreateDungeons();
-    //}
     public void GenerateDungeons()
     {
         seed = UnityEngine.Random.Range(-10000, 10000);
@@ -122,13 +117,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private void CreateDungeons()
     {
         HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
+
         while (dungeonList.Count < 5)
         {
-            dungeonList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), dungeonWidth, dungeonHeight);
+            dungeonList = ProceduralGenerationAlgorithms.BSP(
+                new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)),
+                dungeonWidth,
+                dungeonHeight
+            );
         }
+
         List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
 
-        // Najdìte nejvìtší bounds
         BoundsInt largestBounds = dungeons.OrderByDescending(bounds => bounds.size.x * bounds.size.y).First();
 
         List<Dungeon> createdDungeonsList = new List<Dungeon>();
@@ -139,49 +139,56 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         createdDungeonsList.Add(GreenDungeon);
         dungeons.Remove(largestBounds);
 
-        PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
-        PinkDungeon.parameters = pinkDungeonParameters;
-        InitDungeon(PinkDungeon);
-        createdDungeonsList.Add(PinkDungeon);
-        dungeons.RemoveAt(0);
-
-        BlueDungeon = new Dungeon(dungeons[1], DungeonColor.Blue);
-        BlueDungeon.parameters = blueDungeonParameters;
-        InitDungeon(BlueDungeon);
-        createdDungeonsList.Add(BlueDungeon);
-        dungeons.RemoveAt(1);
-
-        // Použijte nejvìtší bounds pro zelený dungeon
-
-        //PurpleDungeon = new Dungeon(dungeons[3], DungeonColor.Purple);
-        //InitDungeon(PurpleDungeon);
-        //createdDungeonsList.Add(PurpleDungeon);
-
-        for (int i = 0; i < createdDungeonsList.Count; i++)
+        if (dungeons.Count > 0)
         {
-            for (int j = createdDungeonsList.Count; j > 0; j--)
+            PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
+            PinkDungeon.parameters = pinkDungeonParameters;
+            InitDungeon(PinkDungeon);
+            createdDungeonsList.Add(PinkDungeon);
+            dungeons.RemoveAt(0);
+        }
+
+        if (dungeons.Count > 0)
+        {
+            BlueDungeon = new Dungeon(dungeons[0], DungeonColor.Blue);
+            BlueDungeon.parameters = blueDungeonParameters;
+            InitDungeon(BlueDungeon);
+            createdDungeonsList.Add(BlueDungeon);
+            dungeons.RemoveAt(0);
+        }
+
+        if (dungeons.Count > 0)
+        {
+            PurpleDungeon = new Dungeon(dungeons[0], DungeonColor.Purple);
+            PurpleDungeon.parameters = purpleDungeonParameters;
+            InitDungeon(PurpleDungeon);
+            createdDungeonsList.Add(PurpleDungeon);
+            dungeons.RemoveAt(0);
+        }
+
+        foreach (var dungeon in createdDungeonsList)
+        {
+            var nearestDungeon = FindNearestBounds(dungeon, createdDungeonsList);
+
+            if (!dungeon.connectedDungeons.Contains(nearestDungeon))
             {
-                var NearestDungeon = FindNearestBounds(createdDungeonsList[i], createdDungeonsList);
-                if (!createdDungeonsList[i].connectedDungeons.Contains(NearestDungeon))
-                {
-                    ConnectDungeons(createdDungeonsList[i], NearestDungeon);
-                }
+                ConnectDungeons(dungeon, nearestDungeon);
             }
         }
 
-        tileMap.DrawFloor(PinkDungeon);
-        tileMap.DrawFloor(BlueDungeon);
-        tileMap.DrawFloor(GreenDungeon);
-        //tileMap.DrawFloor(PurpleDungeon);
+        if (PinkDungeon != null) tileMap.DrawFloor(PinkDungeon);
+        if (BlueDungeon != null) tileMap.DrawFloor(BlueDungeon);
+        if (GreenDungeon != null) tileMap.DrawFloor(GreenDungeon);
+        if (PurpleDungeon != null) tileMap.DrawFloor(PurpleDungeon);
 
-        WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
-        WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
-        //WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
+        if (PinkDungeon != null) WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
+        if (BlueDungeon != null) WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
+        if (GreenDungeon != null) WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
+        if (PurpleDungeon != null) WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
 
-        //SetToRandomPositionInRandomRoom(Player.transform, PinkDungeon, 1);
         DrawDungeonBounds(dungeonList.ToList());
     }
+
 
 
 
@@ -231,40 +238,35 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public float SetItemToRoomPosition(Item item, Room room, int width, int height, int offset, int spacing = 2)
     {
-        // Výpoèet aktuální obsazenosti místnosti
         float occupancy = (float)occupiedPositions.Count(pos => room.FloorList.Contains(pos)) / room.FloorList.Count;
 
-        // Rozdìlení místnosti na dostupné pozice
         var grid = room.FloorList
             .Where(pos => IsValidPositionWithOffset(pos, room, offset))
-            .OrderBy(_ => UnityEngine.Random.value) // Randomizace poøadí
+            .OrderBy(_ => UnityEngine.Random.value)
             .ToList();
 
         if (grid.Count == 0)
         {
             Debug.LogWarning("Žádné volné pozice nejsou k dispozici.");
-            return 1f; // Místnost je plná
+            return 1f;
         }
 
         foreach (var newPos in grid)
         {
-            // Zkontrolujte, zda lze objekt umístit s ohledem na rozestupy
             if (CanPlaceWithSpacing(newPos, room, width, height, spacing))
             {
-                // Nastavení pozice objektu
                 item.transform.position = new Vector2(newPos.x + 0.5f, newPos.y + 0.5f);
                 item.Position = newPos;
 
-                // Oznaèení obsazených pozic
                 var newOccupiedPositions = GetOccupiedPositionsForLargeObject(newPos, width, height);
                 foreach (var pos in newOccupiedPositions)
                 {
                     occupiedPositions.Add(pos);
-                    tileMap.DrawTile(blueTile, pos); // Vykreslení na mapì
+                    //tileMap.DrawTile(blueTile, pos); 
                 }
 
                 allItems.Add(item);
-                return occupancy; // Vrácení obsazenosti
+                return occupancy;
             }
         }
 

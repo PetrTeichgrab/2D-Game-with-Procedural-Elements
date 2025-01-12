@@ -33,11 +33,11 @@ public class EnemyMushroomPink : RangeEnemy
             CheckAppearence();
             if (!Appeard)
             {
-                GetComponent<EdgeCollider2D>().enabled = false;
+                GetComponent<PolygonCollider2D>().enabled = false;
             }
             else
             {
-                GetComponent<EdgeCollider2D>().enabled = true;
+                GetComponent<PolygonCollider2D>().enabled = true;
                 shootBehaviour();
             }
             animator.SetBool("appeard", Appeard);

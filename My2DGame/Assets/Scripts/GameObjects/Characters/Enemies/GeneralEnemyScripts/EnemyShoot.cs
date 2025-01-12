@@ -13,7 +13,7 @@ public class EnemyShoot : MonoBehaviour
     protected void Start()
     {
         target = new Vector2(transform.position.x, transform.position.y);
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
     protected void ShootAndFollowPlayer(){

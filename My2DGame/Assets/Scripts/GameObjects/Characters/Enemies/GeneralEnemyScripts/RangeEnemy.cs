@@ -51,7 +51,7 @@ public abstract class RangeEnemy : Character
         }
     }
 
-    private void ShootMultipleProjectiles(int projectileCount, bool followPlayer)
+    private void ShootMultipleProjectiles(int projectileCount)
     {
         float angleStep = 360f / projectileCount;
         float angle = 0f;
@@ -85,7 +85,14 @@ public abstract class RangeEnemy : Character
             {
                 if (Vector2.Distance(player.transform.position, transform.position) < shootDistance)
                 {
-                    ShootMultipleProjectiles(projectileCount, followPlayer);
+                    if (followPlayer)
+                    {
+                        ShootHomingProjectiles(projectileCount);
+                    }
+                    else
+                    {
+                        ShootMultipleProjectiles(projectileCount);
+                    }
                 }
             }
             timeBetweenShots = startTimeBetweenShots;
@@ -95,6 +102,31 @@ public abstract class RangeEnemy : Character
             timeBetweenShots -= Time.deltaTime;
         }
     }
+
+
+    private void ShootHomingProjectiles(int projectileCount)
+    {
+        float angleStep = 360f / projectileCount;
+        float angle = 0f;
+
+        for (int i = 0; i < projectileCount; i++)
+        {
+            float projectileDirX = Mathf.Cos(angle * Mathf.Deg2Rad);
+            float projectileDirY = Mathf.Sin(angle * Mathf.Deg2Rad);
+            Vector2 spawnDirection = new Vector2(projectileDirX, projectileDirY).normalized;
+
+            var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
+
+            var enemyProjectile = projectileObject.GetComponent<EnemyShoot>();
+
+            Destroy(projectileObject, projectileMaxLifeTime);
+
+            angle += angleStep;
+        }
+    }
+
+
+
 
     protected void MoveToPlayer()
     {
