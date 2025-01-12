@@ -274,6 +274,29 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         return occupancy;
     }
 
+    public void SetOverlapItemToRoomPosition(Item item, Room room, int offset)
+    {
+        var randomPosition = room.FloorList
+            .Where(pos => IsValidPositionWithOffset(pos, room, offset))
+            .OrderBy(_ => UnityEngine.Random.value)
+            .FirstOrDefault();
+
+        if (randomPosition != default)
+        {
+            item.transform.position = new Vector2(randomPosition.x + 0.5f, randomPosition.y + 0.5f);
+            item.Position = randomPosition;
+
+            allItems.Add(item);
+
+            Debug.Log($"Item {item.name} byl umístìn do místnosti na pozici {randomPosition}.");
+        }
+        else
+        {
+            Debug.LogWarning("Nebyla nalezena žádná platná pozice pro položku.");
+        }
+    }
+
+
     private bool CanPlaceWithSpacing(Vector2Int position, Room room, int width, int height, int spacing)
     {
         for (int x = -spacing; x <= spacing; x++)

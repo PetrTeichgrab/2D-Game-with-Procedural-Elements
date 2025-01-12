@@ -35,6 +35,8 @@ public class GreenDungeon : DungeonBehaviour
 
         AddEnemies();
 
+        setLights();
+
         StartCoroutine(GenerateDynamicDungeon());
     }
 
@@ -117,11 +119,22 @@ public class GreenDungeon : DungeonBehaviour
 
     private void setLights()
     {
-        for (int i = 0; i < 60; i++)
+        foreach (var room in greenDungeon.RoomList)
         {
-            generator.SetItemToRandomPosition(lightBulb, greenDungeon, 0);
+            int lightCount = Mathf.CeilToInt((float)room.FloorList.Count / 70);
+
+            for (int i = 0; i < lightCount; i++)
+            {
+                var lightInstance = Instantiate(lightBulb);
+
+                generator.SetOverlapItemToRoomPosition(lightInstance, room, 2);
+            }
         }
+
+        Debug.Log("Svìtla byla pøidána do všech místností.");
     }
+
+
 
     private IEnumerator GenerateDynamicDungeon()
     {
