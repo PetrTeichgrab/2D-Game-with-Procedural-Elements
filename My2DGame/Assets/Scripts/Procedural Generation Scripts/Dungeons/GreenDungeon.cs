@@ -92,7 +92,7 @@ public class GreenDungeon : DungeonBehaviour
 
     private void GenerateStaticDungeon()
     {
-        generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
+        //generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
 
         foreach (var room in greenDungeon.RoomList)
         {

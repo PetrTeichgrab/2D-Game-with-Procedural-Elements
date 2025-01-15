@@ -499,7 +499,7 @@ public class MapCreator : MonoBehaviour
 
     public void AddCollider(Vector2Int position)
     {
-        Vector3Int tilePosition = this.colliderMap.WorldToCell((Vector3Int)position);
+        Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
         this.colliderMap.SetTile(tilePosition, emptyTile);
     }
 

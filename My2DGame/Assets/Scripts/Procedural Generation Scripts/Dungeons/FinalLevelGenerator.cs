@@ -187,13 +187,14 @@ public class FinalLevelGenerator : MonoBehaviour
 
     public void AddCollider(Vector2Int position)
     {
-        Vector3Int tilePosition = this.colliderMap.WorldToCell((Vector3Int)position);
+        Vector3Int tilePosition = this.tilemap.WorldToCell((Vector3Int)position);
         this.colliderMap.SetTile(tilePosition, emptyTile);
     }
 
     private void ClearLevel()
     {
         tilemap.ClearAllTiles();
+        colliderMap.ClearAllTiles();
         mazeFloor.Clear();
     }
 }

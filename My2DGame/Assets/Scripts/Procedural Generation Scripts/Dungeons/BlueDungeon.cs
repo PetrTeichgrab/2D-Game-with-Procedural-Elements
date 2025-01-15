@@ -91,6 +91,7 @@ public class BlueDungeon : DungeonBehaviour
         BlueBossSlimeInstance = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position,
                 this.blueBossSlime.transform.rotation);
         generator.setBossToRandomRoom(BlueBossSlimeInstance, blueDungeon, 2, 2);
+        generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
