@@ -98,6 +98,9 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [SerializeField]
     GreenDungeon greenDungeon;
 
+    [SerializeField]
+    private FinalLevelGenerator finalLevel;
+
     private Underground undergroundDungeon;
 
     public void GenerateDungeons()
@@ -108,10 +111,12 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         allEnemiesList.Clear();
         allItems.Clear();
         CreateDungeons();
-        pinkDungeon.Create();
+        //pinkDungeon.Create();
+        //blueDungeon.Create();
+        //greenDungeon.Create();
         CreateUnderground();
-        blueDungeon.Create();
-        greenDungeon.Create();
+        CreateFinalLevel();
+        finalLevel.PlacePlayerRandomly(Player);
     }
 
     private void CreateDungeons()
@@ -207,6 +212,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             Debug.DrawLine(topRight, topLeft, UnityEngine.Color.red, 10f);      // Top
             Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.red, 10f);    // Left
         }
+    }
+
+    private void CreateFinalLevel()
+    {
+        finalLevel.GenerateFinalLevel();
     }
 
     public void CreateUnderground()
