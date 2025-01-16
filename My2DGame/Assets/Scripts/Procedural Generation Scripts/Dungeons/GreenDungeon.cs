@@ -8,7 +8,11 @@ public class GreenDungeon : DungeonBehaviour
 
     [SerializeField] private GreenSlime greenSlime;
 
+    [SerializeField] private GreenSlimeBoss greenSlimeBoss;
+
     [SerializeField] private EnemyMushroomGreen greenMushroom;
+
+    [SerializeField] private EnemyMushroomGreenBoss greenMushroomBoss;
 
     [SerializeField] private Item treeBright1, treeBright2, treeBright3, treeBright4, treeBright5, treeBright6;
     [SerializeField] private Item treeDark1, treeDark2, treeDark3, treeDark4, treeDark5, treeDark6, treeDark7, treeDark8, treeDark9, treeDark10;
@@ -20,6 +24,11 @@ public class GreenDungeon : DungeonBehaviour
 
     private Dungeon greenDungeon;
     private ObjectPool<Item> objectPool;
+
+    public EnemyMushroomGreenBoss GreenMushroomBossInstance { get; set; }
+
+    public GreenSlimeBoss GreenSlimeBossInstance { get; set; }
+
 
     public override void Create()
     {
@@ -37,7 +46,7 @@ public class GreenDungeon : DungeonBehaviour
 
         setLights();
 
-        StartCoroutine(GenerateDynamicDungeon());
+        //StartCoroutine(GenerateDynamicDungeon());
     }
 
     private void InitializePools()
@@ -72,6 +81,7 @@ public class GreenDungeon : DungeonBehaviour
 
     private void AddEnemies()
     {
+
         var enemyConfigs = new List<(Character prefab, System.Action<Character> positionSetter, int count)>
         {
             (greenSlime, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 40),
@@ -92,8 +102,13 @@ public class GreenDungeon : DungeonBehaviour
 
     private void GenerateStaticDungeon()
     {
-        //generator.Player.transform.position = new Vector3(greenDungeon.RoomList[0].Center.x, greenDungeon.RoomList[0].Center.y);
-
+        GreenMushroomBossInstance = Instantiate(this.greenMushroomBoss, this.greenMushroomBoss.transform.position,
+        this.greenMushroomBoss.transform.rotation);
+        generator.setBossToRandomRoom(GreenMushroomBossInstance, greenDungeon, 2, 2);
+        GreenSlimeBossInstance = Instantiate(this.greenSlimeBoss, this.greenSlimeBoss.transform.position,
+        this.greenSlimeBoss.transform.rotation);
+        generator.setBossToRandomRoom(GreenSlimeBossInstance, greenDungeon, 2, 2);
+        generator.Player.transform.position = new Vector3(GreenSlimeBossInstance.Position.x + 5, GreenSlimeBossInstance.Position.y + 5);
         foreach (var room in greenDungeon.RoomList)
         {
             bool isBrightTreeType = UnityEngine.Random.value > 0.5f;

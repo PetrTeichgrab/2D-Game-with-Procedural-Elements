@@ -20,6 +20,8 @@ public class FinalLevelGenerator : MonoBehaviour
     [SerializeField]
     private MapCreator mapCreator;
 
+    [SerializeField] private ColorCore colorCore;
+
     [SerializeField]
     private Vector2Int startCoordinates = new Vector2Int(500, 500);
 
@@ -72,27 +74,76 @@ public class FinalLevelGenerator : MonoBehaviour
                 stack.Push(current);
 
                 Vector2Int chosenNeighbor = neighbors[Random.Range(0, neighbors.Count)];
-                mazeFloor.Add(chosenNeighbor);
                 visited.Add(chosenNeighbor);
 
                 // Pøidání cesty mezi buòkami
                 Vector2Int path = (current + chosenNeighbor) / 2;
                 mazeFloor.Add(path);
 
+                // Pøidání sousedních zdí okolo cesty
+                AddSurroundingWalls(current);
+                AddSurroundingWalls(path);
+                AddSurroundingWalls(chosenNeighbor);
+
                 stack.Push(chosenNeighbor);
             }
         }
+        var colorCoreInstance = Instantiate(colorCore, colorCore.transform.position, colorCore.transform.rotation);
+        PlaceObjectRandomly(colorCoreInstance);
     }
+
+    private bool IsMazeFullyConnected()
+    {
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        Vector2Int start = new Vector2Int((int)mazeBounds.center.x, (int)mazeBounds.center.y);
+
+        queue.Enqueue(start);
+        visited.Add(start);
+
+        while (queue.Count > 0)
+        {
+            Vector2Int current = queue.Dequeue();
+
+            foreach (Vector2Int direction in Directions.eightDirectionsList)
+            {
+                Vector2Int neighbor = current + direction;
+                if (mazeFloor.Contains(neighbor) && !visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        // Pokud poèet navštívených políèek odpovídá poètu políèek v mazeFloor, bludištì je souvislé
+        return visited.Count == mazeFloor.Count;
+    }
+
+    private void AddSurroundingWalls(Vector2Int position)
+    {
+        foreach (Vector2Int direction in Directions.eightDirectionsList)
+        {
+            Vector2Int wallPosition = position + direction;
+            if (!mazeFloor.Contains(wallPosition))
+            {
+                mazeFloor.Add(wallPosition); // Zdi se považují za souèást "zaplnìných" pozic
+            }
+        }
+
+    }
+
+
 
     private List<Vector2Int> GetUnvisitedNeighbors(Vector2Int current, HashSet<Vector2Int> visited)
     {
         List<Vector2Int> directions = new List<Vector2Int>
-        {
-            new Vector2Int(0, 2),
-            new Vector2Int(2, 0),
-            new Vector2Int(0, -2),
-            new Vector2Int(-2, 0)
-        };
+    {
+        new Vector2Int(0, 4),
+        new Vector2Int(4, 0),
+        new Vector2Int(0, -4),
+        new Vector2Int(-4, 0)
+    };
 
         List<Vector2Int> neighbors = new List<Vector2Int>();
 
@@ -107,6 +158,7 @@ public class FinalLevelGenerator : MonoBehaviour
 
         return neighbors;
     }
+
 
     private void DrawLevel()
     {
@@ -183,6 +235,21 @@ public class FinalLevelGenerator : MonoBehaviour
 
         player.transform.position = new Vector3(randomPosition.x + 0.5f, randomPosition.y + 0.5f, 0);
         Debug.Log("Player placed at: " + randomPosition);
+    }
+
+    public void PlaceObjectRandomly(ColorCore gameObject)
+    {
+        if (gameObject == null)
+        {
+            Debug.LogWarning("gameObject is not assigned.");
+            return;
+        }
+
+        List<Vector2Int> floorPositions = new List<Vector2Int>(mazeFloor);
+        Vector2Int randomPosition = floorPositions[Random.Range(0, floorPositions.Count)];
+
+        gameObject.transform.position = new Vector3(randomPosition.x + 0.5f, randomPosition.y + 0.5f, 0);
+        Debug.Log("gameObject placed at: " + randomPosition);
     }
 
     public void AddCollider(Vector2Int position)

@@ -45,7 +45,7 @@ public class EnemyMushroomGreen : RangeEnemy
         animator.SetBool("alive", isAlive);
     }
 
-    protected void shootBehaviour()
+    protected virtual void shootBehaviour()
     {
         ShootMultipleShotsInCircle(amountOfProjectiles, true);
     }

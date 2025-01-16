@@ -16,8 +16,8 @@ public class BlueSlime : MeleeEnemy
             if (IsInApproachDistance())
             {
                 animator.SetTrigger("move");
-                MoveToPlayer(movementSpeed);
-                dashAttack();
+                MoveToPlayer();
+                DashAttack();
             }
             else
             {

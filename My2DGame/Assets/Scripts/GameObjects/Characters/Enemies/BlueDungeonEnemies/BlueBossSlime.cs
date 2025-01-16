@@ -37,7 +37,7 @@ public class BlueBossSlime : MeleeEnemy
             if (IsInApproachDistance())
             {
                 animator.SetTrigger("move");
-                MoveToPlayer(movementSpeed);
+                MoveToPlayer();
                 spawnSlimesCooldownTimer += Time.deltaTime;
 
                 if (spawnSlimesCooldownTimer >= spawnSlimesCooldown)
@@ -46,7 +46,7 @@ public class BlueBossSlime : MeleeEnemy
                     spawnSlimesCooldownTimer = 0;
                 }
 
-                dashAttack();
+                DashAttack();
             }
             else
             {

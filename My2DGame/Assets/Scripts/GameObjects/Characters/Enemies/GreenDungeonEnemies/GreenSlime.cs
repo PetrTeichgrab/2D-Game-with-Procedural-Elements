@@ -16,8 +16,8 @@ public class GreenSlime : MeleeEnemy
             if (IsInApproachDistance())
             {
                 animator.SetBool("move", true);
-                MoveToPlayer(movementSpeed);
-                dashAttack();
+                MoveToPlayer();
+                DashAttack();
             }
             else
             {
