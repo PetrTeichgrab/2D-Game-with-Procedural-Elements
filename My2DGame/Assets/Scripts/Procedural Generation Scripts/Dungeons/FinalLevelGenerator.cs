@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,9 +10,6 @@ public class FinalLevelGenerator : MonoBehaviour
 {
     [SerializeField]
     private int levelSize = 99;
-
-    [SerializeField]
-    private Tilemap tilemap;
 
     [SerializeField]
     private UnityEngine.Tilemaps.Tile greenFloorTile, pinkFloorTile, blueFloorTile, purpleFloorTile, emptyTile, floorTile, wallTile;
@@ -43,7 +41,7 @@ public class FinalLevelGenerator : MonoBehaviour
     private HashSet<Vector2Int> mazeFloor = new HashSet<Vector2Int>();
 
     [SerializeField]
-    private Item monumentPrefab;
+    private Item monumentPrefab, firePedestalPrefab;
 
     private Vector2Int part1Monument, part2Monument, part3Monument, part4Monument;
 
@@ -130,8 +128,8 @@ public class FinalLevelGenerator : MonoBehaviour
         foreach (var part in dungeonParts)
         {
             Vector2Int monumentPosition = PlaceMonumentInBounds(part.Bounds);
-            var monument = Instantiate(monumentPrefab, new Vector3(monumentPosition.x, monumentPosition.y, 0), Quaternion.identity);
-            ColorCore colorCore = Instantiate(GetColorCore(part.Color), new Vector3(monumentPosition.x + 0.8f, monumentPosition.y + 0.8f, 0), Quaternion.identity);
+            var monument = Instantiate(monumentPrefab, new Vector3(monumentPosition.x + 0.5f, monumentPosition.y +0.5f, 0), Quaternion.identity);
+            ColorCore colorCore = Instantiate(GetColorCore(part.Color), new Vector3(monumentPosition.x + 0.52f, monumentPosition.y + 0.85f, 0), Quaternion.identity);
             part.ColorCore = colorCore;
             part.ColorCore.gameObject.SetActive(false);
             allItems.Add(monument);
@@ -153,7 +151,7 @@ public class FinalLevelGenerator : MonoBehaviour
 
                 // Nastavit podlahu pouze v této oblasti
                 mazeFloor.Add(position);
-                tilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                mapCreator.DrawTile(floorTile, new Vector2Int(x, y));
                 colliderMap.SetTile(new Vector3Int(x, y, 0), null); // Odstranit kolizní dlaždici
             }
         }
@@ -189,14 +187,31 @@ public class FinalLevelGenerator : MonoBehaviour
         new Vector2Int(center.x, center.y - 2), // Spodní vchod
         new Vector2Int(center.x - 2, center.y), // Levý vchod
         new Vector2Int(center.x + 2, center.y), // Pravý vchod
-        new Vector2Int(center.x, center.y + 2)  // Horní vchod
+        new Vector2Int(center.x, center.y + 2),  // Horní vchod
+        new Vector2Int(center.x, center.y - 3), // Spodní vchod
+        new Vector2Int(center.x - 3, center.y), // Levý vchod
+        new Vector2Int(center.x + 3, center.y), // Pravý vchod
+        new Vector2Int(center.x, center.y + 3)  // Horní vchod
         };
+
+        Vector2Int[] cornerPositions = new Vector2Int[]
+        {
+            new Vector2Int(center.x - 1, center.y - 1), // Levý dolní roh
+            new Vector2Int(center.x - 1, center.y + 1), // Levý horní roh
+            new Vector2Int(center.x + 1, center.y - 1), // Pravý dolní roh
+            new Vector2Int(center.x + 1, center.y + 1)  // Pravý horní roh
+        };
+
+        foreach (Vector2Int corner in cornerPositions)
+        {
+            Item firePedestal = Instantiate(firePedestalPrefab, new Vector3(corner.x + 0.5f, corner.y + 0.75f, 0), Quaternion.identity);
+        }
 
         foreach (Vector2Int entrance in entrancePositions)
         {
             mazeFloor.Add(entrance);
-            mapCreator.DrawTile(floorTile, entrance); // Nastavit podlahu pro vchody
-            colliderMap.SetTile(new Vector3Int(entrance.x, entrance.y, 0), null); // Odstranit kolizní dlaždici
+            mapCreator.DrawTile(floorTile, entrance);
+            colliderMap.SetTile(new Vector3Int(entrance.x, entrance.y, 0), null); 
         }
 
         return center;
@@ -344,17 +359,44 @@ public class FinalLevelGenerator : MonoBehaviour
     {
         part.ColorCore.gameObject.SetActive(true);
         part.ColorCore.isPlaced = true;
-        foreach (var position in GetPositionsInBounds(part.Bounds))
+
+        player.DisableLightForDuration(8);
+        // Spustí postupné zvìtšování svìtla
+        part.ColorCore.GradualLightIncrease(10f);
+
+        // Spustí postupné nahrazování podlahy
+        StartCoroutine(GradualFloorReplacement(part));
+    }
+
+    private IEnumerator GradualFloorReplacement(FinalDungeonPart part)
+    {
+        // Najít støed èásti
+        Vector2Int center = new Vector2Int(part.Bounds.xMin + part.Bounds.size.x / 2, part.Bounds.yMin + part.Bounds.size.y / 2);
+
+        // Všechny pozice uvnitø hranic
+        List<Vector2Int> positions = new List<Vector2Int>(GetPositionsInBounds(part.Bounds));
+
+        // Seøadit pozice podle vzdálenosti od støedu
+        positions.Sort((a, b) => Vector2Int.Distance(a, center).CompareTo(Vector2Int.Distance(b, center)));
+
+        float duration = 0.1f;
+        // Postupnì nahrazovat dlaždice
+        foreach (var position in positions)
         {
             if (mazeFloor.Contains(position))
             {
-                UnityEngine.Tilemaps.Tile floorTile = GetColoredFloorTile(part.Color);
-                tilemap.SetTile(new Vector3Int(position.x, position.y, 0), floorTile);
+                // Nahradí dlaždici odpovídající barvou
+                mapCreator.DrawTile(GetColoredFloorTile(part.Color), position);
+
+                // Krátká prodleva mezi nahrazením dlaždic
+                yield return new WaitForSeconds(duration);
+                duration -= 0.001f;
             }
         }
 
-        Debug.Log($"Completed part {part.Color} with monument at {part.MonumentPosition}");
+        Debug.Log($"Completed gradual floor replacement for part {part.Color}.");
     }
+
 
     public void PlacePlayerRandomly(Player player)
     {
@@ -373,13 +415,12 @@ public class FinalLevelGenerator : MonoBehaviour
 
     public void AddCollider(Vector2Int position)
     {
-        Vector3Int tilePosition = this.tilemap.WorldToCell((Vector3Int)position);
+        Vector3Int tilePosition = this.colliderMap.WorldToCell((Vector3Int)position);
         this.colliderMap.SetTile(tilePosition, emptyTile);
     }
 
     private void ClearLevel()
     {
-        tilemap.ClearAllTiles();
         colliderMap.ClearAllTiles();
         mazeFloor.Clear();
         dungeonParts.Clear();

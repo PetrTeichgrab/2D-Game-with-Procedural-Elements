@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class Player : Character
 {
@@ -27,6 +28,9 @@ public class Player : Character
     public GameObject castPoint;
 
     public List<ColorCore> colorCores;
+
+    [SerializeField]
+    private Light2D playerLight;
 
 
     void Start()
@@ -100,5 +104,28 @@ public class Player : Character
         trailRenderer.startColor = new UnityEngine.Color(255f, 255f, 255f, 0.1f);
         trailRenderer.endColor = new UnityEngine.Color(0, 0, 0, 0f);
         trailRenderer.endWidth = 0f;
+    }
+
+    public void DisableLightForDuration(float duration)
+    {
+        if (playerLight == null)
+        {
+            Debug.LogWarning("Player light is not assigned.");
+            return;
+        }
+
+        StartCoroutine(DisableLightCoroutine(duration));
+    }
+
+    private IEnumerator DisableLightCoroutine(float duration)
+    {
+        // Vypnout svìtlo
+        playerLight.enabled = false;
+
+        // Èekat po dobu zadanou v parametru
+        yield return new WaitForSeconds(duration);
+
+        // Zapnout svìtlo
+        playerLight.enabled = true;
     }
 }
