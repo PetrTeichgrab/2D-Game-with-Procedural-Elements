@@ -138,7 +138,7 @@ public class GreenDungeon : DungeonBehaviour
         GreenSlimeBossInstance = Instantiate(this.greenSlimeBoss, this.greenSlimeBoss.transform.position,
         this.greenSlimeBoss.transform.rotation);
         generator.setBossToRandomRoom(GreenSlimeBossInstance, greenDungeon, 2, 2);
-        generator.Player.transform.position = new Vector3(GreenMushroomBossInstance.Position.x + 5, GreenMushroomBossInstance.Position.y + 5);
+        //generator.Player.transform.position = new Vector3(GreenMushroomBossInstance.Position.x + 5, GreenMushroomBossInstance.Position.y + 5);
         foreach (var room in greenDungeon.RoomList)
         {
             bool isBrightTreeType = UnityEngine.Random.value > 0.5f;

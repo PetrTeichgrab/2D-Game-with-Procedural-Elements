@@ -6,4 +6,7 @@ public class ColorCore : Item
 {
     [SerializeField]
     protected Animator animator;
+
+    public bool isPlaced { get; set; }
+
 }

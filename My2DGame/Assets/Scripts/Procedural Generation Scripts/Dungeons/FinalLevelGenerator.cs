@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -13,7 +14,7 @@ public class FinalLevelGenerator : MonoBehaviour
     private Tilemap tilemap;
 
     [SerializeField]
-    private UnityEngine.Tilemaps.Tile completedFloorTile, emptyTile, floorTile, wallTile;
+    private UnityEngine.Tilemaps.Tile greenFloorTile, pinkFloorTile, blueFloorTile, purpleFloorTile, emptyTile, floorTile, wallTile;
 
     [SerializeField]
     private Tilemap colliderMap;
@@ -21,10 +22,17 @@ public class FinalLevelGenerator : MonoBehaviour
     [SerializeField]
     private MapCreator mapCreator;
 
-    [SerializeField] private ColorCore colorCore;
-
     [SerializeField]
     private Vector2Int startCoordinates = new Vector2Int(500, 500);
+
+    [SerializeField]
+    private List<Item> allItems = new List<Item>();
+
+    [SerializeField]
+    Player player;
+
+    [SerializeField]
+    ColorCore pinkColorCore, blueColorCore, greenColorCore, purpleColorCore;
 
     private BoundsInt mazeBounds;
     private BoundsInt part1Bounds;
@@ -34,6 +42,31 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private HashSet<Vector2Int> mazeFloor = new HashSet<Vector2Int>();
 
+    [SerializeField]
+    private Item monumentPrefab;
+
+    private Vector2Int part1Monument, part2Monument, part3Monument, part4Monument;
+
+    private List<FinalDungeonPart> dungeonParts = new List<FinalDungeonPart>();
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Vector2Int playerPosition = Vector2Int.FloorToInt(new Vector2(player.transform.position.x, player.transform.position.y));
+
+            foreach (var part in dungeonParts)
+            {
+                if (Vector2Int.Distance(playerPosition, part.MonumentPosition) < 1.5f)
+                {
+                    CompletePart(part);
+                    break;
+                }
+            }
+        }
+    }
+
+
     public void GenerateFinalLevel()
     {
         ClearLevel();
@@ -41,19 +74,20 @@ public class FinalLevelGenerator : MonoBehaviour
         mazeBounds = new BoundsInt(startCoordinates.x, startCoordinates.y, 0, levelSize, levelSize, 1);
 
         int halfSize = levelSize / 2;
-        part1Bounds = new BoundsInt(mazeBounds.min.x, mazeBounds.min.y, 0, halfSize, halfSize, 1);
-        part2Bounds = new BoundsInt(mazeBounds.min.x + halfSize, mazeBounds.min.y, 0, halfSize, halfSize, 1);
-        part3Bounds = new BoundsInt(mazeBounds.min.x, mazeBounds.min.y + halfSize, 0, halfSize, halfSize, 1);
-        part4Bounds = new BoundsInt(mazeBounds.min.x + halfSize, mazeBounds.min.y + halfSize, 0, halfSize, halfSize, 1);
+
+        dungeonParts.Add(new FinalDungeonPart(new BoundsInt(mazeBounds.min.x, mazeBounds.min.y, 0, halfSize, halfSize, 1), DungeonColor.Pink));
+        dungeonParts.Add(new FinalDungeonPart(new BoundsInt(mazeBounds.min.x + halfSize, mazeBounds.min.y, 0, halfSize, halfSize, 1), DungeonColor.Blue));
+        dungeonParts.Add(new FinalDungeonPart(new BoundsInt(mazeBounds.min.x, mazeBounds.min.y + halfSize, 0, halfSize, halfSize, 1), DungeonColor.Green));
+        dungeonParts.Add(new FinalDungeonPart(new BoundsInt(mazeBounds.min.x + halfSize, mazeBounds.min.y + halfSize, 0, halfSize, halfSize, 1), DungeonColor.Purple));
 
         Vector2Int startPosition = new Vector2Int((int)mazeBounds.center.x, (int)mazeBounds.center.y);
         GenerateMaze(startPosition);
 
         DrawLevel();
-
         DrawBoundaryWalls();
+        PlaceMonuments();
 
-        Debug.Log("Final level with maze and sections generated using BoundsInt.");
+        Debug.Log("Final level with maze and sections generated.");
     }
 
     private void GenerateMaze(Vector2Int start)
@@ -89,8 +123,118 @@ public class FinalLevelGenerator : MonoBehaviour
                 stack.Push(chosenNeighbor);
             }
         }
-        var colorCoreInstance = Instantiate(colorCore, colorCore.transform.position, colorCore.transform.rotation);
-        PlaceObjectRandomly(colorCoreInstance);
+    }
+
+    private void PlaceMonuments()
+    {
+        foreach (var part in dungeonParts)
+        {
+            Vector2Int monumentPosition = PlaceMonumentInBounds(part.Bounds);
+            var monument = Instantiate(monumentPrefab, new Vector3(monumentPosition.x, monumentPosition.y, 0), Quaternion.identity);
+            ColorCore colorCore = Instantiate(GetColorCore(part.Color), new Vector3(monumentPosition.x + 0.8f, monumentPosition.y + 0.8f, 0), Quaternion.identity);
+            part.ColorCore = colorCore;
+            part.ColorCore.gameObject.SetActive(false);
+            allItems.Add(monument);
+            part.SetMonument(monumentPosition, monument);
+        }
+    }
+
+    private Vector2Int PlaceMonumentInBounds(BoundsInt bounds)
+    {
+        // Najít støed èásti
+        Vector2Int center = new Vector2Int(bounds.xMin + bounds.size.x / 2, bounds.yMin + bounds.size.y / 2);
+
+        // Vytvoøit 3x3 místnost (podlahu)
+        for (int x = center.x - 1; x <= center.x + 1; x++)
+        {
+            for (int y = center.y - 1; y <= center.y + 1; y++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+
+                // Nastavit podlahu pouze v této oblasti
+                mazeFloor.Add(position);
+                tilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                colliderMap.SetTile(new Vector3Int(x, y, 0), null); // Odstranit kolizní dlaždici
+            }
+        }
+
+        // Pøidat zdi kolem 3x3 místnosti, ale nezahrnovat je do mazeFloor
+        for (int x = center.x - 2; x <= center.x + 2; x++)
+        {
+            for (int y = center.y - 2; y <= center.y + 2; y++)
+            {
+                // Ignorovat pozice podlahy (3x3 místnost)
+                if (x >= center.x - 1 && x <= center.x + 1 && y >= center.y - 1 && y <= center.y + 1)
+                    continue;
+
+                // Ignorovat pozice vchodù
+                if ((x == center.x && y == center.y - 2) || // Dolní vchod
+                    (x == center.x && y == center.y + 2) || // Horní vchod
+                    (x == center.x - 2 && y == center.y) || // Levý vchod
+                    (x == center.x + 2 && y == center.y))   // Pravý vchod
+                    continue;
+
+                Vector2Int wallPosition = new Vector2Int(x, y);
+
+                // Nastavit zdi (ale ne do mazeFloor)
+                mapCreator.DrawTile(wallTile, wallPosition); // Nastavit dlaždici zdi
+                mazeFloor.Remove(wallPosition);
+                AddCollider(wallPosition); // Pøidat kolizní dlaždici
+            }
+        }
+
+        // Pøidat vchody a zahrnout je do mazeFloor
+        Vector2Int[] entrancePositions = new Vector2Int[]
+        {
+        new Vector2Int(center.x, center.y - 2), // Spodní vchod
+        new Vector2Int(center.x - 2, center.y), // Levý vchod
+        new Vector2Int(center.x + 2, center.y), // Pravý vchod
+        new Vector2Int(center.x, center.y + 2)  // Horní vchod
+        };
+
+        foreach (Vector2Int entrance in entrancePositions)
+        {
+            mazeFloor.Add(entrance);
+            mapCreator.DrawTile(floorTile, entrance); // Nastavit podlahu pro vchody
+            colliderMap.SetTile(new Vector3Int(entrance.x, entrance.y, 0), null); // Odstranit kolizní dlaždici
+        }
+
+        return center;
+    }
+
+    private UnityEngine.Tilemaps.Tile GetColoredFloorTile(DungeonColor color)
+    {
+        // Vrátit dlaždici na základì barvy
+        return color switch
+        {
+            DungeonColor.Pink => pinkFloorTile, // Rùžová dlaždice
+            DungeonColor.Blue => blueFloorTile, // Modrá dlaždice
+            DungeonColor.Green => greenFloorTile, // Zelená dlaždice
+            DungeonColor.Purple => purpleFloorTile, // Fialová dlaždice
+            _ => floorTile // Výchozí dlaždice
+        };
+    }
+
+    private ColorCore GetColorCore(DungeonColor color)
+    {
+        return color switch
+        {
+            DungeonColor.Pink => pinkColorCore,
+            DungeonColor.Blue => blueColorCore,
+            DungeonColor.Green => greenColorCore,
+            DungeonColor.Purple => purpleColorCore,
+        };
+    }
+
+    private IEnumerable<Vector2Int> GetPositionsInBounds(BoundsInt bounds)
+    {
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                yield return new Vector2Int(x, y);
+            }
+        }
     }
 
     private bool IsMazeFullyConnected()
@@ -172,8 +316,9 @@ public class FinalLevelGenerator : MonoBehaviour
                 {
                     mapCreator.DrawTile(floorTile, position);
                 }
-                else {
-                    mapCreator.DrawTile(wallTile,position);
+                else
+                {
+                    mapCreator.DrawTile(wallTile, position);
                     AddCollider(position);
                 }
             }
@@ -195,32 +340,20 @@ public class FinalLevelGenerator : MonoBehaviour
         }
     }
 
-    public void CompletePart(int partNumber)
+    private void CompletePart(FinalDungeonPart part)
     {
-        BoundsInt partBounds = partNumber switch
+        part.ColorCore.gameObject.SetActive(true);
+        part.ColorCore.isPlaced = true;
+        foreach (var position in GetPositionsInBounds(part.Bounds))
         {
-            1 => part1Bounds,
-            2 => part2Bounds,
-            3 => part3Bounds,
-            4 => part4Bounds,
-            _ => default
-        };
-
-        if (partBounds == default) return;
-
-        for (int x = partBounds.xMin; x < partBounds.xMax; x++)
-        {
-            for (int y = partBounds.yMin; y < partBounds.yMax; y++)
+            if (mazeFloor.Contains(position))
             {
-                Vector2Int position = new Vector2Int(x, y);
-                if (mazeFloor.Contains(position))
-                {
-                    tilemap.SetTile(new Vector3Int(x, y, 0), completedFloorTile);
-                }
+                UnityEngine.Tilemaps.Tile floorTile = GetColoredFloorTile(part.Color);
+                tilemap.SetTile(new Vector3Int(position.x, position.y, 0), floorTile);
             }
         }
 
-        Debug.Log($"Part {partNumber} completed and floor color updated.");
+        Debug.Log($"Completed part {part.Color} with monument at {part.MonumentPosition}");
     }
 
     public void PlacePlayerRandomly(Player player)
@@ -238,21 +371,6 @@ public class FinalLevelGenerator : MonoBehaviour
         Debug.Log("Player placed at: " + randomPosition);
     }
 
-    public void PlaceObjectRandomly(ColorCore gameObject)
-    {
-        if (gameObject == null)
-        {
-            Debug.LogWarning("gameObject is not assigned.");
-            return;
-        }
-
-        List<Vector2Int> floorPositions = new List<Vector2Int>(mazeFloor);
-        Vector2Int randomPosition = floorPositions[Random.Range(0, floorPositions.Count)];
-
-        gameObject.transform.position = new Vector3(randomPosition.x + 0.5f, randomPosition.y + 0.5f, 0);
-        Debug.Log("gameObject placed at: " + randomPosition);
-    }
-
     public void AddCollider(Vector2Int position)
     {
         Vector3Int tilePosition = this.tilemap.WorldToCell((Vector3Int)position);
@@ -264,5 +382,13 @@ public class FinalLevelGenerator : MonoBehaviour
         tilemap.ClearAllTiles();
         colliderMap.ClearAllTiles();
         mazeFloor.Clear();
+        dungeonParts.Clear();
+        foreach (Item item in allItems)
+        {
+            if (item != null)
+            {
+                DestroyImmediate(item.gameObject);
+            }
+        }
     }
 }
