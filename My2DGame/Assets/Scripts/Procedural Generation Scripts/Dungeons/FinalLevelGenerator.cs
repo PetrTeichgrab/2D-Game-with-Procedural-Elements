@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 using UnityEngine.WSA;
 
 public class FinalLevelGenerator : MonoBehaviour
@@ -183,14 +184,14 @@ public class FinalLevelGenerator : MonoBehaviour
     {
         for (int x = mazeBounds.xMin; x <= mazeBounds.xMax; x++)
         {
-            tilemap.SetTile(new Vector3Int(x, mazeBounds.yMin, 0), wallTile);
-            tilemap.SetTile(new Vector3Int(x, mazeBounds.yMax - 1, 0), wallTile);
+            mapCreator.DrawTile(wallTile, new Vector2Int(x, mazeBounds.yMin));
+            mapCreator.DrawTile(wallTile, new Vector2Int(x, mazeBounds.yMax));
         }
 
         for (int y = mazeBounds.yMin; y <= mazeBounds.yMax; y++)
         {
-            tilemap.SetTile(new Vector3Int(mazeBounds.xMin, y, 0), wallTile);
-            tilemap.SetTile(new Vector3Int(mazeBounds.xMax - 1, y, 0), wallTile);
+            mapCreator.DrawTile(wallTile, new Vector2Int(mazeBounds.xMin, y));
+            mapCreator.DrawTile(wallTile, new Vector2Int(mazeBounds.xMax, y));
         }
     }
 

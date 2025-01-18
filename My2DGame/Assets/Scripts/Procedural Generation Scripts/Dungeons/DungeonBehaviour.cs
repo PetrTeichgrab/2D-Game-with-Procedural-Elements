@@ -8,6 +8,14 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
 {
     public bool Completed {  get; set; }
 
+    protected void HandleBossInstance(Character bossInstance, ColorCore colorCore)
+    {
+        if (bossInstance != null && !bossInstance.isAlive && !Completed)
+        {
+            StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, colorCore, bossInstance.transform));
+        }
+    }
+
     protected bool IsPlayerInsideDungeon(Player player, Dungeon dungeon)
     {
         Vector3Int playerPosition = Vector3Int.FloorToInt(player.transform.position);
