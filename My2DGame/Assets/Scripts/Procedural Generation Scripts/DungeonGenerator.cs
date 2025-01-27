@@ -105,16 +105,16 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public void GenerateDungeons()
     {
-        //seed = UnityEngine.Random.Range(-10000, 10000);
-        //tileMap.ClearGeneration();
-        //ClearGeneratedObjects();
-        //allEnemiesList.Clear();
-        //allItems.Clear();
-        //CreateDungeons();
-        //pinkDungeon.Create();
-        //blueDungeon.Create();
-        //greenDungeon.Create();
-        //CreateUnderground();
+        seed = UnityEngine.Random.Range(-10000, 10000);
+        tileMap.ClearGeneration();
+        ClearGeneratedObjects();
+        allEnemiesList.Clear();
+        allItems.Clear();
+        CreateDungeons();
+        pinkDungeon.Create();
+        blueDungeon.Create();
+        greenDungeon.Create();
+        CreateUnderground();
         CreateFinalLevel();
         //finalLevel.PlacePlayerRandomly(Player);
     }

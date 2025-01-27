@@ -11,13 +11,19 @@ public class BlueSlime : MeleeEnemy
             return;
         }
 
+        dashCooldownTimer -= Time.deltaTime;
+
         if (isAlive)
         {
             if (IsInApproachDistance())
             {
                 animator.SetTrigger("move");
                 MoveToPlayer();
-                DashAttack();
+                if (dashCooldownTimer <= 0f && !isDashing)
+                {
+                    StartCoroutine(DashAttack());
+                    dashCooldownTimer = dashCooldown;
+                }
             }
             else
             {
@@ -35,5 +41,6 @@ public class BlueSlime : MeleeEnemy
             animator.SetBool("isAlive", isAlive);
         }
     }
+
 
 }

@@ -46,7 +46,13 @@ public class BlueBossSlime : MeleeEnemy
                     spawnSlimesCooldownTimer = 0;
                 }
 
-                DashAttack();
+                dashCooldownTimer -= Time.deltaTime;
+
+                if (dashCooldownTimer <= 0f && !isDashing)
+                {
+                    StartCoroutine(DashAttack());
+                    dashCooldownTimer = dashCooldown;
+                }
             }
             else
             {

@@ -17,6 +17,7 @@ public abstract class MeleeEnemy : Character
     public TrailRenderer trailRenderer;
     public Rigidbody2D rb;
     public float attackCooldown = 2f;
+    public float dashCooldown = 3f;
     protected float startMovementSpeed;
     protected bool isDashing;
     [SerializeField]
@@ -24,7 +25,7 @@ public abstract class MeleeEnemy : Character
     private Vector2 avoidDirection; // Pamatuje si aktuální smìr vyhýbání
     private float avoidTimer = 0f;  // Èas vyhýbání pøekážce
     private const float avoidDuration = 0.3f; // Délka èasu, po kterou se nepøítel vyhýbá pøekážce
-
+    protected float dashCooldownTimer = 0f;
     private Vector2 lastKnownPlayerPosition;
     private bool isAvoidingObstacle = false;
 

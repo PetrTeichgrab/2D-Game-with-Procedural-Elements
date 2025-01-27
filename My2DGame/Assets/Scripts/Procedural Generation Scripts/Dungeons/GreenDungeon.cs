@@ -76,7 +76,7 @@ public class GreenDungeon : DungeonBehaviour
 
         setLights();
 
-        //StartCoroutine(GenerateDynamicDungeon());
+        StartCoroutine(GenerateDynamicDungeon());
     }
 
     private void InitializePools()
