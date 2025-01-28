@@ -19,19 +19,22 @@ public abstract class Character : MonoBehaviour
         isAlive = true;
         currentHP = maxHP;
     }
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
-        currentHP -= damage;
+        if (currentHP > 0)
+        {
+            currentHP -= damage;
+        }
         if (animator != null)
         {
-
-                animator.SetTrigger("hit");
+            animator.SetTrigger("hit");
         }
         if(currentHP <= 0){
             isAlive = false;
 
             foreach (var collider in GetComponents<Collider2D>())
             {
+                Debug.Log("collider v pryc");
                 collider.enabled = false;
             }
         }

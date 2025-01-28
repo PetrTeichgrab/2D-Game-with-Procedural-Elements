@@ -101,7 +101,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     [SerializeField]
     private FinalLevelGenerator finalLevel;
 
-    private Underground undergroundDungeon;
+    public Underground undergroundDungeon;
 
     public void GenerateDungeons()
     {

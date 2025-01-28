@@ -29,6 +29,19 @@ public class Player : Character
 
     public List<ColorCore> colorCores;
 
+    private bool canDoubleJump = true;
+    private bool isGrounded;
+    private bool usesGravity = false;
+
+    [SerializeField]
+    private float jumpForce = 5f;
+
+    [SerializeField]
+    private Transform groundCheck;
+
+    [SerializeField]
+    private LayerMask groundLayer;
+
     [SerializeField]
     private Light2D playerLight;
 
@@ -41,25 +54,47 @@ public class Player : Character
         resetTrailRendered();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isDashing)
         {
             return;
         }
+
+        CheckGrounded();
+
         ProcessInputs();
         animator.SetFloat("verticalSpeed", moveY);
         animator.SetFloat("horizontalSpeed", moveX);
-        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash) {
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && canDash)
+        {
             StartCoroutine(Dash());
+        }
+
+        if (usesGravity && Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
         }
     }
 
+    private void CheckGrounded()
+    {
+        bool wasGrounded = isGrounded;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);
+
+        if (isGrounded && !wasGrounded)
+        {
+            canDoubleJump = true;
+        }
+    }
+
+
     void FixedUpdate()
     {
-        if(isDashing) { 
-            return; 
+        if (isDashing)
+        {
+            return;
         }
         Move();
     }
@@ -67,27 +102,64 @@ public class Player : Character
     void ProcessInputs()
     {
         moveX = Input.GetAxisRaw("Horizontal");
-        moveY = Input.GetAxisRaw("Vertical");
-
+        moveY = usesGravity ? 0 : Input.GetAxisRaw("Vertical");
         moveDirection = new Vector2(moveX, moveY).normalized;
-    }
-
-    void Move()
-    {
-        rb.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
     }
 
     private IEnumerator Dash()
     {
         canDash = false;
         isDashing = true;
-        rb.velocity = new Vector2(moveX, moveY).normalized*dashSpeed;
+
+        rb.velocity = new Vector2(moveX, moveY).normalized * dashSpeed;
         setTrailrendererForDash();
+
         yield return new WaitForSeconds(dashTime);
+
         resetTrailRendered();
         isDashing = false;
+
         yield return new WaitForSeconds(dashCD);
         canDash = true;
+    }
+
+    void Move()
+    {
+        if (usesGravity)
+        {
+            rb.velocity = new Vector2(moveDirection.x * movementSpeed, rb.velocity.y);
+        }
+        else
+        {
+            rb.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+        }
+    }
+
+    void Jump()
+    {
+        if (isGrounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+        else if (canDoubleJump)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            canDoubleJump = false;
+        }
+    }
+
+    public void EnableGravityMode()
+    {
+        usesGravity = true;
+        rb.gravityScale = 3;
+        canDoubleJump = true;
+    }
+
+    public void DisableGravityMode()
+    {
+        usesGravity = false;
+        rb.gravityScale = 0;
+        rb.velocity = Vector2.zero;
     }
 
     private void setTrailrendererForDash()
@@ -106,6 +178,25 @@ public class Player : Character
         trailRenderer.endWidth = 0f;
     }
 
+    private void SetPermanentTrailTransparency(float alpha)
+    {
+        if (trailRenderer == null)
+        {
+            Debug.LogWarning("TrailRenderer není pøipojen k objektu.");
+            return;
+        }
+
+        alpha = Mathf.Clamp01(alpha);
+
+        Color startColor = trailRenderer.startColor;
+        Color endColor = trailRenderer.endColor;
+
+        trailRenderer.startColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
+        trailRenderer.endColor = new Color(endColor.r, endColor.g, endColor.b, alpha * 0.5f);
+    }
+
+
+
     public void DisableLightForDuration(float duration)
     {
         if (playerLight == null)
@@ -119,13 +210,41 @@ public class Player : Character
 
     private IEnumerator DisableLightCoroutine(float duration)
     {
-        // Vypnout svìtlo
         playerLight.enabled = false;
 
-        // Èekat po dobu zadanou v parametru
         yield return new WaitForSeconds(duration);
 
-        // Zapnout svìtlo
         playerLight.enabled = true;
     }
+
+    public override void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        if (animator != null)
+        {
+            animator.SetTrigger("hit");
+        }
+        if (currentHP <= 0)
+        {
+            isAlive = false;
+        }
+    }
+
+    public void SetTransparency(float alpha)
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            Color color = spriteRenderer.color;
+            color.a = Mathf.Clamp01(alpha);
+            spriteRenderer.color = color;
+        }
+        else
+        {
+            Debug.LogWarning("SpriteRenderer není pøipojen k objektu hráèe.");
+        }
+        SetPermanentTrailTransparency(0.01f);
+    }
+
+
 }
