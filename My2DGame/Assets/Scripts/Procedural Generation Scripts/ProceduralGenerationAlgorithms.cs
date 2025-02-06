@@ -58,12 +58,18 @@ public static class ProceduralGenerationAlgorithms
         int perlinHeight = 0;
         int seed = UnityEngine.Random.Range(-100000, 100000);
         HashSet<Vector2Int> undergroundMap = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> boundaries = new HashSet<Vector2Int>();
 
         for (int x = startX; x < width + startX; x++)
         {
             float perlinValue = Mathf.PerlinNoise((x / smoothness) + seed, seed);
             perlinHeight = Mathf.RoundToInt(perlinValue * (height / 2)) + (height / 2);
-            underground.Floor.Add(new Vector2Int(x, 0));
+
+            // Spodní hrana
+            for (int i = -5; i <= 0; i++)
+            {
+                boundaries.Add(new Vector2Int(x, i));
+            }
 
             for (int y = 0; y < perlinHeight; y++)
             {
@@ -72,13 +78,31 @@ public static class ProceduralGenerationAlgorithms
                 if (caveValue > 0.5f)
                 {
                     underground.Floor.Add(new Vector2Int(x, y));
+                    undergroundMap.Add(new Vector2Int(x, y));
                 }
+                else
+                {
+                    underground.Cave.Add(new Vector2Int(x, y));
+                }
+            }
+
+            //// Horní okraj
+            //boundaries.Add(new Vector2Int(x, perlinHeight));
+            //boundaries.Add(new Vector2Int(x, perlinHeight + 1));
+        }
+
+        for (int y = -5; y < height; y++)
+        {
+            for (int i = -2; i <= 0; i++)
+            {
+                boundaries.Add(new Vector2Int(startX + i, y));
+                boundaries.Add(new Vector2Int(startX + width - 1 - i, y));
             }
         }
 
+        underground.Boundaries = boundaries;
         return undergroundMap;
     }
-
 
 
 

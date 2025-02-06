@@ -129,11 +129,18 @@ public class MapCreator : MonoBehaviour
 
     public void DrawUndergroundFloor(Underground underground)
     {
-        foreach(var position in underground.Floor){
-            Vector3Int tilePosition = this.map.WorldToCell((Vector3Int)position);
+        foreach (var position in underground.Floor)
+        {
+            Vector3Int tilePosition = new Vector3Int(position.x, position.y, 0);
+            this.undergroundMap.SetTile(tilePosition, redUndergroundFloorTile);
+        }
+        foreach (var position in underground.Boundaries)
+        {
+            Vector3Int tilePosition = new Vector3Int(position.x, position.y, 0);
             this.undergroundMap.SetTile(tilePosition, redUndergroundFloorTile);
         }
     }
+
 
     private void DrawTilesRandomly(TileBase tile1, TileBase tile2, TileBase tile3, TileBase tile4, Vector2Int position)
     {

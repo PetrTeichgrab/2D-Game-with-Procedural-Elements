@@ -14,6 +14,18 @@ public class PlayerSpellBehavior : SpellBehavior
             }
         }
 
+        else
+        {
+            UndergroundTilemap undergroundTilemap = collision.gameObject.GetComponent<UndergroundTilemap>();
+
+            if (undergroundTilemap != null)
+            {
+                Vector3 hitPosition = collision.contacts[0].point;
+                Vector3 bulletDirection = GetComponent<Rigidbody2D>().velocity.normalized;
+                undergroundTilemap.BreakTile(hitPosition, bulletDirection);
+            }
+        }
+
         if (gameObject != null)
         {
             Destroy(gameObject);

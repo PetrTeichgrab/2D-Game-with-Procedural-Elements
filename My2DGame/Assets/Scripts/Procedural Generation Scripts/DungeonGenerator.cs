@@ -103,6 +103,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     public Underground undergroundDungeon;
 
+    public UndergroundBehaviour undergroundBeh;
+
     public void GenerateDungeons()
     {
         seed = UnityEngine.Random.Range(-10000, 10000);
@@ -115,6 +117,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         blueDungeon.Create();
         greenDungeon.Create();
         CreateUnderground();
+        undergroundBeh.InitDungeon();
         CreateFinalLevel();
         //finalLevel.PlacePlayerRandomly(Player);
     }
@@ -223,6 +226,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     {
         undergroundDungeon = new Underground();
         ProceduralGenerationAlgorithms.PerlinNoise(undergroundDungeon, undergoundHeight, undergoundWidth, undergroundSmoothness, modifier, startX);
+        undergroundDungeon.Height = undergoundHeight;
+        undergroundDungeon.Width = undergoundWidth;
         tileMap.DrawUndergroundFloor(undergroundDungeon);
     }
 
@@ -298,7 +303,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
             allItems.Add(item);
 
-            Debug.Log($"Item {item.name} byl umístìn do místnosti na pozici {randomPosition}.");
+            //Debug.Log($"Item {item.name} byl umístìn do místnosti na pozici {randomPosition}.");
         }
         else
         {
