@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Cinemachine;
 using System.Linq;
+using System.Threading;
 
 public class UndergroundBehaviour : DungeonBehaviour
 {
@@ -15,11 +16,18 @@ public class UndergroundBehaviour : DungeonBehaviour
     DungeonGenerator generator;
 
     [SerializeField]
-    CinemachineVirtualCamera mainVirtualCamera; // Hlavní Cinemachine kamera
+    CinemachineVirtualCamera mainVirtualCamera;
+
+    [SerializeField]
+    Countdown countdown;
 
     private bool isPlayerInUnderground;
 
     Item playerSaveInstance;
+
+    private float cameraCooldown = 7f;
+    private float lastCameraMoveTime = -Mathf.Infinity;
+
 
     private void Update()
     {
@@ -30,21 +38,27 @@ public class UndergroundBehaviour : DungeonBehaviour
 
         if (Input.GetKeyUp(KeyCode.F))
         {
-            Debug.Log("F PRESSED");
-            StartCoroutine(MoveCameraToItemAndBack(playerSaveInstance));
+            if (Time.time >= lastCameraMoveTime + cameraCooldown)
+            {
+                lastCameraMoveTime = Time.time;
+                StartCoroutine(MoveCameraToItemAndBack(playerSaveInstance));
+            }
+            else
+            {
+                Debug.Log($"Camera move is on cooldown. Try again in {Mathf.Ceil(lastCameraMoveTime + cameraCooldown - Time.time)} seconds.");
+            }
         }
     }
 
     public void InitDungeon()
     {
         PlacePlayerAtHighestPosition(Player);
-
         playerSaveInstance = Instantiate(playerSave, playerSave.transform.position, playerSave.transform.rotation);
         PlaceItemToRandomPosition(playerSaveInstance);
-
         Player.SetTransparency(0.1f);
         Player.EnableGravityMode();
         isPlayerInUnderground = true;
+        StartCoroutine(MoveCameraToItemAndBack(playerSaveInstance));
     }
 
     private void PlacePlayerAtHighestPosition(Player player)
@@ -134,6 +148,9 @@ public class UndergroundBehaviour : DungeonBehaviour
         mainVirtualCamera.Follow = Player.transform;
 
         Destroy(tempFollow);
+
+        countdown.StartCountdown = true;
+
 
         Debug.Log("Camera smoothly moved to item and back to player.");
     }

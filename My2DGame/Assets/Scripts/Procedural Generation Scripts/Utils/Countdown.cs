@@ -6,17 +6,30 @@ using TMPro;
 public class Countdown : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI countdownText;
-    float elapsedTime = 60;
-    void Start()
-    {
-        
-    }
+
+    [SerializeField]
+    float remainingTime = 60;
+
+    public bool StartCountdown { get; set; }
+
+    public bool CountdownFinished { get; set; }
 
     void Update()
     {
-        elapsedTime -= Time.deltaTime;
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
-        countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if (StartCountdown)
+        {
+            if (remainingTime >= 1)
+            {
+                remainingTime -= Time.deltaTime;
+            }
+            else
+            {
+                remainingTime = 0;
+                CountdownFinished = true;
+            }
+            int minutes = Mathf.FloorToInt(remainingTime / 60);
+            int seconds = Mathf.FloorToInt(remainingTime % 60);
+            countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 }
