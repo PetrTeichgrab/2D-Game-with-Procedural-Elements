@@ -45,6 +45,10 @@ public class Player : Character
     [SerializeField]
     private Light2D playerLight;
 
+    public bool isDead;
+
+    public Vector3 deathPosition;
+
 
     void Start()
     {
@@ -52,6 +56,8 @@ public class Player : Character
         currentHP = maxHP;
         colorCores = new List<ColorCore>();
         resetTrailRendered();
+        DisableGravityMode();
+        SetTransparency(1f);
     }
 
     void Update()
@@ -76,6 +82,7 @@ public class Player : Character
         {
             Jump();
         }
+
     }
 
     private void CheckGrounded()
@@ -226,6 +233,7 @@ public class Player : Character
         }
         if (currentHP <= 0)
         {
+            deathPosition = transform.position;
             isAlive = false;
         }
     }
@@ -245,6 +253,39 @@ public class Player : Character
         }
         SetPermanentTrailTransparency(0.01f);
     }
+    public void Respawn()
+    {
+        currentHP = 50;
+        isAlive = true;
+        transform.position = deathPosition;
+        deathPosition = Vector3.zero;
+        gameObject.SetActive(true);
+        Debug.Log(currentHP);
+        Debug.Log(maxHP);
+        StartCoroutine(TemporaryInvulnerability(3f));
+    }
+
+    private IEnumerator TemporaryInvulnerability(float duration)
+    {
+        Collider2D playerCollider = GetComponent<Collider2D>();
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = false;
+        }
+
+        SetTransparency(0.5f);
+
+        yield return new WaitForSeconds(duration);
+
+        if (playerCollider != null)
+        {
+            playerCollider.enabled = true;
+        }
+
+        SetTransparency(1f);
+
+    }
+
 
 
 }

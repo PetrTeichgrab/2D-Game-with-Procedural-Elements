@@ -38,7 +38,7 @@ public class EnemyShoot : MonoBehaviour
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null)
             {
-                character.TakeDamage(2);
+                character.TakeDamage(10);
             }
         }
 

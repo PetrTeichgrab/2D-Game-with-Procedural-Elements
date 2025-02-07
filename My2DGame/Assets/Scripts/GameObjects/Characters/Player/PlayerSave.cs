@@ -36,7 +36,7 @@ public class PlayerSave : MonoBehaviour
     {
         player.SetTransparency(1.0f);
         player.DisableGravityMode();  
-
+        player.Respawn();
         gameObject.SetActive(false);
         Debug.Log("Save item collected, actions applied to the player, and item removed.");
     }

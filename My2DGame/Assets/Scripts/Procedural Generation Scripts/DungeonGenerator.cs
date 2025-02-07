@@ -117,7 +117,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         blueDungeon.Create();
         greenDungeon.Create();
         CreateUnderground();
-        undergroundBeh.InitDungeon();
         CreateFinalLevel();
         //finalLevel.PlacePlayerRandomly(Player);
     }

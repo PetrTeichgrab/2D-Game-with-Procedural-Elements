@@ -31,7 +31,7 @@ public class UndergroundBehaviour : DungeonBehaviour
 
     private void Update()
     {
-        if (!isPlayerInUnderground)
+        if (!isPlayerInUnderground && !Player.isAlive)
         {
             InitDungeon();
         }
@@ -48,6 +48,12 @@ public class UndergroundBehaviour : DungeonBehaviour
                 Debug.Log($"Camera move is on cooldown. Try again in {Mathf.Ceil(lastCameraMoveTime + cameraCooldown - Time.time)} seconds.");
             }
         }
+
+        if (countdown.CountdownFinished)
+        {
+            Player.isDead = true;
+        }
+
     }
 
     public void InitDungeon()
@@ -150,7 +156,6 @@ public class UndergroundBehaviour : DungeonBehaviour
         Destroy(tempFollow);
 
         countdown.StartCountdown = true;
-
 
         Debug.Log("Camera smoothly moved to item and back to player.");
     }
