@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BlueColorCore : ColorCore
 {
+    private void Start()
+    {
+        color = DungeonColor.Blue;
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && !isPlaced)
@@ -12,6 +16,7 @@ public class BlueColorCore : ColorCore
             if (character != null && character.isAlive)
             {
                 character.movementSpeed += 1.5f;
+                character.colorCores.Add(this);
             }
             gameObject.SetActive(false);
         }

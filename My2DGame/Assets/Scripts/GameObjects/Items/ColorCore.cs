@@ -8,6 +8,8 @@ public class ColorCore : Item
     [SerializeField]
     protected Animator animator;
 
+    public DungeonColor color;
+
     public bool isPlaced { get; set; }
 
     private Light2D light2D;
@@ -32,8 +34,8 @@ public class ColorCore : Item
         float originalIntensity = light2D.intensity;
         float originalOuterRadius = light2D.pointLightOuterRadius;
 
-        float targetIntensity = originalIntensity*1.2f; // Tøikrát vyšší jas
-        float targetOuterRadius = originalOuterRadius * 65; // Dvojnásobný dosah
+        float targetIntensity = originalIntensity*1.2f;
+        float targetOuterRadius = originalOuterRadius * 65;
 
         float elapsedTime = 0f;
 
@@ -47,7 +49,6 @@ public class ColorCore : Item
             yield return null;
         }
 
-        // Nastavit cílové hodnoty, aby interpolace pøesnì skonèila na požadovaných èíslech
         light2D.intensity = targetIntensity;
         light2D.pointLightOuterRadius = targetOuterRadius;
 

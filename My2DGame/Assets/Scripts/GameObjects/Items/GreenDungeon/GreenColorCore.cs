@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GreenColorCore : ColorCore
 {
+    private void Start()
+    {
+        color = DungeonColor.Green;
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && !isPlaced)

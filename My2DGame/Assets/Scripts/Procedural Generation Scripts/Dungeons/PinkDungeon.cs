@@ -47,6 +47,13 @@ public class PinkDungeon : DungeonBehaviour
     [SerializeField]
     PinkColorCore pinkColorCore;
 
+    [SerializeField]
+    GreenColorCore greenColorCore;
+
+    [SerializeField]
+    BlueColorCore blueColorCore;
+
+
     private EnemyMushroomPinkBoss PinkMushroomBossInstance { get; set; }
 
     Dungeon pinkDungeon;
@@ -57,7 +64,23 @@ public class PinkDungeon : DungeonBehaviour
         {
             if (!PinkMushroomBossInstance.isAlive && !Completed)
             {
-                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, pinkColorCore, PinkMushroomBossInstance.transform));
+                Vector3 offset = new Vector3(1f, 0f, 0f);
+                Vector3 offset2 = new Vector3(1f, 0f, 0f);
+
+                UnityEngine.Transform spawnTransform = PinkMushroomBossInstance.transform;
+                Vector3 blueSpawnPosition = spawnTransform.position + offset;
+                Vector3 greenSpawnPosition = spawnTransform.position + offset2;
+
+                GameObject tempTransformObject = new GameObject("TempBlueSpawn");
+                GameObject tempTransformObject2 = new GameObject("TempGreenSpawn");
+                tempTransformObject.transform.position = blueSpawnPosition;
+
+                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, pinkColorCore, spawnTransform));
+                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, blueColorCore, tempTransformObject.transform));
+                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, greenColorCore, tempTransformObject2.transform));
+
+
+                Destroy(tempTransformObject, 2f);
                 Completed = true;
             }
         }
