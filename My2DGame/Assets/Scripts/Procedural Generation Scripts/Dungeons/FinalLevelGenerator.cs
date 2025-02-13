@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Rendering.Universal;
 
 public class FinalLevelGenerator : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class FinalLevelGenerator : MonoBehaviour
     [SerializeField]
     private Item monumentPrefab, firePedestalPrefab;
 
+    [SerializeField]
+    private Light2D globalLight;
+
     private Vector2Int part1Monument, part2Monument, part3Monument, part4Monument;
 
     private List<FinalDungeonPart> dungeonParts = new List<FinalDungeonPart>();
@@ -58,6 +62,11 @@ public class FinalLevelGenerator : MonoBehaviour
                     break;
                 }
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PlacePlayerRandomly(player);
         }
     }
 
@@ -408,6 +417,7 @@ public class FinalLevelGenerator : MonoBehaviour
 
         player.transform.position = new Vector3(randomPosition.x + 0.5f, randomPosition.y + 0.5f, 0);
         Debug.Log("Player placed at: " + randomPosition);
+        TurnOffGlobalLight();
     }
 
     public void AddCollider(Vector2Int position)
@@ -429,4 +439,17 @@ public class FinalLevelGenerator : MonoBehaviour
             }
         }
     }
+
+    public void TurnOffGlobalLight()
+    {
+        if (globalLight != null)
+        {
+            globalLight.intensity = 0f;
+        }
+        else
+        {
+            Debug.LogWarning("Global Light is not assigned!");
+        }
+    }
+
 }

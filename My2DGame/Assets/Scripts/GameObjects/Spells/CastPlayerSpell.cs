@@ -14,11 +14,18 @@ public class CastSpell : MonoBehaviour
     public GameObject hitEffect;
     public GameObject spellObject;
 
+    [SerializeField]
+    private Player player;
+
     public float cooldownTime = 0.2f;
+    public float minCooldownTime = 0.1f;
     private float lastCastTime = -Mathf.Infinity;
 
     void Update()
     {
+        if (player.isDead) { 
+            return; 
+        }
         mousePostion = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 lookDirection = mousePostion - (Vector2)rb.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90f;
@@ -40,6 +47,15 @@ public class CastSpell : MonoBehaviour
         Rigidbody2D spellRb = spellObject.GetComponent<Rigidbody2D>();
         spellRb.AddForce(castPoint.up * spellSpeed, ForceMode2D.Impulse);
         Destroy(spellObject, 0.7f);
+    }
+
+    public void ReduceCooldown(float time)
+    {
+        if(cooldownTime-time <= minCooldownTime)
+        {
+            return;
+        }
+        cooldownTime -= time;
     }
 }
 

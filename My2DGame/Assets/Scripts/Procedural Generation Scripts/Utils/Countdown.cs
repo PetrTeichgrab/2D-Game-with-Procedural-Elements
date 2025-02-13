@@ -8,7 +8,7 @@ public class Countdown : MonoBehaviour
     [SerializeField] TextMeshProUGUI countdownText;
 
     [SerializeField]
-    float remainingTime = 60;
+    float remainingTime = 10;
 
     public bool StartCountdown { get; set; }
 
@@ -18,6 +18,7 @@ public class Countdown : MonoBehaviour
     {
         if (StartCountdown)
         {
+            this.gameObject.SetActive(true);
             if (remainingTime >= 1)
             {
                 remainingTime -= Time.deltaTime;
@@ -26,6 +27,7 @@ public class Countdown : MonoBehaviour
             {
                 remainingTime = 0;
                 CountdownFinished = true;
+                this.gameObject.SetActive(false);
             }
             int minutes = Mathf.FloorToInt(remainingTime / 60);
             int seconds = Mathf.FloorToInt(remainingTime % 60);

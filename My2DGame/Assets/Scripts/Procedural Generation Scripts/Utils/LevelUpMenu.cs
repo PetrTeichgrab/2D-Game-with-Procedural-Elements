@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelUpMenu : MonoBehaviour
 {
     [SerializeField]
     private Player player;
+
+    [SerializeField]
+    private CastSpell spellCasting;
 
     [SerializeField]
     private Button button1;
@@ -50,6 +54,12 @@ public class LevelUpMenu : MonoBehaviour
             hasDisplayedLevelUp = true;
             StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
         }
+
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            hasDisplayedLevelUp = true;
+            StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
+        }
     }
 
     private IEnumerator ShowLevelUpButtonsAfterDelay(float delay)
@@ -58,7 +68,6 @@ public class LevelUpMenu : MonoBehaviour
         GenerateLevelUpButtons();
     }
 
-    // Metoda pro skrytí tlaèítek
     private void HideLevelUpButtons()
     {
         foreach (var button in buttons)
@@ -139,6 +148,24 @@ public class LevelUpMenu : MonoBehaviour
     void ApplyUpgrade(ColorCore colorCore)
     {
         Debug.Log($"Applied upgrade for {colorCore.color}");
+        switch (colorCore.color)
+        {
+            case DungeonColor.Pink:
+                player.maxHP += 10;
+                player.currentHP = player.maxHP;
+                break;
+            case DungeonColor.Blue:
+                player.movementSpeed += 0.6f;
+                break;
+            case DungeonColor.Green:
+                spellCasting.ReduceCooldown(0.1f);
+                break;
+            case DungeonColor.Purple:
+                player.ReduceDashCD(0.2f);
+                break;
+
+        }
+        SceneManager.LoadScene("Endscene");
     }
 
     Color convertDungeonColorToColor(DungeonColor color)

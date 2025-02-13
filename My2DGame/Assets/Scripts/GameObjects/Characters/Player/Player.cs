@@ -12,11 +12,13 @@ public class Player : Character
     private bool isDashing;
 
     [SerializeField]
-    private float dashSpeed = 12f;
+    public float dashSpeed = 12f;
     [SerializeField]
-    private float dashTime = 0.2f;
+    public float dashTime = 0.2f;
     [SerializeField]
-    private float dashCD = 1f;
+    public float dashCD = 1f;
+
+    public float minDashCD = 0.8f;
 
     [SerializeField]
     private TrailRenderer trailRenderer;
@@ -54,6 +56,7 @@ public class Player : Character
     {
         maxHP = 100;
         currentHP = maxHP;
+        isDead = false;
         colorCores = new List<ColorCore>();
         resetTrailRendered();
         DisableGravityMode();
@@ -62,6 +65,11 @@ public class Player : Character
 
     void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         if (isDashing)
         {
             return;
@@ -76,6 +84,11 @@ public class Player : Character
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && canDash)
         {
             StartCoroutine(Dash());
+        }
+
+        if (Input.GetKeyUp(KeyCode.End))
+        {
+            Suicide();
         }
 
         if (usesGravity && Input.GetKeyDown(KeyCode.Space))
@@ -94,6 +107,11 @@ public class Player : Character
         {
             canDoubleJump = true;
         }
+    }
+
+    private void Suicide()
+    {
+        TakeDamage(maxHP);
     }
 
 
@@ -284,6 +302,15 @@ public class Player : Character
 
         SetTransparency(1f);
 
+    }
+
+    public void ReduceDashCD(float duration)
+    {
+        if(dashCD - duration >= minDashCD)
+        {
+            return;
+        }
+        dashCD -= duration;
     }
 
 
