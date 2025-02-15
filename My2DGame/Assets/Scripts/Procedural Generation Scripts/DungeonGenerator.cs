@@ -661,10 +661,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         HashSet<Vector2Int> floor = FloorGenerator.CreateRandomRooms(dungeon.RoomList, dungeon.Floor.RoomList.ToList(), dungeon.parameters, offset);
 
-        if (dungeon.Color != DungeonColor.Green)
-        {
-            AddRandomHolesToFloor(floor, minClusters: 10, maxClusters: 25, minClusterSize: 1, maxClusterSize: 4);
-        }
+        //if (dungeon.Color != DungeonColor.Green)
+        //{
+        //    AddRandomHolesToFloor(floor, minClusters: 10, maxClusters: 25, minClusterSize: 1, maxClusterSize: 4);
+        //}
 
         HashSet<Vector2Int> corridors = FloorGenerator.ConnectRooms(new List<Vector2Int>(dungeon.Floor.RoomCentersList));
 

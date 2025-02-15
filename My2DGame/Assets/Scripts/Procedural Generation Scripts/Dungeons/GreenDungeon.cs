@@ -111,24 +111,15 @@ public class GreenDungeon : DungeonBehaviour
 
     private void AddEnemies()
     {
-
-        var enemyConfigs = new List<(Character prefab, System.Action<Character> positionSetter, int count)>
+        var enemyConfigs = new List<(Character prefab, Action<Character> positionSetter)>()
         {
-            (greenSlime, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 40),
-            (greenMushroom, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0), 40)
+            (this.greenSlime, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0)),
+            (this.greenMushroom, obj => generator.setCharacterToRandomPosition(obj, greenDungeon, 0)),
         };
 
-        foreach (var (prefab, positionSetter, count) in enemyConfigs)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                var enemy = Instantiate(prefab);
-                positionSetter(enemy);
-            }
-        }
-
-        Debug.Log("Nepøátelé byli pøidáni do dungeonu.");
+        GenerateEnemies(greenDungeon, enemyConfigs);
     }
+
 
     private void GenerateStaticDungeon()
     {

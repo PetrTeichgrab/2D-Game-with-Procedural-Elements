@@ -16,6 +16,48 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
         }
     }
 
+    private int CalculateEnemyCount(int floorCount, int baseCount, float scalingFactor, int minCount, int maxCount)
+    {
+        int enemyCount = Mathf.RoundToInt(baseCount + floorCount * scalingFactor);
+        Debug.Log("floorCount " + floorCount);
+        Debug.Log("enemyCount " + enemyCount);
+        int count = Mathf.Clamp(enemyCount, minCount, maxCount);
+        Debug.Log("Poèet enemies v místnosti: " + count);
+        return count;
+    }
+
+    public void GenerateEnemies(Dungeon dungeon, List<(Character prefab, Action<Character> positionSetter)> enemyConfigs, int baseCount = 5, float scalingFactor = 0.03f, int minCount = 5, int maxCount = 50)
+    {
+        foreach (var room in dungeon.RoomList)
+        {
+            int enemyCount = CalculateEnemyCount(room.FloorList.Count, baseCount, scalingFactor, minCount, maxCount);
+
+            if (enemyConfigs.Count == 0)
+            {
+                Debug.LogWarning("Nebyl nalezen žádný typ nepøátel k vygenerování!");
+                continue;
+            }
+
+            int enemiesPerType = Mathf.Max(1, enemyCount / enemyConfigs.Count); // Poèet nepøátel na typ
+            int remainingEnemies = enemyCount; // Pro pøípad nerovnomìrného dìlení
+
+            foreach (var (prefab, positionSetter) in enemyConfigs)
+            {
+                int countForThisType = Mathf.Min(enemiesPerType, remainingEnemies);
+                remainingEnemies -= countForThisType;
+
+                for (int i = 0; i < countForThisType; i++)
+                {
+                    var enemy = Instantiate(prefab);
+                    positionSetter(enemy);
+                }
+            }
+        }
+
+        Debug.Log("Nepøátelé byli vygenerováni podle velikosti místností.");
+    }
+
+
     protected bool IsPlayerInsideDungeon(Player player, Dungeon dungeon)
     {
         Vector3Int playerPosition = Vector3Int.FloorToInt(player.transform.position);

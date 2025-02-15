@@ -114,11 +114,12 @@ public class PinkDungeon : DungeonBehaviour
             (this.grassLarge, obj => generator.SetItemToRandomPosition(obj, pinkDungeon, 0), 50)
         };
 
-        var enemyConfigs = new List<(EnemyMushroomPink prefab, Action<EnemyMushroomPink> positionSetter, int count)>()
-    {
-        (this.pinkMushroom, obj => generator.setCharacterToRandomPosition(obj, pinkDungeon, 0), 30),
-    };
+        var enemyConfigs = new List<(Character prefab, Action<Character> positionSetter)>()
+        {
+            (this.pinkMushroom, obj => generator.setCharacterToRandomPosition(obj, pinkDungeon, 0)),
+        };
 
-        GenerateDungeonObjects(itemConfigs, enemyConfigs);
+        GenerateObjects(itemConfigs);
+        GenerateEnemies(pinkDungeon, enemyConfigs);
     }
 }

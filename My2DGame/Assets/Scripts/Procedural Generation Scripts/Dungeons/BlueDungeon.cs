@@ -91,7 +91,7 @@ public class BlueDungeon : DungeonBehaviour
         BlueBossSlimeInstance = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position,
                 this.blueBossSlime.transform.rotation);
         generator.setBossToRandomRoom(BlueBossSlimeInstance, blueDungeon, 2, 2);
-        //generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
+        generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
@@ -100,12 +100,13 @@ public class BlueDungeon : DungeonBehaviour
             (this.iceObstacle2, obj => generator.SetLargeItemToRandomPosition(obj, blueDungeon,2, 3, 1), 10),
         };
 
-        var enemyConfigs = new List<(BlueSlime prefab, Action<BlueSlime> positionSetter, int count)>()
+        var enemyConfigs = new List<(Character prefab, Action<Character> positionSetter)>()
         {
-            (this.blueSlime, obj => generator.setCharacterToRandomPosition(obj, blueDungeon, 0), 30),
+            (this.blueSlime, obj => generator.setCharacterToRandomPosition(obj, blueDungeon, 0)),
         };
 
-        GenerateDungeonObjects(itemConfigs, enemyConfigs);
+        GenerateObjects(itemConfigs);
+        GenerateEnemies(blueDungeon, enemyConfigs);
     }
 
     private void StartSnowEffect()
