@@ -56,6 +56,9 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     protected Vector3Int mapSize = new Vector3Int(400, 400, 0);
 
     [SerializeField]
+    private int dungeonsCount = 4;
+
+    [SerializeField]
     private int dungeonWidth = 120;
 
     [SerializeField]
@@ -123,28 +126,62 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private void CreateDungeons()
     {
+        int maxAttempts = 10; // Maximální poèet pokusù pøed zvìtšením mapy
+        int maxSizeIncrements = 10; // Kolikrát mùžeme zvìtšit mapu
+        int sizeIncrement = 10; // O kolik zvìtšíme mapu pøi každém neúspìchu
+
+        int mapSizeX = mapSize.x;
+        int mapSizeY = mapSize.y;
+
         HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
 
-        while (dungeonList.Count < 5)
+        for (int i = 0; i < maxSizeIncrements; i++)
         {
-            dungeonList = ProceduralGenerationAlgorithms.BSP(
-                new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)),
-                dungeonWidth,
-                dungeonHeight
-            );
+            for (int attempts = 0; attempts < maxAttempts; attempts++)
+            {
+                dungeonList = ProceduralGenerationAlgorithms.BSP(
+                    new BoundsInt(Vector3Int.zero, new Vector3Int(mapSizeX, mapSizeY, 0)),
+                    dungeonWidth,
+                    dungeonHeight,
+                    dungeonsCount
+                );
+
+
+                if (dungeonList.Count >= dungeonsCount-1)
+                {
+                    break;
+                }
+            }
+
+            if (dungeonList.Count >= dungeonsCount-1)
+            {
+                break;
+            }
+
+            mapSizeX += sizeIncrement;
+            mapSizeY += sizeIncrement;
+            Debug.LogWarning($"Zvìtšuji mapu na {mapSizeX}x{mapSizeY} pro lepší generování dungeonù.");
         }
 
-        List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList);
+        if (dungeonList.Count < 5)
+        {
+            Debug.LogError("Nepodaøilo se vygenerovat minimálnì 5 dungeonù ani po zvìtšení mapy!");
+        }
 
-        BoundsInt largestBounds = dungeons.OrderByDescending(bounds => bounds.size.x * bounds.size.y).First();
+        List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList)
+            .OrderByDescending(bounds => bounds.size.x * bounds.size.y)
+            .ToList();
 
         List<Dungeon> createdDungeonsList = new List<Dungeon>();
 
-        GreenDungeon = new Dungeon(largestBounds, DungeonColor.Green);
-        GreenDungeon.parameters = greenDungeonParameters;
-        InitDungeon(GreenDungeon);
-        createdDungeonsList.Add(GreenDungeon);
-        dungeons.Remove(largestBounds);
+        if (dungeons.Count > 0)
+        {
+            GreenDungeon = new Dungeon(dungeons[0], DungeonColor.Green);
+            GreenDungeon.parameters = greenDungeonParameters;
+            InitDungeon(GreenDungeon);
+            createdDungeonsList.Add(GreenDungeon);
+            dungeons.RemoveAt(0);
+        }
 
         if (dungeons.Count > 0)
         {
@@ -176,8 +213,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         foreach (var dungeon in createdDungeonsList)
         {
             var nearestDungeon = FindNearestBounds(dungeon, createdDungeonsList);
-
-            if (!dungeon.connectedDungeons.Contains(nearestDungeon))
+            if (nearestDungeon != null && !dungeon.connectedDungeons.Contains(nearestDungeon))
             {
                 ConnectDungeons(dungeon, nearestDungeon);
             }
@@ -195,6 +231,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         DrawDungeonBounds(dungeonList.ToList());
     }
+
 
 
 
@@ -637,7 +674,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         HashSet<BoundsInt> allRooms = ProceduralGenerationAlgorithms.BSP(
             new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int(dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)),
             minRoomWidth,
-            minRoomHeight
+            minRoomHeight,
+            20
         );
 
         List<BoundsInt> roomList = allRooms.ToList();

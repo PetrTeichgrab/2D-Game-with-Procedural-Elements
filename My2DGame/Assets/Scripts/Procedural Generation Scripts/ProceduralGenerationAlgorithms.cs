@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class ProceduralGenerationAlgorithms
 {
-    public static HashSet<BoundsInt> BSP(BoundsInt spaceToSplit, int minWidth, int minHeight)
+    public static HashSet<BoundsInt> BSP(BoundsInt spaceToSplit, int minWidth, int minHeight, int maxSpaceSplits)
     {
         Queue<BoundsInt> toBeSplitObjects = new Queue<BoundsInt>();
         HashSet<BoundsInt> splittedObjects = new HashSet<BoundsInt>();
@@ -15,6 +15,12 @@ public static class ProceduralGenerationAlgorithms
         while (toBeSplitObjects.Count > 0)
         {
             var toBeSplitObject = toBeSplitObjects.Dequeue();
+
+            if (splittedObjects.Count >= maxSpaceSplits)
+            {
+                splittedObjects.Add(toBeSplitObject);
+                continue;
+            }
 
             if (toBeSplitObject.size.x < minWidth * 2 && toBeSplitObject.size.y < minHeight * 2)
             {
@@ -49,6 +55,7 @@ public static class ProceduralGenerationAlgorithms
 
         return splittedObjects;
     }
+
 
 
     public static HashSet<Vector2Int> PerlinNoise(Underground underground, int height, int width, float smoothness, float modifier, int startX = 0)
