@@ -44,7 +44,6 @@ public class FinalLevelGenerator : MonoBehaviour
     [SerializeField]
     private Light2D globalLight;
 
-    private Vector2Int part1Monument, part2Monument, part3Monument, part4Monument;
 
     private List<FinalDungeonPart> dungeonParts = new List<FinalDungeonPart>();
 
@@ -67,6 +66,22 @@ public class FinalLevelGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             PlacePlayerRandomly(player);
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            player.transform.position = new Vector3(dungeonParts[0].MonumentPosition.x + 1, dungeonParts[0].MonumentPosition.y + 1, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            player.transform.position = new Vector3(dungeonParts[1].MonumentPosition.x + 1, dungeonParts[1].MonumentPosition.y + 1, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            player.transform.position = new Vector3(dungeonParts[2].MonumentPosition.x + 1, dungeonParts[2].MonumentPosition.y + 1, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            player.transform.position = new Vector3(dungeonParts[3].MonumentPosition.x + 1, dungeonParts[3].MonumentPosition.y + 1, 0);
         }
     }
 
