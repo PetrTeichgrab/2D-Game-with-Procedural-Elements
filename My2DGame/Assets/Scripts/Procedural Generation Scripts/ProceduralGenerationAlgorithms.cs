@@ -15,42 +15,41 @@ public static class ProceduralGenerationAlgorithms
         while (toBeSplitObjects.Count > 0)
         {
             var toBeSplitObject = toBeSplitObjects.Dequeue();
-            if (toBeSplitObject.size.y >= minHeight && toBeSplitObject.size.x >= minWidth)
+
+            if (toBeSplitObject.size.x < minWidth * 2 && toBeSplitObject.size.y < minHeight * 2)
             {
-                if (UnityEngine.Random.value < 0.5f)
-                {
-                    if (toBeSplitObject.size.y >= minHeight * 2)
-                    {
-                        SplitHorizontally(minWidth, toBeSplitObjects, toBeSplitObject);
-                    }
-                    else if (toBeSplitObject.size.x >= minWidth * 2)
-                    {
-                        SplitVertically(minHeight, toBeSplitObjects, toBeSplitObject);
-                    }
-                    else
-                    {
-                        splittedObjects.Add(toBeSplitObject);
-                    }
-                }
-                else
-                {
-                    if (toBeSplitObject.size.x >= minWidth * 2)
-                    {
-                        SplitVertically(minWidth, toBeSplitObjects, toBeSplitObject);
-                    }
-                    else if (toBeSplitObject.size.y >= minHeight * 2)
-                    {
-                        SplitHorizontally(minHeight, toBeSplitObjects, toBeSplitObject);
-                    }
-                    else
-                    {
-                        splittedObjects.Add(toBeSplitObject);
-                    }
-                }
+                splittedObjects.Add(toBeSplitObject);
+                continue;
+            }
+
+            bool splitHorizontally;
+
+            if (toBeSplitObject.size.x >= minWidth * 2 && toBeSplitObject.size.y >= minHeight * 2)
+            {
+                splitHorizontally = UnityEngine.Random.value > 0.5f;
+            }
+            else
+            {
+                splitHorizontally = toBeSplitObject.size.y >= minHeight * 2;
+            }
+
+            if (splitHorizontally && toBeSplitObject.size.y >= minHeight * 2)
+            {
+                SplitHorizontally(minHeight, toBeSplitObjects, toBeSplitObject);
+            }
+            else if (!splitHorizontally && toBeSplitObject.size.x >= minWidth * 2)
+            {
+                SplitVertically(minWidth, toBeSplitObjects, toBeSplitObject);
+            }
+            else
+            {
+                splittedObjects.Add(toBeSplitObject);
             }
         }
+
         return splittedObjects;
     }
+
 
     public static HashSet<Vector2Int> PerlinNoise(Underground underground, int height, int width, float smoothness, float modifier, int startX = 0)
     {
@@ -107,21 +106,30 @@ public static class ProceduralGenerationAlgorithms
 
     private static void SplitVertically(int minWidth, Queue<BoundsInt> objectsQueue, BoundsInt objectBounds)
     {
-        var xSplit = UnityEngine.Random.Range(1, objectBounds.size.x);
+        // Správné omezení rozsahu splitu
+        var xSplit = UnityEngine.Random.Range(minWidth, objectBounds.size.x - minWidth);
+
+        // Rozdělení na dvě části, které jsou dostatečně velké
         BoundsInt object1 = new BoundsInt(objectBounds.min, new Vector3Int(xSplit, objectBounds.size.y, objectBounds.size.z));
         BoundsInt object2 = new BoundsInt(new Vector3Int(objectBounds.min.x + xSplit, objectBounds.min.y, objectBounds.min.z),
             new Vector3Int(objectBounds.size.x - xSplit, objectBounds.size.y, objectBounds.size.z));
+
         objectsQueue.Enqueue(object1);
         objectsQueue.Enqueue(object2);
     }
 
     private static void SplitHorizontally(int minHeight, Queue<BoundsInt> objectsQueue, BoundsInt objectBounds)
     {
-        var ySplit = UnityEngine.Random.Range(1, objectBounds.size.y);
+        // Správné omezení rozsahu splitu
+        var ySplit = UnityEngine.Random.Range(minHeight, objectBounds.size.y - minHeight);
+
+        // Rozdělení na dvě části, které jsou dostatečně velké
         BoundsInt object1 = new BoundsInt(objectBounds.min, new Vector3Int(objectBounds.size.x, ySplit, objectBounds.size.z));
         BoundsInt object2 = new BoundsInt(new Vector3Int(objectBounds.min.x, objectBounds.min.y + ySplit, objectBounds.min.z),
             new Vector3Int(objectBounds.size.x, objectBounds.size.y - ySplit, objectBounds.size.z));
+
         objectsQueue.Enqueue(object1);
         objectsQueue.Enqueue(object2);
     }
+
 }

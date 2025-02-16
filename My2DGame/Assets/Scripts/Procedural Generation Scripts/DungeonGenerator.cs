@@ -62,10 +62,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private int dungeonHeight = 120;
 
     [SerializeField]
-    private int minRoomWidth = 20;
+    private int minRoomWidth = 50;
 
     [SerializeField]
-    private int minRoomHeight = 20;
+    private int minRoomHeight = 50;
 
     [SerializeField]
     private int undergoundHeight = 10;
@@ -113,11 +113,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         allEnemiesList.Clear();
         allItems.Clear();
         CreateDungeons();
-        pinkDungeon.Create();
-        blueDungeon.Create();
-        greenDungeon.Create();
-        CreateUnderground();
-        CreateFinalLevel();
+        //pinkDungeon.Create();
+        //blueDungeon.Create();
+        //greenDungeon.Create();
+        //CreateUnderground();
+        //CreateFinalLevel();
         //finalLevel.PlacePlayerRandomly(Player);
     }
 
@@ -634,10 +634,25 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private void GetRoomsPositions(Dungeon dungeon)
     {
-        dungeon.Floor.RoomList = ProceduralGenerationAlgorithms.BSP(new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int
-            (dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)), minRoomWidth, minRoomHeight);
+        HashSet<BoundsInt> allRooms = ProceduralGenerationAlgorithms.BSP(
+            new BoundsInt(dungeon.DungeonBounds.min, new Vector3Int(dungeon.DungeonBounds.size.x, dungeon.DungeonBounds.size.y, 0)),
+            minRoomWidth,
+            minRoomHeight
+        );
+
+        List<BoundsInt> roomList = allRooms.ToList();
+
+        //int numberOfRoomsToUse = UnityEngine.Random.Range((roomList.Count + 1)/2, roomList.Count + 1);
+
+        //List<BoundsInt> selectedRooms = roomList.OrderBy(x => UnityEngine.Random.value).Take(numberOfRoomsToUse).ToList();
+
+        dungeon.Floor.RoomList = new HashSet<BoundsInt>(allRooms);
+
         DrawRoomBounds(dungeon.Floor.RoomList.ToList());
     }
+
+
+
 
     private void DrawRoomBounds(List<BoundsInt> roomList)
     {
@@ -740,6 +755,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             }
         }
         HashSet<Vector2Int> connectingCorridor = FloorGenerator.CreateCorridor(minDistancePoint1, minDistancePoint2);
+        HashSet<Vector2Int> firstDungeonCorridor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> secondDungeonCorridor = new HashSet<Vector2Int>();
         for (int i = 0; i < connectingCorridor.Count; i++)
         {
             var corridorPoint = connectingCorridor.ToList()[i];
@@ -749,13 +766,13 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
                 (corridorPoint.y < secondDungeon.DungeonBounds.yMax) && (corridorPoint.y > secondDungeon.DungeonBounds.yMin));
             if (isInFirstDungeon) 
             {
-                firstDungeon.Floor.FloorList.Add(corridorPoint);
+                firstDungeonCorridor.Add(corridorPoint);
             }
             else if (isInSecondDungeon)
             {
-                secondDungeon.Floor.FloorList.Add(corridorPoint);
+                secondDungeonCorridor.Add(corridorPoint);
             }
-            if(!isInSecondDungeon && !isInFirstDungeon)
+            if (!isInSecondDungeon && !isInFirstDungeon)
             {
                 secondDungeon.Floor.FloorList.Add(corridorPoint);
                 firstDungeon.Floor.AnotherDungeonsEntrances.Add(corridorPoint);
@@ -766,9 +783,68 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
                 secondDungeon.Floor.AnotherDungeonsEntrances.Add(connectingCorridor.ToList()[i - 3]);
             }
         }
+        int maxCorridorLength = 20;
+        if (firstDungeonCorridor.Count > maxCorridorLength)
+        {
+            Vector2Int midPoint = firstDungeonCorridor.ToList()[firstDungeonCorridor.Count / 2];
+            GenerateCircularRoom(midPoint, 5, firstDungeon);
+        }
+        if (secondDungeonCorridor.Count > maxCorridorLength)
+        {
+            Vector2Int midPoint = secondDungeonCorridor.ToList()[secondDungeonCorridor.Count / 2];
+            GenerateCircularRoom(midPoint, 5, secondDungeon);
+        }
+        firstDungeon.Floor.FloorList.UnionWith(firstDungeonCorridor);
+        secondDungeon.Floor.FloorList.UnionWith(secondDungeonCorridor);
         firstDungeon.connectedDungeons.Add(secondDungeon);
         secondDungeon.connectedDungeons.Add(firstDungeon);
     }
+
+    private static List<Vector2Int> GenerateStraightPath(Vector2Int start, Vector2Int end)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+        Vector2Int current = start;
+
+        while (current != end)
+        {
+            path.Add(current);
+
+            if (current.x < end.x) current.x++;
+            else if (current.x > end.x) current.x--;
+
+            if (current.y < end.y) current.y++;
+            else if (current.y > end.y) current.y--;
+        }
+
+        path.Add(end);
+        return path;
+    }
+
+
+
+    private static void GenerateCircularRoom(Vector2Int center, int radius, Dungeon dungeon)
+    {
+        HashSet<Vector2Int> circularRoom = new HashSet<Vector2Int>();
+
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                if (x * x + y * y <= radius * radius) // Rovnice kruhu
+                {
+                    Vector2Int roomPoint = new Vector2Int(center.x + x, center.y + y);
+                    circularRoom.Add(roomPoint);
+                }
+            }
+        }
+
+        // Pøidáme místnost do dungeonu
+        dungeon.Floor.FloorList.UnionWith(circularRoom);
+
+        Debug.Log($"Vygenerována kruhová místnost na {center} s polomìrem {radius}");
+    }
+
+
 
     public Dungeon FindNearestBounds(Dungeon targetDungeon, List<Dungeon> otherDungeons)
     {

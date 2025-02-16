@@ -23,6 +23,9 @@ public static class FloorGenerator
     public static HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
+
+        if (roomCenters.Count == 0) return corridors;
+
         var currentRoomCenter = roomCenters[UnityEngine.Random.Range(0, roomCenters.Count)];
         roomCenters.Remove(currentRoomCenter);
 
@@ -30,12 +33,57 @@ public static class FloorGenerator
         {
             Vector2Int closest = FindClosestPoint(currentRoomCenter, roomCenters);
             roomCenters.Remove(closest);
-            HashSet<Vector2Int> newCorridor = CreateCorridor(currentRoomCenter, closest);
+
+            HashSet<Vector2Int> newCorridor = CreateCurvedCorridor(currentRoomCenter, closest);
             currentRoomCenter = closest;
             corridors.UnionWith(newCorridor);
         }
+
         return corridors;
     }
+
+    public static HashSet<Vector2Int> CreateCurvedCorridor(Vector2Int start, Vector2Int end)
+    {
+        HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+
+        // Pøidáme mírnì náhodný bod mezi start a end pro zakøivení
+        Vector2Int midPoint = new Vector2Int((start.x + end.x) / 2, (start.y + end.y) / 2);
+        midPoint += new Vector2Int(UnityEngine.Random.Range(-2, 2), UnityEngine.Random.Range(-2, 2));
+
+        List<Vector2Int> firstHalf = GeneratePath(start, midPoint);
+        List<Vector2Int> secondHalf = GeneratePath(midPoint, end);
+
+        corridor.UnionWith(firstHalf);
+        corridor.UnionWith(secondHalf);
+
+        return corridor;
+    }
+
+    private static List<Vector2Int> GeneratePath(Vector2Int start, Vector2Int end)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+        Vector2Int current = start;
+
+        while (current != end)
+        {
+            path.Add(current);
+
+            if (UnityEngine.Random.value > 0.5f)
+            {
+                if (current.x < end.x) current.x++;
+                else if (current.x > end.x) current.x--;
+            }
+            else
+            {
+                if (current.y < end.y) current.y++;
+                else if (current.y > end.y) current.y--;
+            }
+        }
+
+        path.Add(end);
+        return path;
+    }
+
 
 
     public static HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int closest)
