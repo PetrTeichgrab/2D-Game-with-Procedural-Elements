@@ -26,7 +26,7 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
         return count;
     }
 
-    public void GenerateEnemies(Dungeon dungeon, List<(Character prefab, Action<Character> positionSetter)> enemyConfigs, int baseCount = 5, float scalingFactor = 0.03f, int minCount = 5, int maxCount = 50)
+    public void GenerateEnemies(Dungeon dungeon, List<(Character prefab, Action<Character> positionSetter)> enemyConfigs, int baseCount = 5, float scalingFactor = 0.015f, int minCount = 5, int maxCount = 50)
     {
         foreach (var room in dungeon.RoomList)
         {

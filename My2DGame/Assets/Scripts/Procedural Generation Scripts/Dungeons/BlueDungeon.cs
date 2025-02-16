@@ -51,6 +51,10 @@ public class BlueDungeon : DungeonBehaviour
                 Completed = true;
             }
         }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
+        }
     }
 
     private void OnDrawGizmos()

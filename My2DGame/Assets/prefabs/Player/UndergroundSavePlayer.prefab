@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5655870183562602694
+--- !u!1 &2908074233875257979
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4434109667702123019}
-  - component: {fileID: 6170953190555049361}
-  - component: {fileID: 2710393309371327504}
-  - component: {fileID: 1066983158641889178}
-  - component: {fileID: 6304075575759073614}
-  - component: {fileID: -2742234779212136}
+  - component: {fileID: 5885439271676515162}
+  - component: {fileID: 4302899148716816629}
+  - component: {fileID: 7255526858039518131}
+  - component: {fileID: 7729656449856443163}
+  - component: {fileID: 1381473930662043413}
+  - component: {fileID: 3898544429265562771}
   m_Layer: 0
   m_Name: UndergroundSavePlayer
   m_TagString: Untagged
@@ -21,13 +21,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4434109667702123019
+--- !u!4 &5885439271676515162
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.001, y: -1.361, z: -0.4033473}
@@ -36,26 +36,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6170953190555049361
+--- !u!114 &4302899148716816629
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9abfe6c742d99ea48887cbbad8c52acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: playerSoul
---- !u!212 &2710393309371327504
+--- !u!212 &7255526858039518131
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -101,13 +101,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1066983158641889178
+--- !u!114 &7729656449856443163
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
@@ -151,13 +151,13 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
---- !u!60 &6304075575759073614
+--- !u!60 &1381473930662043413
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -401,13 +401,13 @@ PolygonCollider2D:
       - {x: 0.07861328, y: -0.34228516}
       - {x: 0.08544922, y: -0.33935547}
   m_UseDelaunayMesh: 0
---- !u!114 &-2742234779212136
+--- !u!114 &3898544429265562771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655870183562602694}
+  m_GameObject: {fileID: 2908074233875257979}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8744b98119ae9764a85b03d911fdbff8, type: 3}
@@ -415,3 +415,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amplitude: 0.3
   speed: 1
+  countdown: {fileID: 0}

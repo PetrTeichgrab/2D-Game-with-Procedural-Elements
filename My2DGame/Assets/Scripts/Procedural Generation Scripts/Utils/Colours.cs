@@ -10,5 +10,6 @@ public enum DungeonColor
     Purple,
     Yellow,
     Red,
+    LightGreen,
     Black
 }

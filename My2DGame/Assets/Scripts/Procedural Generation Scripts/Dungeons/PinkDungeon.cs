@@ -84,6 +84,10 @@ public class PinkDungeon : DungeonBehaviour
                 Completed = true;
             }
         }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            generator.Player.transform.position = new Vector3(PinkMushroomBossInstance.Position.x + 5, PinkMushroomBossInstance.Position.y + 5);
+        }
     }
 
     public override void Create()
@@ -99,7 +103,7 @@ public class PinkDungeon : DungeonBehaviour
         PinkMushroomBossInstance = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);
         generator.setBossToRandomRoom(PinkMushroomBossInstance, pinkDungeon, 2, 2);
-        generator.Player.transform.position = new Vector3(PinkMushroomBossInstance.Position.x + 5, PinkMushroomBossInstance.Position.y + 5);
+        //generator.Player.transform.position = new Vector3(PinkMushroomBossInstance.Position.x + 5, PinkMushroomBossInstance.Position.y + 5);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()

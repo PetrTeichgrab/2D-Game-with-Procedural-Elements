@@ -7,6 +7,9 @@ public class PlayerSave : MonoBehaviour
 
     private Vector3 startPosition;
 
+    [SerializeField]
+    Countdown countdown;
+
     void Start()
     {
         startPosition = transform.position;
@@ -38,6 +41,8 @@ public class PlayerSave : MonoBehaviour
         player.DisableGravityMode();  
         player.Respawn();
         gameObject.SetActive(false);
+        countdown.StartCountdown = false;
+        countdown.HideCountdown();
         Debug.Log("Save item collected, actions applied to the player, and item removed.");
     }
 }

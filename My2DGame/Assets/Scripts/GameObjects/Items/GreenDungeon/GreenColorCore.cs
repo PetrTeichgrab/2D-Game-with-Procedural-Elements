@@ -16,7 +16,8 @@ public class GreenColorCore : ColorCore
             CastSpell playerSpell = character.GetComponent<CastSpell>();
             if (character != null && playerSpell != null && character.isAlive)
             {
-                playerSpell.cooldownTime = 0.1f;
+                playerSpell.ReduceCooldown(0.1f);
+                character.colorCores.Add(this);
             }
             gameObject.SetActive(false);
         }

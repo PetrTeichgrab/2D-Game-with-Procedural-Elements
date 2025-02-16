@@ -21,8 +21,6 @@ public class UndergroundBehaviour : DungeonBehaviour
     [SerializeField]
     Countdown countdown;
 
-    private bool isPlayerInUnderground;
-
     Item playerSaveInstance;
 
     private float cameraCooldown = 7f;
@@ -31,7 +29,7 @@ public class UndergroundBehaviour : DungeonBehaviour
 
     private void Update()
     {
-        if (!isPlayerInUnderground && !Player.isAlive)
+        if (!Player.isPlayerInUnderground && !Player.isAlive)
         {
             InitDungeon();
         }
@@ -49,6 +47,11 @@ public class UndergroundBehaviour : DungeonBehaviour
             }
         }
 
+        if (Input.GetKeyUp(KeyCode.F5))
+        {
+            Player.transform.position = playerSaveInstance.transform.position + new Vector3(2,0,0);
+        }
+
         if (countdown.CountdownFinished)
         {
             Player.isDead = true;
@@ -63,7 +66,7 @@ public class UndergroundBehaviour : DungeonBehaviour
         PlaceItemToRandomPosition(playerSaveInstance);
         Player.SetTransparency(0.1f);
         Player.EnableGravityMode();
-        isPlayerInUnderground = true;
+        Player.isPlayerInUnderground = true;
         StartCoroutine(MoveCameraToItemAndBack(playerSaveInstance));
     }
 
@@ -154,6 +157,8 @@ public class UndergroundBehaviour : DungeonBehaviour
         mainVirtualCamera.Follow = Player.transform;
 
         Destroy(tempFollow);
+
+        countdown.ResetRemainingTime();
 
         countdown.StartCountdown = true;
 

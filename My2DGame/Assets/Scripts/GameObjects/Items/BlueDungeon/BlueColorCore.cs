@@ -15,7 +15,7 @@ public class BlueColorCore : ColorCore
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null && character.isAlive)
             {
-                character.movementSpeed += 1.5f;
+                character.movementSpeed += 1f;
                 character.colorCores.Add(this);
             }
             gameObject.SetActive(false);

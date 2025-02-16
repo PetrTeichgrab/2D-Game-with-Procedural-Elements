@@ -8,7 +8,7 @@ public class Countdown : MonoBehaviour
     [SerializeField] TextMeshProUGUI countdownText;
 
     [SerializeField]
-    float remainingTime = 10;
+    float remainingTime = 20;
 
     public bool StartCountdown { get; set; }
 
@@ -33,5 +33,15 @@ public class Countdown : MonoBehaviour
             int seconds = Mathf.FloorToInt(remainingTime % 60);
             countdownText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
+    }
+
+    public void ResetRemainingTime()
+    {
+        remainingTime = 20;
+    }
+
+    public void HideCountdown()
+    {
+        countdownText.text = string.Empty;
     }
 }

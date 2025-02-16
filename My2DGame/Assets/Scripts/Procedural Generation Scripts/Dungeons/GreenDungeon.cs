@@ -25,6 +25,9 @@ public class GreenDungeon : DungeonBehaviour
 
     [SerializeField] private GreenColorCore greenColorCore;
 
+    [SerializeField] private LightGreenColorCore lightGreenColorCore;
+
+
     private Dungeon greenDungeon;
     private ObjectPool<Item> objectPool;
 
@@ -47,7 +50,7 @@ public class GreenDungeon : DungeonBehaviour
     {
         if (!firstPartCompleted && GreenSlimeBossInstance != null && !GreenSlimeBossInstance.isAlive)
         {
-            StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, greenColorCore, GreenSlimeBossInstance.transform));
+            StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, lightGreenColorCore, GreenSlimeBossInstance.transform));
             firstPartCompleted = true;
         }
         if (!secondPartCompleted && GreenMushroomBossInstance != null && !GreenMushroomBossInstance.isAlive)
@@ -62,6 +65,15 @@ public class GreenDungeon : DungeonBehaviour
             {
                 Completed = true;
             }
+        }
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            generator.Player.transform.position = new Vector3(GreenMushroomBossInstance.Position.x + 5, GreenMushroomBossInstance.Position.y + 5);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            generator.Player.transform.position = new Vector3(GreenSlimeBossInstance.Position.x + 5, GreenSlimeBossInstance.Position.y + 5);
         }
     }
 

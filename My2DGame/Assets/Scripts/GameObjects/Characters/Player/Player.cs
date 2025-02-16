@@ -17,6 +17,8 @@ public class Player : Character
     public float dashTime = 0.2f;
     [SerializeField]
     public float dashCD = 1f;
+    [SerializeField]
+    private StatusBar playerHpBar;
 
     public float minDashCD = 0.8f;
 
@@ -51,10 +53,11 @@ public class Player : Character
 
     public Vector3 deathPosition;
 
+    public bool isPlayerInUnderground;
+
 
     void Start()
     {
-        maxHP = 100;
         currentHP = maxHP;
         isDead = false;
         colorCores = new List<ColorCore>();
@@ -278,8 +281,8 @@ public class Player : Character
         transform.position = deathPosition;
         deathPosition = Vector3.zero;
         gameObject.SetActive(true);
-        Debug.Log(currentHP);
-        Debug.Log(maxHP);
+        playerHpBar.gameObject.SetActive(true);
+        isPlayerInUnderground = false;
         StartCoroutine(TemporaryInvulnerability(3f));
     }
 

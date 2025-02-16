@@ -13,6 +13,9 @@ public class LevelUpMenu : MonoBehaviour
     private CastSpell spellCasting;
 
     [SerializeField]
+    private PlayerSpellBehavior playerSpell;
+
+    [SerializeField]
     private Button button1;
     [SerializeField]
     private Button button2;
@@ -27,6 +30,9 @@ public class LevelUpMenu : MonoBehaviour
 
     [SerializeField]
     Sprite greenButtonSprite;
+
+    [SerializeField]
+    Sprite lightGreenButtonSprite;
 
     [SerializeField]
     Sprite purpleButtonSprite;
@@ -131,6 +137,7 @@ public class LevelUpMenu : MonoBehaviour
             DungeonColor.Pink,
             DungeonColor.Blue,
             DungeonColor.Green,
+            DungeonColor.LightGreen,
             DungeonColor.Purple,
         };
         List<DungeonColor> randomColors = new List<DungeonColor>();
@@ -159,6 +166,9 @@ public class LevelUpMenu : MonoBehaviour
                 break;
             case DungeonColor.Green:
                 spellCasting.ReduceCooldown(0.1f);
+                break;
+            case DungeonColor.LightGreen:
+                playerSpell.IncreaseDamage();
                 break;
             case DungeonColor.Purple:
                 player.ReduceDashCD(0.2f);
@@ -201,6 +211,8 @@ public class LevelUpMenu : MonoBehaviour
                 return blueButtonSprite;
             case DungeonColor.Green:
                 return greenButtonSprite;
+            case DungeonColor.LightGreen:
+                return lightGreenButtonSprite;
             case DungeonColor.Purple:
                 return purpleButtonSprite;
             default:
