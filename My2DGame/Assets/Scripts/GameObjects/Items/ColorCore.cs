@@ -14,6 +14,8 @@ public class ColorCore : Item
 
     private Light2D light2D;
 
+    protected AudioManager audioManager;
+
     private void Awake()
     {
         light2D = GetComponent<Light2D>();
@@ -21,6 +23,12 @@ public class ColorCore : Item
         {
             Debug.LogWarning("Light2D component is missing on the ColorCore object.");
         }
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+    protected void playPickUpSFX()
+    {
+        audioManager.PlaySFX(audioManager.playerPickUpColorCore);
     }
     public void GradualLightIncrease(float duration)
     {

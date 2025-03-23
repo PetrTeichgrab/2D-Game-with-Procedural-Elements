@@ -9,33 +9,19 @@ public class GameController : MonoBehaviour
     DungeonGenerator generator;
 
     [SerializeField]
-    PinkDungeon pinkDungeon;
-
-    [SerializeField]
-    BlueDungeon blueDungeon;
-
-    [SerializeField]
-    GreenDungeon greenDungeon;
-
-    [SerializeField]
-    Player player;
-
-    EnemyMushroomPinkBoss pinkDungeonBoss;
+    AudioManager audioManager;
 
     void Start()
     {
         generateGameContent();
+        audioManager.PlayNextTrack();
     }
 
     public void generateGameContent()
     {
         generator.GenerateDungeons();
-        //blueDungeon.Create();
-        //greenDungeon.Create();
-        //pinkDungeon.Create();
     }
 
-    // Update is called once per frame
     void Update()
     {
  

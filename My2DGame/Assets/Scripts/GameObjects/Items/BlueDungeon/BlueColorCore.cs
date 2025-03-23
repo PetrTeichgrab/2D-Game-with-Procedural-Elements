@@ -15,6 +15,7 @@ public class BlueColorCore : ColorCore
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null && character.isAlive)
             {
+                playPickUpSFX();
                 character.movementSpeed += 1f;
                 character.colorCores.Add(this);
             }

@@ -11,6 +11,7 @@ public class PurpleColorCore : ColorCore
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null && character.isAlive)
             {
+                playPickUpSFX();
                 //do something
             }
             gameObject.SetActive(false);

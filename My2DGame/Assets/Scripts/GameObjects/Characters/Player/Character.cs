@@ -13,11 +13,17 @@ public abstract class Character : MonoBehaviour
 
     public Animator animator;
 
+    protected AudioManager audioManager;
+
     public Vector2Int Position { get; set; }
     private void Start()
     {
         isAlive = true;
         currentHP = maxHP;
+    }
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
     public virtual void TakeDamage(int damage)
     {
@@ -34,7 +40,6 @@ public abstract class Character : MonoBehaviour
 
             foreach (var collider in GetComponents<Collider2D>())
             {
-                Debug.Log("collider v pryc");
                 collider.enabled = false;
             }
         }

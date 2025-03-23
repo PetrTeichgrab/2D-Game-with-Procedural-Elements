@@ -28,6 +28,7 @@ public abstract class MeleeEnemy : Character
     protected float dashCooldownTimer = 0f;
     private Vector2 lastKnownPlayerPosition;
     private bool isAvoidingObstacle = false;
+    public AudioClip attackSFX;
 
     private void Start()
     {
@@ -138,7 +139,8 @@ public abstract class MeleeEnemy : Character
                 if (Time.time >= lastAttackTime + attackCooldown)
                 {
                     animator.SetTrigger("attack");
-                    character.TakeDamage(10);
+                    character.TakeDamage(damage);
+                    audioManager.PlaySFX(attackSFX == null ? audioManager.EnemyAttackMelee2 : attackSFX);
                     lastAttackTime = Time.time;
                 }
             }

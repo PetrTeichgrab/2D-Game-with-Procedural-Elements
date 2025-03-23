@@ -63,6 +63,7 @@ public abstract class RangeEnemy : Character
             Vector2 projectileDirection = new Vector2(projectileDirX, projectileDirY).normalized;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
+            audioManager.PlaySFX(audioManager.EnemyAttackRange);
             var mushroomProjectile = projectileObject.GetComponent<MushroomProjectile>();
 
             if (mushroomProjectile != null)
@@ -116,8 +117,7 @@ public abstract class RangeEnemy : Character
             Vector2 spawnDirection = new Vector2(projectileDirX, projectileDirY).normalized;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
-
-            var enemyProjectile = projectileObject.GetComponent<EnemyShoot>();
+            audioManager.PlaySFX(audioManager.EnemyAttackRange);
 
             Destroy(projectileObject, projectileMaxLifeTime);
 

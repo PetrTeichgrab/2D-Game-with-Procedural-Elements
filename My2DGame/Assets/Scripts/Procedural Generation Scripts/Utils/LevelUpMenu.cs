@@ -21,6 +21,8 @@ public class LevelUpMenu : MonoBehaviour
     private Button button2;
     [SerializeField]
     private Button button3;
+    [SerializeField]
+    private Button continueButton;
 
     [SerializeField]
     Sprite pinkButtonSprite;
@@ -47,6 +49,7 @@ public class LevelUpMenu : MonoBehaviour
     void Start()
     {
         buttons = new List<Button> { button1, button2, button3 };
+        continueButton.gameObject.SetActive(false);
         foreach (var button in buttons)
         {
             button.gameObject.SetActive(false);
@@ -79,12 +82,15 @@ public class LevelUpMenu : MonoBehaviour
         foreach (var button in buttons)
         {
             button.gameObject.SetActive(false);
+            continueButton.gameObject.SetActive(false);
         }
     }
 
     void GenerateLevelUpButtons()
     {
+        continueButton.gameObject.SetActive(true);
         List<DungeonColor> selectedColors = GetRandomColors(3);
+        continueButton.onClick.AddListener(() => SceneManager.LoadScene("Endscene"));
 
         for (int i = 0; i < buttons.Count; i++)
         {

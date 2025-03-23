@@ -47,6 +47,13 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private List<FinalDungeonPart> dungeonParts = new List<FinalDungeonPart>();
 
+    private AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -58,6 +65,7 @@ public class FinalLevelGenerator : MonoBehaviour
                 if (Vector2Int.Distance(playerPosition, part.MonumentPosition) < 1.5f)
                 {
                     CompletePart(part);
+                    audioManager.PlaySFX(audioManager.placeColorCore);
                     break;
                 }
             }

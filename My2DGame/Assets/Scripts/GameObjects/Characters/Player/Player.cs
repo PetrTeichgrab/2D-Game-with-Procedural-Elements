@@ -255,6 +255,7 @@ public class Player : Character
         if (currentHP <= 0)
         {
             deathPosition = transform.position;
+            audioManager.PlaySFX(audioManager.Death);
             isAlive = false;
         }
     }
@@ -283,6 +284,7 @@ public class Player : Character
         gameObject.SetActive(true);
         playerHpBar.gameObject.SetActive(true);
         isPlayerInUnderground = false;
+        audioManager.PlaySFX(audioManager.Revive);
         StartCoroutine(TemporaryInvulnerability(3f));
     }
 

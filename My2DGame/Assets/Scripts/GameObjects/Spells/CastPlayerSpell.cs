@@ -21,6 +21,13 @@ public class CastSpell : MonoBehaviour
     public float minCooldownTime = 0.1f;
     private float lastCastTime = -Mathf.Infinity;
 
+    public AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     void Update()
     {
         if (player.isDead) { 
@@ -36,6 +43,7 @@ public class CastSpell : MonoBehaviour
             if (Time.time >= lastCastTime + cooldownTime)
             {
                 Cast();
+                audioManager.PlaySFX(audioManager.playerSpell);
                 lastCastTime = Time.time;
             }
         }

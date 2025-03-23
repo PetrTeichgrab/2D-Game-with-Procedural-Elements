@@ -19,6 +19,7 @@ public class LightGreenColorCore : ColorCore
             CastSpell playerSpell = character.GetComponent<CastSpell>();
             if (character != null && playerSpell != null && character.isAlive)
             {
+                playPickUpSFX();
                 character.colorCores.Add(this);
                 spellBehavior.IncreaseDamage();
             }
