@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CastSpell : MonoBehaviour
 {
     public Transform castPoint;
     public float spellSpeed = 2.5f;
+    public int damage = 50;
     public Rigidbody2D rb;
     Vector2 mousePostion;
     public Camera cam;
@@ -26,6 +28,7 @@ public class CastSpell : MonoBehaviour
     private void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        SaveSystem.LoadPlayerSpell(this);
     }
 
     void Update()
@@ -46,15 +49,30 @@ public class CastSpell : MonoBehaviour
                 audioManager.PlaySFX(audioManager.playerSpell);
                 lastCastTime = Time.time;
             }
+            Debug.Log(player.movementSpeed);
+            Debug.Log(damage);
         }
     }
 
     public void Cast()
     {
-        var spellObject = Instantiate(this.spellObject, castPoint.position, castPoint.rotation);
-        Rigidbody2D spellRb = spellObject.GetComponent<Rigidbody2D>();
+        if (spellObject == null)
+        {
+            Debug.LogWarning("spellObject je null!");
+            return;
+        }
+
+        GameObject instance = Instantiate(spellObject, castPoint.position, castPoint.rotation);
+
+        PlayerSpellBehavior behavior = instance.GetComponent<PlayerSpellBehavior>();
+        if (behavior != null)
+        {
+            behavior.Initialize(this);
+        }
+
+        Rigidbody2D spellRb = instance.GetComponent<Rigidbody2D>();
         spellRb.AddForce(castPoint.up * spellSpeed, ForceMode2D.Impulse);
-        Destroy(spellObject, 0.7f);
+        Destroy(instance, 0.7f);
     }
 
     public void ReduceCooldown(float time)
@@ -64,6 +82,11 @@ public class CastSpell : MonoBehaviour
             return;
         }
         cooldownTime -= time;
+    }
+
+    public void IncreaseDamage()
+    {
+        damage += 100;
     }
 }
 

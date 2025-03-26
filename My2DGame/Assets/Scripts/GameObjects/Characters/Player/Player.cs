@@ -38,7 +38,7 @@ public class Player : Character
     private bool usesGravity = false;
 
     [SerializeField]
-    private float jumpForce = 5f;
+    public float jumpForce = 5f;
 
     [SerializeField]
     private Transform groundCheck;
@@ -58,6 +58,7 @@ public class Player : Character
 
     void Start()
     {
+        SaveSystem.LoadPlayer(this);
         currentHP = maxHP;
         isDead = false;
         colorCores = new List<ColorCore>();
@@ -277,7 +278,7 @@ public class Player : Character
     }
     public void Respawn()
     {
-        currentHP = 50;
+        currentHP = maxHP/2;
         isAlive = true;
         transform.position = deathPosition;
         deathPosition = Vector3.zero;

@@ -172,15 +172,18 @@ public class LevelUpMenu : MonoBehaviour
                 break;
             case DungeonColor.Green:
                 spellCasting.ReduceCooldown(0.1f);
+                spellCasting.IncreaseDamage();
                 break;
             case DungeonColor.LightGreen:
-                playerSpell.IncreaseDamage();
+                spellCasting.IncreaseDamage();
                 break;
             case DungeonColor.Purple:
                 player.ReduceDashCD(0.2f);
                 break;
 
         }
+        SaveSystem.SavePlayer(player);
+        SaveSystem.SavePlayerSpell(spellCasting);
         SceneManager.LoadScene("Endscene");
     }
 

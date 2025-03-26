@@ -541,4 +541,3 @@ MonoBehaviour:
   itemName: 
   animator: {fileID: 1778818289931241713}
   color: 6
-  spellBehavior: {fileID: -3073455955112641764, guid: 1c0309c1c1b5b794c880e881c60b833b, type: 3}

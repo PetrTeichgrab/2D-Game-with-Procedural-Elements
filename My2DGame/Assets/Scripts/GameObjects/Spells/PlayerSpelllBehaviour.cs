@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class PlayerSpellBehavior : SpellBehavior
 {
-    [SerializeField]
-    public int Damage = 10;
+    CastSpell spell;
+    public void Initialize(CastSpell spell)
+    {
+        this.spell = spell;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -12,7 +16,7 @@ public class PlayerSpellBehavior : SpellBehavior
             Character character = collision.gameObject.GetComponent<Character>();
             if (character != null)
             {
-                character.TakeDamage(Damage);
+                character.TakeDamage(spell.damage);
             }
         }
 
@@ -32,10 +36,5 @@ public class PlayerSpellBehavior : SpellBehavior
         {
             Destroy(gameObject);
         }
-    }
-
-    public void IncreaseDamage()
-    {
-        Damage += 100;
     }
 }

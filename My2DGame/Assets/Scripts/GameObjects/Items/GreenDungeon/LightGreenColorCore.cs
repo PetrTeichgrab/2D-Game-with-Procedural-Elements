@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class LightGreenColorCore : ColorCore
 {
-    [SerializeField]
-    PlayerSpellBehavior spellBehavior;
     private void Start()
     {
         color = DungeonColor.LightGreen;
@@ -21,7 +19,7 @@ public class LightGreenColorCore : ColorCore
             {
                 playPickUpSFX();
                 character.colorCores.Add(this);
-                spellBehavior.IncreaseDamage();
+                playerSpell.IncreaseDamage();
             }
             gameObject.SetActive(false);
         }
