@@ -55,6 +55,7 @@ public class UndergroundBehaviour : DungeonBehaviour
         if (countdown.CountdownFinished)
         {
             Player.isDead = true;
+            SaveSystem.SavePlayer(Player);
         }
 
     }

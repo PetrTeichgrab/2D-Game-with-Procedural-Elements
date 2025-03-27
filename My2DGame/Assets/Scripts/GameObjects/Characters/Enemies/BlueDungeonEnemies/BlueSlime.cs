@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BlueSlime : MeleeEnemy
 {
+    public int rewardMoney = 1;
     void Update()
     {
-        if (isDashing)
+        if (isDashing || rewardMoney == 0)
         {
             return;
         }
@@ -33,6 +34,11 @@ public class BlueSlime : MeleeEnemy
         else
         {
             StopOnCurrentPosition();
+            if (Player.Instance != null)
+            {
+                Player.Instance.AddMoney(rewardMoney);
+                rewardMoney = 0;
+            }
         }
 
         if (animator != null)
@@ -41,6 +47,5 @@ public class BlueSlime : MeleeEnemy
             animator.SetBool("isAlive", isAlive);
         }
     }
-
 
 }

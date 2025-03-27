@@ -2,14 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CastSpell : MonoBehaviour
 {
+    public static int DEF_DAMAGE = 10;
+    public static float DEF_SPELL_SPEED = 5;
+    public static float DEF_COOLDOWN_TIME = 1.2f;
+
     public Transform castPoint;
-    public float spellSpeed = 2.5f;
-    public int damage = 50;
+    public float spellSpeedPermanent = DEF_SPELL_SPEED;
+    public float spellSpeed = 0;
+    public int damagePermanent = DEF_DAMAGE;
+    public int damage = 0;
+    public float cooldownTimePermanent = DEF_COOLDOWN_TIME;
+    public float cooldownTime = 1f;
     public Rigidbody2D rb;
     Vector2 mousePostion;
     public Camera cam;
@@ -19,8 +26,7 @@ public class CastSpell : MonoBehaviour
     [SerializeField]
     private Player player;
 
-    public float cooldownTime = 0.2f;
-    public float minCooldownTime = 0.1f;
+    public float minCooldownTime = 0.5f;
     private float lastCastTime = -Mathf.Infinity;
 
     public AudioManager audioManager;
@@ -43,15 +49,30 @@ public class CastSpell : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            if (Time.time >= lastCastTime + cooldownTime)
+            if (Time.time >= lastCastTime + cooldownTimePermanent + cooldownTime)
             {
                 Cast();
                 audioManager.PlaySFX(audioManager.playerSpell);
                 lastCastTime = Time.time;
             }
-            Debug.Log(player.movementSpeed);
-            Debug.Log(damage);
+            Debug.Log(player.movementSpeedPermanent);
+            Debug.Log(damagePermanent);
         }
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            resetStats();
+        }
+    }
+
+    public void resetStats()
+    {
+        spellSpeedPermanent = DEF_SPELL_SPEED;
+        spellSpeed = 0;
+        damagePermanent = DEF_DAMAGE;
+        damage = 0;
+        cooldownTimePermanent = DEF_COOLDOWN_TIME;
+        cooldownTime = 1f;
     }
 
     public void Cast()
@@ -71,7 +92,7 @@ public class CastSpell : MonoBehaviour
         }
 
         Rigidbody2D spellRb = instance.GetComponent<Rigidbody2D>();
-        spellRb.AddForce(castPoint.up * spellSpeed, ForceMode2D.Impulse);
+        spellRb.AddForce(castPoint.up * (spellSpeedPermanent + spellSpeed), ForceMode2D.Impulse);
         Destroy(instance, 0.7f);
     }
 
@@ -84,9 +105,22 @@ public class CastSpell : MonoBehaviour
         cooldownTime -= time;
     }
 
+    public void ReduceCooldownPermanent(float time)
+    {
+        if (cooldownTimePermanent - time <= minCooldownTime)
+        {
+            return;
+        }
+        cooldownTimePermanent -= time;
+    }
+
+    public void IncreaseDamagePermanent()
+    {
+        damagePermanent += 5;
+    }
     public void IncreaseDamage()
     {
-        damage += 100;
+        damage += 10;
     }
 }
 

@@ -17,7 +17,7 @@ public class GreenColorCore : ColorCore
             if (character != null && playerSpell != null && character.isAlive)
             {
                 playPickUpSFX();
-                playerSpell.ReduceCooldown(0.1f);
+                playerSpell.ReduceCooldown(0.8f);
                 character.colorCores.Add(this);
             }
             gameObject.SetActive(false);

@@ -9,9 +9,12 @@ public class PauseMenu : MonoBehaviour
 
     public static bool isPaused;
 
+    public GameObject shop;
+
     private void Start()
     {
         pauseMenu.SetActive(false);
+        shop.SetActive(false);
     }
 
     private void Update()
@@ -27,11 +30,31 @@ public class PauseMenu : MonoBehaviour
                 PauseGame();
             }
         }
+
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            if (isPaused)
+            {
+                ResumeGame();
+                shop.SetActive(false);
+            }
+            else
+            {
+                PauseGameWithoutShowingMenu();
+                shop.SetActive(true);
+            }
+        }
     }
 
     public void PauseGame()
     {
         pauseMenu.SetActive(true);
+        Time.timeScale = 0;
+        isPaused = true;
+    }
+
+    public void PauseGameWithoutShowingMenu()
+    {
         Time.timeScale = 0;
         isPaused = true;
     }

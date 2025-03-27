@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    public int maxHPpermanent;
     public int maxHP;
 
     public int currentHP;
@@ -19,7 +20,7 @@ public abstract class Character : MonoBehaviour
     private void Start()
     {
         isAlive = true;
-        currentHP = maxHP;
+        currentHP = maxHPpermanent;
     }
     private void Awake()
     {
@@ -30,6 +31,7 @@ public abstract class Character : MonoBehaviour
         if (currentHP > 0)
         {
             currentHP -= damage;
+            Debug.Log("Daaaavamm dmg " + damage);
         }
         if (animator != null)
         {
@@ -48,9 +50,9 @@ public abstract class Character : MonoBehaviour
     public void AddHP(int healthPoints)
     {
         currentHP += healthPoints;
-        if (currentHP > maxHP)
+        if (currentHP > maxHPpermanent)
         {
-            currentHP = maxHP;
+            currentHP = maxHPpermanent;
         }
     }
 

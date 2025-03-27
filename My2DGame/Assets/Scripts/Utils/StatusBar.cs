@@ -35,7 +35,7 @@ public class StatusBar : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        float barFillValue = (float)character.currentHP / (float)character.maxHP;
+        float barFillValue = (float)character.currentHP / (float)character.maxHPpermanent;
         slider.value = barFillValue;
 
         if (slider.value <= slider.minValue)

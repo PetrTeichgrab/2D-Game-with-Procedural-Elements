@@ -10,11 +10,12 @@ public class SaveSystem : MonoBehaviour
     {
         PlayerData data = new PlayerData
         {
-            dashSpeed = player.dashSpeed,
-            dashCD = player.dashCD,
-            movementSpeed = player.movementSpeed,
-            jumpForce = player.jumpForce,
-            maxHP = player.maxHP,
+            dashSpeed = player.dashSpeedPermanent,
+            dashCD = player.dashCDPermanent,
+            movementSpeed = player.movementSpeedPermanent,
+            jumpForce = player.jumpForcePermanent,
+            maxHP = player.maxHPpermanent,
+            money = player.money
         };
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(playerPath, json);
@@ -27,11 +28,12 @@ public class SaveSystem : MonoBehaviour
             string json = File.ReadAllText(playerPath);
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
 
-            player.dashSpeed = data.dashSpeed;
-            player.dashCD = data.dashCD;
-            player.movementSpeed = data.movementSpeed;
-            player.jumpForce = data.jumpForce;
-            player.maxHP = data.maxHP;
+            player.dashSpeedPermanent = data.dashSpeed;
+            player.dashCDPermanent = data.dashCD;
+            player.movementSpeedPermanent = data.movementSpeed;
+            player.jumpForcePermanent = data.jumpForce;
+            player.maxHPpermanent = data.maxHP;
+            player.money = data.money;
         }
     }
 
@@ -39,9 +41,9 @@ public class SaveSystem : MonoBehaviour
     {
         PlayerSpellData data = new PlayerSpellData
         {
-            spellSpeed = playerSpell.spellSpeed,
-            cooldownTime = playerSpell.cooldownTime,
-            damage = playerSpell.damage
+            spellSpeed = playerSpell.spellSpeedPermanent,
+            cooldownTime = playerSpell.cooldownTimePermanent,
+            damage = playerSpell.damagePermanent
         };
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(spellPath, json);
@@ -55,11 +57,35 @@ public class SaveSystem : MonoBehaviour
             PlayerSpellData data = JsonUtility.FromJson<PlayerSpellData>(json);
             if (playerSpell != null)
             {
-                playerSpell.cooldownTime = data.cooldownTime;
-                playerSpell.spellSpeed = data.spellSpeed;
-                playerSpell.damage = data.damage;
+                playerSpell.cooldownTimePermanent = data.cooldownTime;
+                playerSpell.spellSpeedPermanent = data.spellSpeed;
+                playerSpell.damagePermanent = data.damage;
             }
         }
+    }
+
+    public static void ResetStats()
+    {
+        PlayerData playerData = new PlayerData
+        {
+            dashSpeed = Player.DEF_DASH_SPEED,
+            dashCD = Player.DEF_DASH_CD,
+            movementSpeed = Player.DEF_MOVEMENT_SPEED,
+            jumpForce = Player.DEF_JUMP_FORCE,
+            maxHP = Player.DEF_MAX_HP,
+            money = Player.DEF_MONEY_AMOUNT
+        };
+        PlayerSpellData playerSpellData = new PlayerSpellData
+        {
+            spellSpeed = CastSpell.DEF_SPELL_SPEED,
+            cooldownTime = CastSpell.DEF_COOLDOWN_TIME,
+            damage = CastSpell.DEF_DAMAGE
+        };
+
+        string json = JsonUtility.ToJson(playerData, true);
+        File.WriteAllText(playerPath, json);
+        string jsonSpell = JsonUtility.ToJson(playerSpellData, true);
+        File.WriteAllText(spellPath, jsonSpell);
     }
 }
 

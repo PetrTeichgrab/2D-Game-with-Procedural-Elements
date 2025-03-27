@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -11,21 +12,42 @@ public class Player : Character
     private bool canDash = true;
     private bool isDashing;
 
+    public static float DEF_DASH_SPEED = 12f;
+    public static float DEF_DASH_TIME = 0.2f;
+    public static float DEF_DASH_CD = 3f;
+    public static float DEF_JUMP_FORCE = 5f;
+    public static float DEF_MOVEMENT_SPEED = 3f;
+    public static int DEF_MAX_HP = 100;
+    public static int DEF_MONEY_AMOUNT = 0;
+
     [SerializeField]
-    public float dashSpeed = 12f;
+    public float dashSpeedPermanent = DEF_DASH_SPEED;
+    public float dashSpeed = 0;
     [SerializeField]
-    public float dashTime = 0.2f;
+    public float dashTimePermanent = DEF_DASH_TIME;
+    public float dashTime = 0;
     [SerializeField]
-    public float dashCD = 1f;
+    public float dashCDPermanent = DEF_DASH_CD;
+    public float dashCD = 0;
+    [SerializeField]
+    public float jumpForcePermanent = DEF_JUMP_FORCE;
+    public float jumpForce = 0;
+    public float movementSpeedPermanent = DEF_MOVEMENT_SPEED;
+    public float movementSpeed = 0;
+    public bool hasMovementSpeedSpell;
+    public bool hasAttackSpeedSpell;
+    public bool hasHealthSpell;
+    public bool hasTimeslowSpell;
     [SerializeField]
     private StatusBar playerHpBar;
+
+    [SerializeField]
+    public int money = DEF_MONEY_AMOUNT;
 
     public float minDashCD = 0.8f;
 
     [SerializeField]
     private TrailRenderer trailRenderer;
-
-    public float movementSpeed = 2;
 
     public Rigidbody2D rb;
 
@@ -36,9 +58,6 @@ public class Player : Character
     private bool canDoubleJump = true;
     private bool isGrounded;
     private bool usesGravity = false;
-
-    [SerializeField]
-    public float jumpForce = 5f;
 
     [SerializeField]
     private Transform groundCheck;
@@ -55,16 +74,26 @@ public class Player : Character
 
     public bool isPlayerInUnderground;
 
+    public static Player Instance { get; private set; }
+
 
     void Start()
     {
         SaveSystem.LoadPlayer(this);
-        currentHP = maxHP;
+        currentHP = maxHPpermanent;
         isDead = false;
         colorCores = new List<ColorCore>();
         resetTrailRendered();
         DisableGravityMode();
         SetTransparency(1f);
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     void Update()
@@ -95,11 +124,49 @@ public class Player : Character
             Suicide();
         }
 
+        if (Input.GetKeyUp(KeyCode.Delete))
+        {
+            ResetStats();
+        }
+
         if (usesGravity && Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
         }
 
+    }
+
+    public void ResetStats()
+    {
+        dashSpeedPermanent = DEF_DASH_SPEED;
+        dashSpeed = 0;
+        dashTimePermanent = DEF_DASH_TIME;
+        dashTime = 0;
+        dashCDPermanent = DEF_DASH_CD;
+        dashCD = 0;
+        jumpForcePermanent = DEF_JUMP_FORCE;
+        jumpForce = 0;
+        movementSpeedPermanent = DEF_MOVEMENT_SPEED;
+        movementSpeed = 0;
+        money = DEF_MONEY_AMOUNT;
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
+        Debug.Log("Player money: " + money);
+    }
+
+    public void BoostMovementSpeedSpell(float speedBoost, float duration)
+    {
+        StartCoroutine(BoostMovementSpeedCoroutine(speedBoost, duration));
+    }
+
+    private IEnumerator BoostMovementSpeedCoroutine(float speedBoost, float duration)
+    {
+        movementSpeed += speedBoost;
+        yield return new WaitForSeconds(duration);
+        movementSpeed -= speedBoost; 
     }
 
     private void CheckGrounded()
@@ -115,7 +182,7 @@ public class Player : Character
 
     private void Suicide()
     {
-        TakeDamage(maxHP);
+        TakeDamage(maxHPpermanent);
     }
 
 
@@ -140,15 +207,15 @@ public class Player : Character
         canDash = false;
         isDashing = true;
 
-        rb.velocity = new Vector2(moveX, moveY).normalized * dashSpeed;
+        rb.velocity = new Vector2(moveX, moveY).normalized * dashSpeedPermanent;
         setTrailrendererForDash();
 
-        yield return new WaitForSeconds(dashTime);
+        yield return new WaitForSeconds(dashTimePermanent);
 
         resetTrailRendered();
         isDashing = false;
 
-        yield return new WaitForSeconds(dashCD);
+        yield return new WaitForSeconds(dashCDPermanent);
         canDash = true;
     }
 
@@ -156,11 +223,11 @@ public class Player : Character
     {
         if (usesGravity)
         {
-            rb.velocity = new Vector2(moveDirection.x * movementSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(moveDirection.x * (movementSpeedPermanent + movementSpeed), rb.velocity.y);
         }
         else
         {
-            rb.velocity = new Vector2(moveDirection.x * movementSpeed, moveDirection.y * movementSpeed);
+            rb.velocity = new Vector2(moveDirection.x * (movementSpeedPermanent + movementSpeed), moveDirection.y * (movementSpeedPermanent + movementSpeed));
         }
     }
 
@@ -168,11 +235,11 @@ public class Player : Character
     {
         if (isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForcePermanent);
         }
         else if (canDoubleJump)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForcePermanent);
             canDoubleJump = false;
         }
     }
@@ -278,7 +345,7 @@ public class Player : Character
     }
     public void Respawn()
     {
-        currentHP = maxHP/2;
+        currentHP = maxHPpermanent/2;
         isAlive = true;
         transform.position = deathPosition;
         deathPosition = Vector3.zero;
@@ -312,7 +379,16 @@ public class Player : Character
 
     public void ReduceDashCD(float duration)
     {
-        if(dashCD - duration >= minDashCD)
+        if(dashCDPermanent - duration >= minDashCD)
+        {
+            return;
+        }
+        dashCDPermanent -= duration;
+    }
+
+    public void ReduceDashCDPermanent(float duration)
+    {
+        if (dashCD - duration >= minDashCD)
         {
             return;
         }

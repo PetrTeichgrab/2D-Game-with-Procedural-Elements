@@ -16,7 +16,9 @@ public class PlayerSpellBehavior : SpellBehavior
             Character character = collision.gameObject.GetComponent<Character>();
             if (character != null)
             {
-                character.TakeDamage(spell.damage);
+                int damage = spell.damagePermanent + spell.damage;
+                character.TakeDamage(damage);
+                Debug.Log("Davam damage " + damage);
             }
         }
 

@@ -47,13 +47,6 @@ public class PinkDungeon : DungeonBehaviour
     [SerializeField]
     PinkColorCore pinkColorCore;
 
-    [SerializeField]
-    GreenColorCore greenColorCore;
-
-    [SerializeField]
-    BlueColorCore blueColorCore;
-
-
     private EnemyMushroomPinkBoss PinkMushroomBossInstance { get; set; }
 
     Dungeon pinkDungeon;
@@ -76,9 +69,6 @@ public class PinkDungeon : DungeonBehaviour
                 tempTransformObject.transform.position = blueSpawnPosition;
 
                 StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, pinkColorCore, spawnTransform));
-                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, blueColorCore, tempTransformObject.transform));
-                StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, greenColorCore, tempTransformObject2.transform));
-
 
                 Destroy(tempTransformObject, 2f);
                 Completed = true;

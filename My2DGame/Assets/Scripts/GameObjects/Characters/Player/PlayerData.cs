@@ -10,4 +10,5 @@ public class PlayerData
     public float movementSpeed;
     public float jumpForce;
     public int maxHP;
+    public int money;
 }

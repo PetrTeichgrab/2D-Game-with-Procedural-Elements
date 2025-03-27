@@ -64,7 +64,7 @@ public class LevelUpMenu : MonoBehaviour
             StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
         }
 
-        if (Input.GetKeyUp(KeyCode.H))
+        if (Input.GetKeyUp(KeyCode.M))
         {
             hasDisplayedLevelUp = true;
             StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
@@ -164,21 +164,20 @@ public class LevelUpMenu : MonoBehaviour
         switch (colorCore.color)
         {
             case DungeonColor.Pink:
-                player.maxHP += 10;
-                player.currentHP = player.maxHP;
+                player.maxHPpermanent += 10;
+                player.currentHP = player.maxHPpermanent;
                 break;
             case DungeonColor.Blue:
-                player.movementSpeed += 0.6f;
+                player.movementSpeedPermanent += 0.6f;
                 break;
             case DungeonColor.Green:
-                spellCasting.ReduceCooldown(0.1f);
-                spellCasting.IncreaseDamage();
+                spellCasting.ReduceCooldownPermanent(1.25f);
                 break;
             case DungeonColor.LightGreen:
-                spellCasting.IncreaseDamage();
+                spellCasting.IncreaseDamagePermanent();
                 break;
             case DungeonColor.Purple:
-                player.ReduceDashCD(0.2f);
+                player.ReduceDashCDPermanent(0.2f);
                 break;
 
         }
