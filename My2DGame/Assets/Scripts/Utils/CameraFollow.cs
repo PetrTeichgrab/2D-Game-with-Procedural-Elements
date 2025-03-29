@@ -1,61 +1,85 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;
-    public Vector3 offset = new Vector3(0, 5, -10);
-    public float smoothSpeed = 0.125f;
+    public Cinemachine.CinemachineVirtualCamera mainVirtualCamera;
+    public float zoomOutSize = 40f;
+    public float transitionTime = 2f;
+    public float stayDuration = 5f;
 
-    private Vector3 originalOffset;
+    private float originalSize;
     private Coroutine zoomCoroutine;
 
-    private void Start()
+    private void Awake()
     {
-        originalOffset = offset;
-        target = Player.Instance.transform;
+        if (mainVirtualCamera == null)
+        {
+            mainVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        }
     }
 
-    private void LateUpdate()
-    {
-        if (target == null) return;
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
-    }
-
-    public void ZoomOutTemporarily(Vector3 zoomedOutOffset, float duration, float transitionTime = 1f)
+    public void ActivateZoomOut()
     {
         if (zoomCoroutine != null)
             StopCoroutine(zoomCoroutine);
 
-        zoomCoroutine = StartCoroutine(ZoomCoroutine(zoomedOutOffset, duration, transitionTime));
+        zoomCoroutine = StartCoroutine(ZoomOutCoroutine());
     }
 
-    private IEnumerator ZoomCoroutine(Vector3 zoomedOutOffset, float duration, float transitionTime)
+    private IEnumerator ZoomOutCoroutine()
     {
-        Vector3 startOffset = offset;
-
-        float t = 0;
-        while (t < 1)
+        if (mainVirtualCamera == null)
         {
-            offset = Vector3.Lerp(startOffset, zoomedOutOffset, t);
-            t += Time.deltaTime / transitionTime;
+            Debug.LogWarning("Virtual Camera not assigned!");
+            yield break;
+        }
+
+        var lens = mainVirtualCamera.m_Lens;
+
+        originalSize = lens.Orthographic ? lens.OrthographicSize : lens.FieldOfView;
+        float targetSize = zoomOutSize;
+
+        yield return ZoomCamera(originalSize, targetSize, transitionTime);
+
+        yield return new WaitForSeconds(stayDuration);
+
+        yield return ZoomCamera(targetSize, originalSize, transitionTime);
+    }
+
+    private IEnumerator ZoomCamera(float from, float to, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            float current = Mathf.Lerp(from, to, t);
+
+            if (mainVirtualCamera.m_Lens.Orthographic)
+            {
+                mainVirtualCamera.m_Lens.OrthographicSize = current;
+            }
+            else
+            {
+                mainVirtualCamera.m_Lens.FieldOfView = current;
+            }
+
+            Debug.Log("Zooming: " + current);
+
             yield return null;
         }
-        offset = zoomedOutOffset;
 
-        yield return new WaitForSeconds(duration);
-
-        t = 0;
-        while (t < 1)
+        if (mainVirtualCamera.m_Lens.Orthographic)
         {
-            offset = Vector3.Lerp(zoomedOutOffset, originalOffset, t);
-            t += Time.deltaTime / transitionTime;
-            yield return null;
+            mainVirtualCamera.m_Lens.OrthographicSize = to;
         }
-        offset = originalOffset;
+        else
+        {
+            mainVirtualCamera.m_Lens.FieldOfView = to;
+        }
     }
 }
 

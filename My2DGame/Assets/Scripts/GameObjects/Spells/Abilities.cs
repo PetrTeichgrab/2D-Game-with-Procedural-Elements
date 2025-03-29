@@ -39,10 +39,11 @@ public class Abilities : MonoBehaviour
 
     private void Start()
     {
-        abilityImage1.fillAmount = 0;
-        abilityImage2.fillAmount = 0;
-        abilityImage3.fillAmount = 0;
-        abilityImage4.fillAmount = 0;
+        abilityImage1.fillAmount = player.hasMovementSpeedSpell ? 0 : 1;
+        abilityImage2.fillAmount = player.hasHealSpell ? 0 : 1; ;
+        abilityImage3.fillAmount = player.hasAttackSpeedSpell ? 0 : 1; ;
+        abilityImage4.fillAmount = player.hasTimeSlowSpell ? 0 : 1; ;
+        abilityImage5.fillAmount = 0;
 
         UpdateAbilityVisibility();
     }
@@ -94,11 +95,6 @@ public class Abilities : MonoBehaviour
 
     private void Ability2()
     {
-        if (!player.hasAttackSpeedSpell)
-        {
-            abilityImage2.fillAmount = 1;
-        }
-
         if (player.hasAttackSpeedSpell && Input.GetKeyDown(ability2) && !isCooldown2)
         {
             isCooldown2 = true;
@@ -164,9 +160,20 @@ public class Abilities : MonoBehaviour
     {
         if (Input.GetKeyDown(ability5) && !isCooldown5)
         {
-            isCooldown4 = true;
-            abilityImage4.fillAmount = 1;
+            isCooldown5 = true;
+            abilityImage5.fillAmount = 1;
             ActivateCameraZoomSpell();
+        }
+
+        if (isCooldown5)
+        {
+            abilityImage5.fillAmount -= 1 / cooldown5 * Time.deltaTime;
+
+            if (abilityImage5.fillAmount <= 0)
+            {
+                abilityImage5.fillAmount = 0;
+                isCooldown5 = false;
+            }
         }
 
     }
@@ -176,8 +183,7 @@ public class Abilities : MonoBehaviour
         CameraFollow cam = Camera.main.GetComponent<CameraFollow>();
         if (cam != null)
         {
-            Vector3 zoomedOutOffset = new Vector3(0, 10f, -20f);
-            cam.ZoomOutTemporarily(zoomedOutOffset, duration: 5f, transitionTime: 1f);
+            cam.ActivateZoomOut();
         }
     }
 
