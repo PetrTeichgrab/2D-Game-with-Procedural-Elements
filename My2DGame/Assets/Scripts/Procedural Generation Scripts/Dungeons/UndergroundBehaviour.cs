@@ -29,6 +29,10 @@ public class UndergroundBehaviour : DungeonBehaviour
 
     private void Update()
     {
+        Debug.Log(!Player.isPlayerInUnderground);
+
+        Debug.Log("Is Player Alive: " + Player.isAlive);
+
         if (!Player.isPlayerInUnderground && !Player.isAlive)
         {
             InitDungeon();

@@ -36,8 +36,8 @@ public class Player : Character
     public float movementSpeed = 0;
     public bool hasMovementSpeedSpell;
     public bool hasAttackSpeedSpell;
-    public bool hasHealthSpell;
-    public bool hasTimeslowSpell;
+    public bool hasHealSpell;
+    public bool hasTimeSlowSpell;
     [SerializeField]
     private StatusBar playerHpBar;
 
@@ -74,6 +74,8 @@ public class Player : Character
 
     public bool isPlayerInUnderground;
 
+    public CastSpell spell;
+
     public static Player Instance { get; private set; }
 
 
@@ -94,6 +96,7 @@ public class Player : Character
         {
             Instance = this;
         }
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     void Update()
@@ -162,11 +165,40 @@ public class Player : Character
         StartCoroutine(BoostMovementSpeedCoroutine(speedBoost, duration));
     }
 
+    public void BoostAttackSpeedSpell(float cooldownReduction, float duration)
+    {
+        StartCoroutine(BoostAttackSpeed(cooldownReduction, duration));
+    }
+
+    public void HealSpell()
+    {
+        currentHP += maxHPpermanent/3;
+    }
+
+    public void TimeSlowSpell(float duration)
+    {
+        StartCoroutine(TimeSlowCoroutine(duration));
+    }
+
+    private IEnumerator TimeSlowCoroutine(float duration)
+    {
+        Time.timeScale = 0.4f;
+        yield return new WaitForSeconds(duration);
+        Time.timeScale = 1f;
+    }
+
     private IEnumerator BoostMovementSpeedCoroutine(float speedBoost, float duration)
     {
         movementSpeed += speedBoost;
         yield return new WaitForSeconds(duration);
         movementSpeed -= speedBoost; 
+    }
+
+    private IEnumerator BoostAttackSpeed(float cooldownReduction, float duration)
+    {
+        spell.cooldownTime -= cooldownReduction;
+        yield return new WaitForSeconds(duration);
+        spell.cooldownTime += cooldownReduction;
     }
 
     private void CheckGrounded()
@@ -323,8 +355,8 @@ public class Player : Character
         if (currentHP <= 0)
         {
             deathPosition = transform.position;
-            audioManager.PlaySFX(audioManager.Death);
             isAlive = false;
+            audioManager.PlaySFX(audioManager.Death);
         }
     }
 
