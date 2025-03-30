@@ -8,7 +8,7 @@ public abstract class MeleeEnemy : Character
     public float approachDistance;
     public int attackMaxCD;
     public int attackMinCD;
-    public int damage = 5;
+    public int damage = 10;
     public float dashTime;
     public float dashSpeed;
     public Collider2D characterCollider;

@@ -146,7 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 4
   projectileMaxLifeTime: 4
-  hitEffect: {fileID: 7834466692352800024, guid: fd4f0e7e8cc180449a8acc9729445040, type: 3}
+  hitEffect: {fileID: 5698847610394566747, guid: 5e80cdec505e9484dbbf0dc9e051e0bf, type: 3}
 --- !u!58 &5729204180217428237
 CircleCollider2D:
   m_ObjectHideFlags: 0

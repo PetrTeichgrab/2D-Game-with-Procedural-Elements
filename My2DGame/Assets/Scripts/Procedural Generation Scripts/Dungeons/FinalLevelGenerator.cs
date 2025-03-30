@@ -53,9 +53,12 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private AudioManager audioManager;
 
+    private bool isTeleportedToFinalLevel;
+
     private void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        isTeleportedToFinalLevel = false;
     }
 
     private void Update()
@@ -75,10 +78,21 @@ public class FinalLevelGenerator : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+
+        if (countdown.CountdownFinished)
         {
+            AlertText.Instance.ShowAlert("HOPE YOU MAKE IT NEXT TIME!");
+            player.isDead = true;
+            SaveSystem.SavePlayer(player);
+            audioManager.StopTickingSound();
+            isTeleportedToFinalLevel = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.G) && !isTeleportedToFinalLevel && player.HasAllColorCores())
+        {
+            isTeleportedToFinalLevel = true;
             PlacePlayerRandomly(player);
-            countdown.remainingTime = 240;
+            countdown.remainingTime = 300;
             countdown.StartCountdown = true;
             countdown.isCountdownForFinalLevel = true;
             AlertText.Instance.ShowAlert("PLACE ALL COLOR CORES TO THEIR RIGHT PLACE! CAREFUL! YOUR TIME IS LIMITED!", 5f);

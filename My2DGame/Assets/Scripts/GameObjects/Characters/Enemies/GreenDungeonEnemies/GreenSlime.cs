@@ -44,7 +44,7 @@ public class GreenSlime : MeleeEnemy
             if (character != null && isAlive)
             {
                 animator.SetTrigger("attack");
-                character.TakeDamage(10);
+                character.TakeDamage(damage);
             }
         }
     }

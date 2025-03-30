@@ -6,6 +6,7 @@ public class EnemyShoot : MonoBehaviour
 {
     public float projectileSpeed;
     public float projectileMaxLifeTime;
+    public int damage = 15;
     public GameObject hitEffect;
     protected Transform player;
     protected Vector2 target;
@@ -38,7 +39,7 @@ public class EnemyShoot : MonoBehaviour
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null)
             {
-                character.TakeDamage(10);
+                character.TakeDamage(damage);
             }
         }
 
