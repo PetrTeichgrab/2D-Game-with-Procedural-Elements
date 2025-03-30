@@ -61,16 +61,9 @@ public class PinkDungeon : DungeonBehaviour
                 Vector3 offset2 = new Vector3(1f, 0f, 0f);
 
                 UnityEngine.Transform spawnTransform = PinkMushroomBossInstance.transform;
-                Vector3 blueSpawnPosition = spawnTransform.position + offset;
-                Vector3 greenSpawnPosition = spawnTransform.position + offset2;
-
-                GameObject tempTransformObject = new GameObject("TempBlueSpawn");
-                GameObject tempTransformObject2 = new GameObject("TempGreenSpawn");
-                tempTransformObject.transform.position = blueSpawnPosition;
 
                 StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, pinkColorCore, spawnTransform));
 
-                Destroy(tempTransformObject, 2f);
                 Completed = true;
             }
         }
