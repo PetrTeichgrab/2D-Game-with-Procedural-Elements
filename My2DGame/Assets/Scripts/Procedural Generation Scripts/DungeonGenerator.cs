@@ -115,8 +115,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         ClearGeneratedObjects();
         allEnemiesList.Clear();
         allItems.Clear();
-        CreateSingleDungeonAndSplit();
-        //CreateDungeons();
+        CreateDungeons();
         //pinkDungeon.Create();
         //blueDungeon.Create();
         //greenDungeon.Create();
@@ -125,176 +124,113 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         //finalLevel.PlacePlayerRandomly(Player);
     }
 
-    //private void CreateDungeons()
-    //{
-    //    int maxAttempts = 10; // Maximální poèet pokusù pøed zvìtšením mapy
-    //    int maxSizeIncrements = 10; // Kolikrát mùžeme zvìtšit mapu
-    //    int sizeIncrement = 10; // O kolik zvìtšíme mapu pøi každém neúspìchu
-
-    //    int mapSizeX = mapSize.x;
-    //    int mapSizeY = mapSize.y;
-
-    //    HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
-
-    //    for (int i = 0; i < maxSizeIncrements; i++)
-    //    {
-    //        for (int attempts = 0; attempts < maxAttempts; attempts++)
-    //        {
-    //            dungeonList = ProceduralGenerationAlgorithms.BSP(
-    //                new BoundsInt(Vector3Int.zero, new Vector3Int(mapSizeX, mapSizeY, 0)),
-    //                dungeonWidth,
-    //                dungeonHeight,
-    //                dungeonsCount
-    //            );
-
-
-    //            if (dungeonList.Count >= dungeonsCount-1)
-    //            {
-    //                break;
-    //            }
-    //        }
-
-    //        if (dungeonList.Count >= dungeonsCount-1)
-    //        {
-    //            break;
-    //        }
-
-    //        mapSizeX += sizeIncrement;
-    //        mapSizeY += sizeIncrement;
-    //        Debug.LogWarning($"Zvìtšuji mapu na {mapSizeX}x{mapSizeY} pro lepší generování dungeonù.");
-    //    }
-
-    //    if (dungeonList.Count < 5)
-    //    {
-    //        Debug.LogError("Nepodaøilo se vygenerovat minimálnì 5 dungeonù ani po zvìtšení mapy!");
-    //    }
-
-    //    List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList)
-    //        .OrderByDescending(bounds => bounds.size.x * bounds.size.y)
-    //        .ToList();
-
-    //    List<Dungeon> createdDungeonsList = new List<Dungeon>();
-
-    //    if (dungeons.Count > 0)
-    //    {
-    //        GreenDungeon = new Dungeon(dungeons[0], DungeonColor.Green);
-    //        GreenDungeon.parameters = greenDungeonParameters;
-    //        InitDungeon(GreenDungeon);
-    //        createdDungeonsList.Add(GreenDungeon);
-    //        dungeons.RemoveAt(0);
-    //    }
-
-    //    if (dungeons.Count > 0)
-    //    {
-    //        PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
-    //        PinkDungeon.parameters = pinkDungeonParameters;
-    //        InitDungeon(PinkDungeon);
-    //        createdDungeonsList.Add(PinkDungeon);
-    //        dungeons.RemoveAt(0);
-    //    }
-
-    //    if (dungeons.Count > 0)
-    //    {
-    //        BlueDungeon = new Dungeon(dungeons[0], DungeonColor.Blue);
-    //        BlueDungeon.parameters = blueDungeonParameters;
-    //        InitDungeon(BlueDungeon);
-    //        createdDungeonsList.Add(BlueDungeon);
-    //        dungeons.RemoveAt(0);
-    //    }
-
-    //    if (dungeons.Count > 0)
-    //    {
-    //        PurpleDungeon = new Dungeon(dungeons[0], DungeonColor.Purple);
-    //        PurpleDungeon.parameters = purpleDungeonParameters;
-    //        InitDungeon(PurpleDungeon);
-    //        createdDungeonsList.Add(PurpleDungeon);
-    //        dungeons.RemoveAt(0);
-    //    }
-
-    //    foreach (var dungeon in createdDungeonsList)
-    //    {
-    //        var nearestDungeon = FindNearestBounds(dungeon, createdDungeonsList);
-    //        if (nearestDungeon != null && !dungeon.connectedDungeons.Contains(nearestDungeon))
-    //        {
-    //            ConnectDungeons(dungeon, nearestDungeon);
-    //        }
-    //    }
-
-    //    if (PinkDungeon != null) tileMap.DrawFloor(PinkDungeon);
-    //    if (BlueDungeon != null) tileMap.DrawFloor(BlueDungeon);
-    //    if (GreenDungeon != null) tileMap.DrawFloor(GreenDungeon);
-    //    if (PurpleDungeon != null) tileMap.DrawFloor(PurpleDungeon);
-
-    //    if (PinkDungeon != null) WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
-    //    if (BlueDungeon != null) WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
-    //    if (GreenDungeon != null) WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
-    //    if (PurpleDungeon != null) WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
-
-    //    DrawDungeonBounds(dungeonList.ToList());
-    //}
-
-    private void CreateSingleDungeonAndSplit()
+    private void CreateDungeons()
     {
-        // 1. Vytvoøení jednoho velkého dungeonu
-        Dungeon mainDungeon = new Dungeon(new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)), DungeonColor.None);
-        mainDungeon.parameters = greenDungeonParameters; // Mùžeš zvolit jakýkoliv defaultní parametr
+        int maxAttempts = 10; // Maximální poèet pokusù pøed zvìtšením mapy
+        int maxSizeIncrements = 10; // Kolikrát mùžeme zvìtšit mapu
+        int sizeIncrement = 10; // O kolik zvìtšíme mapu pøi každém neúspìchu
 
-        InitDungeon(mainDungeon); // Vytvoøí floor a místnosti
+        int mapSizeX = mapSize.x;
+        int mapSizeY = mapSize.y;
 
-        // 2. Rozdìlení na oblasti pomocí BSP
-        var areas = ProceduralGenerationAlgorithms.BSP(
-            new BoundsInt(Vector3Int.zero, new Vector3Int(mapSize.x, mapSize.y, 0)),
-            dungeonWidth,
-            dungeonHeight,
-            dungeonsCount
-        ).ToList();
+        HashSet<BoundsInt> dungeonList = new HashSet<BoundsInt>();
 
-        // 3. Rozdìlení podlahy mezi oblasti
-        List<HashSet<Vector2Int>> regionFloors = new List<HashSet<Vector2Int>>();
-        foreach (var area in areas)
+        for (int i = 0; i < maxSizeIncrements; i++)
         {
-            var region = new HashSet<Vector2Int>(mainDungeon.Floor.FloorList.Where(pos => area.Contains((Vector3Int)pos)));
-            regionFloors.Add(region);
+            for (int attempts = 0; attempts < maxAttempts; attempts++)
+            {
+                dungeonList = ProceduralGenerationAlgorithms.BSP(
+                    new BoundsInt(Vector3Int.zero, new Vector3Int(mapSizeX, mapSizeY, 0)),
+                    dungeonWidth,
+                    dungeonHeight,
+                    dungeonsCount
+                );
+
+
+                if (dungeonList.Count >= dungeonsCount - 1)
+                {
+                    break;
+                }
+            }
+
+            if (dungeonList.Count >= dungeonsCount - 1)
+            {
+                break;
+            }
+
+            mapSizeX += sizeIncrement;
+            mapSizeY += sizeIncrement;
+            Debug.LogWarning($"Zvìtšuji mapu na {mapSizeX}x{mapSizeY} pro lepší generování dungeonù.");
         }
 
-        // 4. Vytvoøení barevných dungeonù bez spojení
-        if (regionFloors.Count > 0)
+        if (dungeonList.Count < 5)
         {
-            GreenDungeon = new Dungeon(areas[0], DungeonColor.Green);
-            GreenDungeon.Floor.FloorList = regionFloors[0];
-            WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
-            tileMap.DrawFloor(GreenDungeon);
+            Debug.LogError("Nepodaøilo se vygenerovat minimálnì 5 dungeonù ani po zvìtšení mapy!");
         }
 
-        if (regionFloors.Count > 1)
+        List<BoundsInt> dungeons = new List<BoundsInt>(dungeonList)
+            .OrderByDescending(bounds => bounds.size.x * bounds.size.y)
+            .ToList();
+
+        List<Dungeon> createdDungeonsList = new List<Dungeon>();
+
+        if (dungeons.Count > 0)
         {
-            PinkDungeon = new Dungeon(areas[1], DungeonColor.Pink);
-            PinkDungeon.Floor.FloorList = regionFloors[1];
-            WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
-            tileMap.DrawFloor(PinkDungeon);
+            GreenDungeon = new Dungeon(dungeons[0], DungeonColor.Green);
+            GreenDungeon.parameters = greenDungeonParameters;
+            InitDungeon(GreenDungeon);
+            createdDungeonsList.Add(GreenDungeon);
+            dungeons.RemoveAt(0);
         }
 
-        if (regionFloors.Count > 2)
+        if (dungeons.Count > 0)
         {
-            BlueDungeon = new Dungeon(areas[2], DungeonColor.Blue);
-            BlueDungeon.Floor.FloorList = regionFloors[2];
-            WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
-            tileMap.DrawFloor(BlueDungeon);
+            PinkDungeon = new Dungeon(dungeons[0], DungeonColor.Pink);
+            PinkDungeon.parameters = pinkDungeonParameters;
+            InitDungeon(PinkDungeon);
+            createdDungeonsList.Add(PinkDungeon);
+            dungeons.RemoveAt(0);
         }
 
-        if (regionFloors.Count > 3)
+        if (dungeons.Count > 0)
         {
-            PurpleDungeon = new Dungeon(areas[3], DungeonColor.Purple);
-            PurpleDungeon.Floor.FloorList = regionFloors[3];
-            WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
-            tileMap.DrawFloor(PurpleDungeon);
+            BlueDungeon = new Dungeon(dungeons[0], DungeonColor.Blue);
+            BlueDungeon.parameters = blueDungeonParameters;
+            InitDungeon(BlueDungeon);
+            createdDungeonsList.Add(BlueDungeon);
+            dungeons.RemoveAt(0);
         }
 
-        DrawDungeonBounds(areas);
+        if (dungeons.Count > 0)
+        {
+            PurpleDungeon = new Dungeon(dungeons[0], DungeonColor.Purple);
+            PurpleDungeon.parameters = purpleDungeonParameters;
+            InitDungeon(PurpleDungeon);
+            createdDungeonsList.Add(PurpleDungeon);
+            dungeons.RemoveAt(0);
+        }
+
+        foreach (var dungeon in createdDungeonsList)
+        {
+            var nearestDungeon = FindNearestBounds(dungeon, createdDungeonsList);
+            if (nearestDungeon != null && !dungeon.connectedDungeons.Contains(nearestDungeon))
+            {
+                ConnectDungeons(dungeon, nearestDungeon);
+            }
+        }
+
+        if (PinkDungeon != null) tileMap.DrawFloor(PinkDungeon);
+        if (BlueDungeon != null) tileMap.DrawFloor(BlueDungeon);
+        if (GreenDungeon != null) tileMap.DrawFloor(GreenDungeon);
+        if (PurpleDungeon != null) tileMap.DrawFloor(PurpleDungeon);
+
+        if (PinkDungeon != null) WallGenerator.CreateAndDrawWalls(PinkDungeon, tileMap);
+        if (BlueDungeon != null) WallGenerator.CreateAndDrawWalls(BlueDungeon, tileMap);
+        if (GreenDungeon != null) WallGenerator.CreateAndDrawWalls(GreenDungeon, tileMap);
+        if (PurpleDungeon != null) WallGenerator.CreateAndDrawWalls(PurpleDungeon, tileMap);
+
+        DrawDungeonBounds(dungeonList.ToList());
     }
-
-
-
 
     private void DrawDungeonBounds(List<BoundsInt> dungeons)
     {
