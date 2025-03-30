@@ -18,7 +18,6 @@ public class PlayerSpellBehavior : SpellBehavior
             {
                 int damage = spell.damagePermanent + spell.damage;
                 character.TakeDamage(damage);
-                Debug.Log("Davam damage " + damage);
             }
         }
 

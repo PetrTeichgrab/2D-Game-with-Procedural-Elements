@@ -157,7 +157,6 @@ public class Player : Character
     public void AddMoney(int amount)
     {
         money += amount;
-        Debug.Log("Player money: " + money);
     }
 
     public void BoostMovementSpeedSpell(float speedBoost, float duration)

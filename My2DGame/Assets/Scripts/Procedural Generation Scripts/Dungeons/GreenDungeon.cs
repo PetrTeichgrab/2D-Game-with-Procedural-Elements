@@ -135,13 +135,14 @@ public class GreenDungeon : DungeonBehaviour
 
     private void GenerateStaticDungeon()
     {
+        portal = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal, greenDungeon, 2, 2, 1);
         GreenMushroomBossInstance = Instantiate(this.greenMushroomBoss, this.greenMushroomBoss.transform.position,
         this.greenMushroomBoss.transform.rotation);
         generator.setBossToRandomRoom(GreenMushroomBossInstance, greenDungeon, 2, 2);
         GreenSlimeBossInstance = Instantiate(this.greenSlimeBoss, this.greenSlimeBoss.transform.position,
         this.greenSlimeBoss.transform.rotation);
         generator.setBossToRandomRoom(GreenSlimeBossInstance, greenDungeon, 2, 2);
-        //generator.Player.transform.position = new Vector3(GreenMushroomBossInstance.Position.x + 5, GreenMushroomBossInstance.Position.y + 5);
         foreach (var room in greenDungeon.RoomList)
         {
             bool isBrightTreeType = UnityEngine.Random.value > 0.5f;

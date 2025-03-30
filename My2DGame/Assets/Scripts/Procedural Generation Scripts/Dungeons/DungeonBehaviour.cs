@@ -6,6 +6,11 @@ using UnityEngine;
 
 public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
 {
+    [SerializeField]
+    protected Item portalPrefab;
+
+    [SerializeField]
+    public Item portal;
     public bool Completed {  get; set; }
 
     protected void HandleBossInstance(Character bossInstance, ColorCore colorCore)
@@ -15,6 +20,14 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
             StartCoroutine(CallSpawnColorCoreAfterDelay(1.2f, colorCore, bossInstance.transform));
         }
     }
+
+    public void LinkPortalTo(DungeonBehaviour target)
+    {
+        var portalBehaviour = portal.GetComponent<PortalBehaviour>();
+        portalBehaviour.TargetDungeon = target;
+        portalBehaviour.TargetPosition = target.portal.transform;
+    }
+
 
     private int CalculateEnemyCount(int floorCount, int baseCount, float scalingFactor, int minCount, int maxCount)
     {
@@ -38,8 +51,8 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
                 continue;
             }
 
-            int enemiesPerType = Mathf.Max(1, enemyCount / enemyConfigs.Count); // Poèet nepøátel na typ
-            int remainingEnemies = enemyCount; // Pro pøípad nerovnomìrného dìlení
+            int enemiesPerType = Mathf.Max(1, enemyCount / enemyConfigs.Count);
+            int remainingEnemies = enemyCount;
 
             foreach (var (prefab, positionSetter) in enemyConfigs)
             {

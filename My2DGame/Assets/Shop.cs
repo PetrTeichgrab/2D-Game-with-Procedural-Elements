@@ -39,7 +39,6 @@ public class Shop : MonoBehaviour
 
     private void CloseShop()
     {
-        Debug.Log("Shop zavøen");
         gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
@@ -50,7 +49,6 @@ public class Shop : MonoBehaviour
         {
             player.money -= MOVEMENT_SPEED_SPELL_PRICE;
             player.hasMovementSpeedSpell = true;
-            Debug.Log("Koupen spell na movement speed");
             buyMovementSpeedSpellBtn.interactable = false;
         }
     }
@@ -61,7 +59,6 @@ public class Shop : MonoBehaviour
         {
             player.money -= ATTACK_SPEED_SPELL_PRICE;
             player.hasAttackSpeedSpell = true;
-            Debug.Log("Koupen spell na attack speed");
             buyAttackSpeedSpellBtn.interactable = false;
         }
     }
@@ -72,7 +69,6 @@ public class Shop : MonoBehaviour
         {
             player.money -= HEAL_SPELL_PRICE;
             player.hasHealSpell = true;
-            Debug.Log("Koupen heal spell");
             buyHealSpellBtn.interactable = false;
         }
     }
@@ -83,7 +79,6 @@ public class Shop : MonoBehaviour
         {
             player.money -= TIMESLOW_SPELL_PRICE;
             player.hasTimeSlowSpell = true;
-            Debug.Log("Koupen spell na zpomalení èasu");
             buyTimeSlowSpellBtn.interactable = false;
         }
     }

@@ -55,8 +55,6 @@ public class CastSpell : MonoBehaviour
                 audioManager.PlaySFX(audioManager.playerSpell);
                 lastCastTime = Time.time;
             }
-            Debug.Log(player.movementSpeedPermanent);
-            Debug.Log(damagePermanent);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete))
@@ -79,7 +77,6 @@ public class CastSpell : MonoBehaviour
     {
         if (spellObject == null)
         {
-            Debug.LogWarning("spellObject je null!");
             return;
         }
 

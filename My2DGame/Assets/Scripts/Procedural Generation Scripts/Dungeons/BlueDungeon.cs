@@ -91,11 +91,12 @@ public class BlueDungeon : DungeonBehaviour
 
     public override void CreateAndSetPositions()
     {
+        portal = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal, blueDungeon, 2, 2, 1);
         // Inicializace hlavního bosse
         BlueBossSlimeInstance = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position,
                 this.blueBossSlime.transform.rotation);
         generator.setBossToRandomRoom(BlueBossSlimeInstance, blueDungeon, 2, 2);
-        generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
 
         // Seznam konfigurací pro generování objektù specifikovaných typem Item
         var itemConfigs = new List<(Item prefab, Action<Item> positionSetter, int count)>()
@@ -111,6 +112,8 @@ public class BlueDungeon : DungeonBehaviour
 
         GenerateObjects(itemConfigs);
         GenerateEnemies(blueDungeon, enemyConfigs);
+        generator.Player.transform.position = new Vector3(portal.Position.x + 1, portal.Position.y + 1);
+
     }
 
     private void StartSnowEffect()

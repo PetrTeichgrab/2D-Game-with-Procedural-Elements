@@ -93,13 +93,16 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
     private int offset = 1;
 
     [SerializeField]
-    PinkDungeon pinkDungeon;
+    PinkDungeon pinkDungeonBehaviour;
 
     [SerializeField]
-    BlueDungeon blueDungeon;
+    BlueDungeon blueDungeonBehaviour;
 
     [SerializeField]
-    GreenDungeon greenDungeon;
+    GreenDungeon greenDungeonBehaviour;
+
+    [SerializeField]
+    PurpleDungeon purpleDungeonBehaviour;
 
     [SerializeField]
     private FinalLevelGenerator finalLevel;
@@ -116,12 +119,19 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         allEnemiesList.Clear();
         allItems.Clear();
         CreateDungeons();
-        //pinkDungeon.Create();
-        //blueDungeon.Create();
-        //greenDungeon.Create();
+        pinkDungeonBehaviour.Create();
+        blueDungeonBehaviour.Create();
+        greenDungeonBehaviour.Create();
+        purpleDungeonBehaviour.Create();
+        ConnectDungeons();
         //CreateUnderground();
         //CreateFinalLevel();
-        //finalLevel.PlacePlayerRandomly(Player);
+    }
+
+    public void ConnectDungeons()
+    {
+        pinkDungeonBehaviour.LinkPortalTo(blueDungeonBehaviour);
+        blueDungeonBehaviour.LinkPortalTo(pinkDungeonBehaviour);
     }
 
     private void CreateDungeons()
@@ -208,15 +218,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             InitDungeon(PurpleDungeon);
             createdDungeonsList.Add(PurpleDungeon);
             dungeons.RemoveAt(0);
-        }
-
-        foreach (var dungeon in createdDungeonsList)
-        {
-            var nearestDungeon = FindNearestBounds(dungeon, createdDungeonsList);
-            if (nearestDungeon != null && !dungeon.connectedDungeons.Contains(nearestDungeon))
-            {
-                ConnectDungeons(dungeon, nearestDungeon);
-            }
         }
 
         if (PinkDungeon != null) tileMap.DrawFloor(PinkDungeon);
