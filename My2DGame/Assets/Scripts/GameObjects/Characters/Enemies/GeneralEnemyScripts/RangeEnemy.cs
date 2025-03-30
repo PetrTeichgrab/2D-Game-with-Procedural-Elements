@@ -29,6 +29,10 @@ public abstract class RangeEnemy : Character
     protected float startTimeBetweenShots;
     [SerializeField]
     private float timeBetweenShots;
+    [SerializeField]
+    protected float appearenceDistance = 5f;
+    [SerializeField]
+    protected int amountOfProjectiles = 1;
 
     private void Start()
     {
@@ -114,16 +118,23 @@ public abstract class RangeEnemy : Character
         {
             float projectileDirX = Mathf.Cos(angle * Mathf.Deg2Rad);
             float projectileDirY = Mathf.Sin(angle * Mathf.Deg2Rad);
-            Vector2 spawnDirection = new Vector2(projectileDirX, projectileDirY).normalized;
+            Vector2 direction = new Vector2(projectileDirX, projectileDirY).normalized;
 
             var projectileObject = Instantiate(projectile, transform.position, Quaternion.identity);
             audioManager.PlaySFX(audioManager.EnemyAttackRange);
+
+            var mushroomProjectile = projectileObject.GetComponent<MushroomProjectile>();
+            if (mushroomProjectile != null)
+            {
+                mushroomProjectile.SetDirection(direction);
+            }
 
             Destroy(projectileObject, projectileMaxLifeTime);
 
             angle += angleStep;
         }
     }
+
 
 
 

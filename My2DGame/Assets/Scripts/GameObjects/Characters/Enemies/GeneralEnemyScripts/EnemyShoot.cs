@@ -10,7 +10,6 @@ public class EnemyShoot : MonoBehaviour
     public GameObject hitEffect;
     protected Transform player;
     protected Vector2 target;
-    private bool hasHit = false;
 
     protected void Start()
     {
@@ -44,12 +43,8 @@ public class EnemyShoot : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (hasHit) return;
-
         if (collision.gameObject.CompareTag("Player"))
         {
-            hasHit = true;
-
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null)
             {

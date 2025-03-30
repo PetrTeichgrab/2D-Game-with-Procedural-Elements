@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyMushroomGreenBoss : EnemyMushroomGreen
 {
-    private float shootCooldown = 1.5f;
-    private float lastShootTime = 0f;
     void Update()
     {
         basicBehaviour();
@@ -13,10 +11,6 @@ public class EnemyMushroomGreenBoss : EnemyMushroomGreen
 
     protected override void shootBehaviour()
     {
-        if (Time.time >= lastShootTime + shootCooldown)
-        {
-            ShootMultipleShotsInCircle(amountOfProjectiles, true);
-            lastShootTime = Time.time;
-        }
+        ShootMultipleShotsInCircle(amountOfProjectiles, true);
     }
 }

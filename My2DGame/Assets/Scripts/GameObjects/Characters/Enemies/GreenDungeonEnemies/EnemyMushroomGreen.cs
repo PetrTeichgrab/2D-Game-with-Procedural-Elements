@@ -5,13 +5,7 @@ using UnityEngine;
 
 public class EnemyMushroomGreen : RangeEnemy
 {
-    protected bool Appeard { get; set; } = false;
-
-    [SerializeField]
-     protected float appearenceDistance { get; set; } = 4f;
-
-    [SerializeField]
-    protected int amountOfProjectiles { get; set; } = 6; 
+    protected bool Appeard = false;
 
     void Update()
     {
