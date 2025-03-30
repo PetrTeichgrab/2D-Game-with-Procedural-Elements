@@ -146,23 +146,35 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
         ShuffleList(portals);
 
-        for (int i = 0; i < portals.Count - 1; i += 2)
+        for (int i = 0; i < portals.Count - 1; i++)
         {
             var portalA = portals[i];
-            var portalB = portals[i + 1];
-
-            var behaviourA = portalA.GetComponent<PortalBehaviour>();
-            var behaviourB = portalB.GetComponent<PortalBehaviour>();
-
             var dungeonA = FindDungeonByPortal(portalA);
-            var dungeonB = FindDungeonByPortal(portalB);
 
-            behaviourA.TargetDungeon = dungeonB;
-            behaviourA.TargetPosition = portalB.transform;
+            for (int j = i + 1; j < portals.Count; j++)
+            {
+                var portalB = portals[j];
+                var dungeonB = FindDungeonByPortal(portalB);
 
-            behaviourB.TargetDungeon = dungeonA;
-            behaviourB.TargetPosition = portalA.transform;
+                if (dungeonA != dungeonB)
+                {
+                    var behaviourA = portalA.GetComponent<PortalBehaviour>();
+                    var behaviourB = portalB.GetComponent<PortalBehaviour>();
+
+                    behaviourA.TargetDungeon = dungeonB;
+                    behaviourA.TargetPosition = portalB.transform;
+
+                    behaviourB.TargetDungeon = dungeonA;
+                    behaviourB.TargetPosition = portalA.transform;
+
+                    portals.RemoveAt(j);
+                    portals.RemoveAt(i);
+                    i--;
+                    break;
+                }
+            }
         }
+
     }
 
     private DungeonBehaviour FindDungeonByPortal(Item portal)

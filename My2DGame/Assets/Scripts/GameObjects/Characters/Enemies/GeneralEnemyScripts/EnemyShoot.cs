@@ -50,9 +50,9 @@ public class EnemyShoot : MonoBehaviour
             {
                 Debug.Log("Damage taken: " + damage);
                 character.TakeDamage(damage);
-                Destroy(gameObject);
             }
         }
+        Destroy(gameObject);
     }
 
 

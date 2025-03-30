@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CastSpell : MonoBehaviour
 {
-    public static int DEF_DAMAGE = 10;
+    public static int DEF_DAMAGE = 20;
     public static float DEF_SPELL_SPEED = 5;
     public static float DEF_COOLDOWN_TIME = 1.2f;
 

@@ -159,7 +159,7 @@ public class Player : Character
 
     public bool HasAllColorCores()
     {
-        return colorCores.Count == 5;
+        return colorCores.Count >= 4;
     }
 
     public void ResetStats()
