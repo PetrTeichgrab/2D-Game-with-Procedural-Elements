@@ -37,39 +37,34 @@ public class Abilities : MonoBehaviour
 
     [SerializeField] private Player player;
 
+    private AudioManager audioManager;
+
     private void Start()
     {
-        abilityImage1.fillAmount = player.hasMovementSpeedSpell ? 0 : 1;
-        abilityImage2.fillAmount = player.hasHealSpell ? 0 : 1; ;
-        abilityImage3.fillAmount = player.hasAttackSpeedSpell ? 0 : 1; ;
-        abilityImage4.fillAmount = player.hasTimeSlowSpell ? 0 : 1; ;
-        abilityImage5.fillAmount = 0;
+        UpdateSpellsVisibility();
 
-        UpdateAbilityVisibility();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     private void Update()
     {
-        Ability1();
-        Ability2();
-        Ability3();
-        Ability4();
-        Ability5();
+        if (!player.cantUseSpells)
+        {
+            Ability1();
+            Ability2();
+            Ability3();
+            Ability4();
+            Ability5();
+        }
     }
 
-    private void UpdateAbilityVisibility()
+    public void UpdateSpellsVisibility()
     {
-        SetAbilityImageState(abilityImage1, player.hasMovementSpeedSpell);
-        SetAbilityImageState(abilityImage2, player.hasAttackSpeedSpell);
-        SetAbilityImageState(abilityImage3, player.hasHealSpell);
-        SetAbilityImageState(abilityImage4, player.hasTimeSlowSpell);
-    }
-
-    private void SetAbilityImageState(Image image, bool isUnlocked)
-    {
-        Color color = image.color;
-        color.a = isUnlocked ? 1f : 0.3f;
-        image.color = color;
+        abilityImage1.fillAmount = player.hasMovementSpeedSpell ? 0 : 1;
+        abilityImage2.fillAmount = player.hasAttackSpeedSpell ? 0 : 1;
+        abilityImage3.fillAmount = player.hasHealSpell ? 0 : 1;
+        abilityImage4.fillAmount = player.hasTimeSlowSpell ? 0 : 1;
+        abilityImage5.fillAmount = 0;
     }
 
     private void Ability1()
@@ -112,6 +107,7 @@ public class Abilities : MonoBehaviour
                 isCooldown2 = false;
             }
         }
+
     }
 
     private void Ability3()
@@ -141,7 +137,7 @@ public class Abilities : MonoBehaviour
         {
             isCooldown4 = true;
             abilityImage4.fillAmount = 1;
-            player.TimeSlowSpell(3);
+            player.TimeSlowSpell(1.5f);
         }
 
         if (isCooldown4)
@@ -162,6 +158,7 @@ public class Abilities : MonoBehaviour
         {
             isCooldown5 = true;
             abilityImage5.fillAmount = 1;
+            audioManager.PlaySFX(audioManager.eagleEyeSpell);
             ActivateCameraZoomSpell();
         }
 

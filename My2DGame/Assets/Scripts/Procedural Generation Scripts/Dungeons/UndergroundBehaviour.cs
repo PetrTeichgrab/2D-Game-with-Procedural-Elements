@@ -26,16 +26,20 @@ public class UndergroundBehaviour : DungeonBehaviour
     private float cameraCooldown = 7f;
     private float lastCameraMoveTime = -Mathf.Infinity;
 
+    AudioManager audioManager;
+
+    private void Start()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
 
     private void Update()
     {
-        Debug.Log(!Player.isPlayerInUnderground);
-
-        Debug.Log("Is Player Alive: " + Player.isAlive);
-
         if (!Player.isPlayerInUnderground && !Player.isAlive)
         {
             InitDungeon();
+            AlertText.Instance.ShowAlert("FIND YOUR BODY!");
         }
 
         if (Input.GetKeyUp(KeyCode.F))
@@ -58,8 +62,12 @@ public class UndergroundBehaviour : DungeonBehaviour
 
         if (countdown.CountdownFinished)
         {
+            AlertText.Instance.ShowAlert("YOU DIED!");
             Player.isDead = true;
             SaveSystem.SavePlayer(Player);
+            countdown.isCountdownForUnderground = false;
+            Player.cantUseSpells = false;
+            audioManager.StopTickingSound();
         }
 
     }
@@ -73,6 +81,7 @@ public class UndergroundBehaviour : DungeonBehaviour
         Player.EnableGravityMode();
         Player.isPlayerInUnderground = true;
         StartCoroutine(MoveCameraToItemAndBack(playerSaveInstance));
+        Player.cantUseSpells = true;
     }
 
     private void PlacePlayerAtHighestPosition(Player player)
@@ -166,6 +175,8 @@ public class UndergroundBehaviour : DungeonBehaviour
         countdown.ResetRemainingTime();
 
         countdown.StartCountdown = true;
+
+        countdown.isCountdownForUnderground = true;
 
         Debug.Log("Camera smoothly moved to item and back to player.");
     }

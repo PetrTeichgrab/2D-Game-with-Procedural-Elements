@@ -15,11 +15,17 @@ public class SaveSystem : MonoBehaviour
             movementSpeed = player.movementSpeedPermanent,
             jumpForce = player.jumpForcePermanent,
             maxHP = player.maxHPpermanent,
-            money = player.money
+            money = player.money,
+            hasAttackSpeedSpell = player.hasAttackSpeedSpell,
+            hasHealSpell = player.hasHealSpell,
+            hasMovementSpeedSpell = player.hasMovementSpeedSpell,
+            hasTimeSlowSpell = player.hasTimeSlowSpell
         };
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(playerPath, json);
     }
+
 
     public static void LoadPlayer(Player player)
     {
@@ -34,6 +40,10 @@ public class SaveSystem : MonoBehaviour
             player.jumpForcePermanent = data.jumpForce;
             player.maxHPpermanent = data.maxHP;
             player.money = data.money;
+            player.hasAttackSpeedSpell = data.hasAttackSpeedSpell;
+            player.hasHealSpell = data.hasHealSpell;
+            player.hasMovementSpeedSpell = data.hasMovementSpeedSpell;
+            player.hasTimeSlowSpell = data.hasTimeSlowSpell;
         }
     }
 

@@ -7,12 +7,13 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource SFXsource;
+    [SerializeField] AudioSource tickingSource;
 
     [SerializeField] 
     AudioClip[] backgroundMusicClips = new AudioClip[8];
 
     [SerializeField]
-    public AudioClip playerSpell;
+    public AudioClip playerBasicSpell;
     public AudioClip playerPickUpColorCore;
     public AudioClip EnemyAttackRange;
     public AudioClip EnemyAttackMelee1;
@@ -20,6 +21,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip Revive;
     public AudioClip Death;
     public AudioClip placeColorCore;
+    public AudioClip teleport;
+    public AudioClip movementSpeedSpell;
+    public AudioClip healSpell;
+    public AudioClip timeSlowSpell;
+    public AudioClip eagleEyeSpell;
+    public AudioClip timeTicking20s;
 
     private List<int> shuffledIndices = new List<int>();
     private int currentTrackIndex = 0;
@@ -70,5 +77,28 @@ public class AudioManager : MonoBehaviour
 
         Invoke(nameof(PlayNextTrack), nextClip.length);
     }
+
+
+    public void PlayTickingSound()
+    {
+        if (tickingSource == null)
+        {
+            tickingSource = gameObject.AddComponent<AudioSource>();
+            tickingSource.playOnAwake = false;
+        }
+
+        tickingSource.clip = timeTicking20s;
+        tickingSource.loop = false;
+        tickingSource.Play();
+    }
+
+    public void StopTickingSound()
+    {
+        if (tickingSource != null && tickingSource.isPlaying)
+        {
+            tickingSource.Stop();
+        }
+    }
+
 
 }

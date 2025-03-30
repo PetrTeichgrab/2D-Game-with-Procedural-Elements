@@ -11,4 +11,8 @@ public class PlayerData
     public float jumpForce;
     public int maxHP;
     public int money;
+    public bool hasMovementSpeedSpell;
+    public bool hasAttackSpeedSpell;
+    public bool hasHealSpell;
+    public bool hasTimeSlowSpell;
 }

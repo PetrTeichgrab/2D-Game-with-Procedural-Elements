@@ -6,17 +6,35 @@ public class PortalBehaviour : MonoBehaviour
 {
     public DungeonBehaviour TargetDungeon;
     public Transform TargetPosition;
+    public float cooldownTime = 1f;
+    AudioManager audioManager;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Start()
     {
-        Debug.Log("JOOOOOO teleport");
-        if (other.CompareTag("Player"))
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Player")) return;
+
+        Player player = collision.gameObject.GetComponent<Player>();
+        if (player == null || player.recentlyTeleported) return;
+
+        if (TargetDungeon != null && TargetPosition != null)
         {
-            if (TargetDungeon != null && TargetPosition != null)
-            {
-                other.transform.position = TargetPosition.position;
-                Debug.Log("Teleportováno do " + TargetDungeon.name);
-            }
+            collision.transform.position = TargetPosition.position;
+            Debug.Log("Teleportováno do " + TargetDungeon.name);
+            audioManager.PlaySFX(audioManager.teleport);
+            StartCoroutine(StartTeleportCooldown(player));
         }
     }
+
+    private IEnumerator StartTeleportCooldown(Player player)
+    {
+        player.recentlyTeleported = true;
+        yield return new WaitForSeconds(cooldownTime);
+        player.recentlyTeleported = false;
+    }
 }
+

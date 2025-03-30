@@ -11,6 +11,7 @@ public class Player : Character
     private float moveX, moveY;
     private bool canDash = true;
     private bool isDashing;
+    public bool recentlyTeleported = false;
 
     public static float DEF_DASH_SPEED = 12f;
     public static float DEF_DASH_TIME = 0.2f;
@@ -18,7 +19,7 @@ public class Player : Character
     public static float DEF_JUMP_FORCE = 5f;
     public static float DEF_MOVEMENT_SPEED = 3f;
     public static int DEF_MAX_HP = 100;
-    public static int DEF_MONEY_AMOUNT = 0;
+    public static int DEF_MONEY_AMOUNT = 5500;
 
     [SerializeField]
     public float dashSpeedPermanent = DEF_DASH_SPEED;
@@ -38,6 +39,7 @@ public class Player : Character
     public bool hasAttackSpeedSpell;
     public bool hasHealSpell;
     public bool hasTimeSlowSpell;
+    public bool cantUseSpells;
     [SerializeField]
     private StatusBar playerHpBar;
 
@@ -78,6 +80,9 @@ public class Player : Character
 
     public static Player Instance { get; private set; }
 
+    [SerializeField]
+    Abilities abilities;
+
 
     void Start()
     {
@@ -88,6 +93,8 @@ public class Player : Character
         resetTrailRendered();
         DisableGravityMode();
         SetTransparency(1f);
+        cantUseSpells = false;
+        abilities.UpdateSpellsVisibility();
     }
 
     private void Awake()
@@ -137,6 +144,16 @@ public class Player : Character
             Jump();
         }
 
+        if (HasAllColorCores())
+        {
+            AlertText.Instance.ShowAlert("TELEPORT TO FINAL DESTINATION BY PRESSING [G]");
+        }
+
+    }
+
+    public bool HasAllColorCores()
+    {
+        return colorCores.Count == 5;
     }
 
     public void ResetStats()
@@ -172,11 +189,13 @@ public class Player : Character
     public void HealSpell()
     {
         currentHP += maxHPpermanent/3;
+        audioManager.PlaySFX(audioManager.healSpell);
     }
 
     public void TimeSlowSpell(float duration)
     {
         StartCoroutine(TimeSlowCoroutine(duration));
+        audioManager.PlaySFX(audioManager.timeSlowSpell);
     }
 
     private IEnumerator TimeSlowCoroutine(float duration)
@@ -189,6 +208,7 @@ public class Player : Character
     private IEnumerator BoostMovementSpeedCoroutine(float speedBoost, float duration)
     {
         movementSpeed += speedBoost;
+        audioManager.PlaySFX(audioManager.movementSpeedSpell);
         yield return new WaitForSeconds(duration);
         movementSpeed -= speedBoost; 
     }
@@ -383,8 +403,10 @@ public class Player : Character
         gameObject.SetActive(true);
         playerHpBar.gameObject.SetActive(true);
         isPlayerInUnderground = false;
+        audioManager.StopTickingSound();
         audioManager.PlaySFX(audioManager.Revive);
-        StartCoroutine(TemporaryInvulnerability(3f));
+        cantUseSpells = false;
+        StartCoroutine(TemporaryInvulnerability(2f));
     }
 
     private IEnumerator TemporaryInvulnerability(float duration)

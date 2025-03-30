@@ -123,16 +123,62 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
         blueDungeonBehaviour.Create();
         greenDungeonBehaviour.Create();
         purpleDungeonBehaviour.Create();
-        ConnectDungeons();
-        //CreateUnderground();
-        //CreateFinalLevel();
+        ConnectDungeonsWithTeleports();
+        CreateUnderground();
+        CreateFinalLevel();
     }
 
-    public void ConnectDungeons()
+    private void ConnectDungeonsWithTeleports()
     {
-        pinkDungeonBehaviour.LinkPortalTo(blueDungeonBehaviour);
-        blueDungeonBehaviour.LinkPortalTo(pinkDungeonBehaviour);
+        List<DungeonBehaviour> allDungeons = new List<DungeonBehaviour>
+        {
+            pinkDungeonBehaviour,
+            blueDungeonBehaviour,
+            greenDungeonBehaviour,
+            purpleDungeonBehaviour
+        };
+
+        ShuffleList(allDungeons);
+
+        for (int i = 0; i < allDungeons.Count - 1; i++)
+        {
+            var from = allDungeons[i];
+            var to = allDungeons[i + 1];
+
+            from.LinkPortalTo(to);
+            to.LinkPortalTo(from);
+        }
+
+        if (allDungeons.Count >= 3)
+        {
+            DungeonBehaviour extraFrom = allDungeons[UnityEngine.Random.Range(0, allDungeons.Count)];
+            DungeonBehaviour extraTo = allDungeons[UnityEngine.Random.Range(0, allDungeons.Count)];
+
+            if (extraFrom != extraTo && !AlreadyLinked(extraFrom, extraTo))
+            {
+                extraFrom.LinkPortalTo(extraTo);
+                extraTo.LinkPortalTo(extraFrom);
+            }
+        }
     }
+
+    private void ShuffleList<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+    }
+
+    private bool AlreadyLinked(DungeonBehaviour a, DungeonBehaviour b)
+    {
+        var aPortal = a.portal.GetComponent<PortalBehaviour>();
+        return aPortal.TargetDungeon == b;
+    }
+
 
     private void CreateDungeons()
     {

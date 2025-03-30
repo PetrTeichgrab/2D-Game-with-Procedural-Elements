@@ -17,6 +17,8 @@ public class Shop : MonoBehaviour
 
     private Player player;
 
+    public Abilities abilities;
+
     private void Start()
     {
         player = Player.Instance;
@@ -50,6 +52,7 @@ public class Shop : MonoBehaviour
             player.money -= MOVEMENT_SPEED_SPELL_PRICE;
             player.hasMovementSpeedSpell = true;
             buyMovementSpeedSpellBtn.interactable = false;
+            abilities.UpdateSpellsVisibility();
         }
     }
 
@@ -60,6 +63,7 @@ public class Shop : MonoBehaviour
             player.money -= ATTACK_SPEED_SPELL_PRICE;
             player.hasAttackSpeedSpell = true;
             buyAttackSpeedSpellBtn.interactable = false;
+            abilities.UpdateSpellsVisibility();
         }
     }
 
@@ -70,6 +74,7 @@ public class Shop : MonoBehaviour
             player.money -= HEAL_SPELL_PRICE;
             player.hasHealSpell = true;
             buyHealSpellBtn.interactable = false;
+            abilities.UpdateSpellsVisibility();
         }
     }
 
@@ -80,6 +85,7 @@ public class Shop : MonoBehaviour
             player.money -= TIMESLOW_SPELL_PRICE;
             player.hasTimeSlowSpell = true;
             buyTimeSlowSpellBtn.interactable = false;
+            abilities.UpdateSpellsVisibility();
         }
     }
 }

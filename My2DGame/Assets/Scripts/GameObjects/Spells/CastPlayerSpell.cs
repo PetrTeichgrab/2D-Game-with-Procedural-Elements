@@ -52,7 +52,7 @@ public class CastSpell : MonoBehaviour
             if (Time.time >= lastCastTime + cooldownTimePermanent + cooldownTime)
             {
                 Cast();
-                audioManager.PlaySFX(audioManager.playerSpell);
+                audioManager.PlaySFX(audioManager.playerBasicSpell);
                 lastCastTime = Time.time;
             }
         }

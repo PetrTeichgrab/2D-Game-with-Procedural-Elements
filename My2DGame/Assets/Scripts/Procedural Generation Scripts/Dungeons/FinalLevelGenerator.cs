@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class FinalLevelGenerator : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class FinalLevelGenerator : MonoBehaviour
 
     [SerializeField]
     ColorCore pinkColorCore, blueColorCore, greenColorCore, purpleColorCore;
+
+    [SerializeField]
+    Countdown countdown;
 
     private BoundsInt mazeBounds;
     private BoundsInt part1Bounds;
@@ -74,6 +78,10 @@ public class FinalLevelGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             PlacePlayerRandomly(player);
+            countdown.remainingTime = 240;
+            countdown.StartCountdown = true;
+            countdown.isCountdownForFinalLevel = true;
+            AlertText.Instance.ShowAlert("PLACE ALL COLOR CORES TO THEIR RIGHT PLACE! CAREFUL! YOUR TIME IS LIMITED!");
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -91,6 +99,23 @@ public class FinalLevelGenerator : MonoBehaviour
         {
             player.transform.position = new Vector3(dungeonParts[3].MonumentPosition.x + 1, dungeonParts[3].MonumentPosition.y + 1, 0);
         }
+        if (AllCoresPlaced())
+        {
+            FadeManager.Instance.FadeToScene("Endscene");
+        }
+
+    }
+
+    private bool AllCoresPlaced()
+    {
+        foreach (var part in dungeonParts)
+        {
+            if (part.ColorCore == null || !part.ColorCore.isPlaced)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 
