@@ -37,7 +37,7 @@ public abstract class RangeEnemy : Character
 
     protected void BasicEnemyMovement()
     {
-        if (IsInApproachDistance())
+        if (IsInApproachDistance() && Player.Instance.canBeAttacked)
         {
             MoveToPlayer();
         }

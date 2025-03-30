@@ -130,36 +130,48 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private void ConnectDungeonsWithTeleports()
     {
-        List<DungeonBehaviour> allDungeons = new List<DungeonBehaviour>
+        List<Item> portals = new List<Item>();
+
+        if (pinkDungeonBehaviour.portal != null) portals.Add(pinkDungeonBehaviour.portal);
+        if (pinkDungeonBehaviour.portal2 != null) portals.Add(pinkDungeonBehaviour.portal2);
+
+        if (blueDungeonBehaviour.portal != null) portals.Add(blueDungeonBehaviour.portal);
+        if (blueDungeonBehaviour.portal2 != null) portals.Add(blueDungeonBehaviour.portal2);
+
+        if (greenDungeonBehaviour.portal != null) portals.Add(greenDungeonBehaviour.portal);
+        if (greenDungeonBehaviour.portal2 != null) portals.Add(greenDungeonBehaviour.portal2);
+
+        if (purpleDungeonBehaviour.portal != null) portals.Add(purpleDungeonBehaviour.portal);
+        if (purpleDungeonBehaviour.portal2 != null) portals.Add(purpleDungeonBehaviour.portal2);
+
+        ShuffleList(portals);
+
+        for (int i = 0; i < portals.Count - 1; i += 2)
         {
-            pinkDungeonBehaviour,
-            blueDungeonBehaviour,
-            greenDungeonBehaviour,
-            purpleDungeonBehaviour
-        };
+            var portalA = portals[i];
+            var portalB = portals[i + 1];
 
-        ShuffleList(allDungeons);
+            var behaviourA = portalA.GetComponent<PortalBehaviour>();
+            var behaviourB = portalB.GetComponent<PortalBehaviour>();
 
-        for (int i = 0; i < allDungeons.Count - 1; i++)
-        {
-            var from = allDungeons[i];
-            var to = allDungeons[i + 1];
+            var dungeonA = FindDungeonByPortal(portalA);
+            var dungeonB = FindDungeonByPortal(portalB);
 
-            from.LinkPortalTo(to);
-            to.LinkPortalTo(from);
+            behaviourA.TargetDungeon = dungeonB;
+            behaviourA.TargetPosition = portalB.transform;
+
+            behaviourB.TargetDungeon = dungeonA;
+            behaviourB.TargetPosition = portalA.transform;
         }
+    }
 
-        if (allDungeons.Count >= 3)
-        {
-            DungeonBehaviour extraFrom = allDungeons[UnityEngine.Random.Range(0, allDungeons.Count)];
-            DungeonBehaviour extraTo = allDungeons[UnityEngine.Random.Range(0, allDungeons.Count)];
-
-            if (extraFrom != extraTo && !AlreadyLinked(extraFrom, extraTo))
-            {
-                extraFrom.LinkPortalTo(extraTo);
-                extraTo.LinkPortalTo(extraFrom);
-            }
-        }
+    private DungeonBehaviour FindDungeonByPortal(Item portal)
+    {
+        if (pinkDungeonBehaviour.portal == portal || pinkDungeonBehaviour.portal2 == portal) return pinkDungeonBehaviour;
+        if (blueDungeonBehaviour.portal == portal || blueDungeonBehaviour.portal2 == portal) return blueDungeonBehaviour;
+        if (greenDungeonBehaviour.portal == portal || greenDungeonBehaviour.portal2 == portal) return greenDungeonBehaviour;
+        if (purpleDungeonBehaviour.portal == portal || purpleDungeonBehaviour.portal2 == portal) return purpleDungeonBehaviour;
+        return null;
     }
 
     private void ShuffleList<T>(List<T> list)
@@ -175,9 +187,11 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private bool AlreadyLinked(DungeonBehaviour a, DungeonBehaviour b)
     {
-        var aPortal = a.portal.GetComponent<PortalBehaviour>();
-        return aPortal.TargetDungeon == b;
+        bool portal1Linked = a.portal != null && a.portal.GetComponent<PortalBehaviour>().TargetDungeon == b;
+        bool portal2Linked = a.portal2 != null && a.portal2.GetComponent<PortalBehaviour>().TargetDungeon == b;
+        return portal1Linked || portal2Linked;
     }
+
 
 
     private void CreateDungeons()

@@ -137,6 +137,8 @@ public class GreenDungeon : DungeonBehaviour
     {
         portal = Instantiate(portalPrefab);
         generator.SetLargeItemToRandomPosition(portal, greenDungeon, 2, 2, 1);
+        portal2 = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal2, greenDungeon, 2, 2, 1);
         GreenMushroomBossInstance = Instantiate(this.greenMushroomBoss, this.greenMushroomBoss.transform.position,
         this.greenMushroomBoss.transform.rotation);
         generator.setBossToRandomRoom(GreenMushroomBossInstance, greenDungeon, 2, 2);

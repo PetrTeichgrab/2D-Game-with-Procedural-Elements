@@ -6,10 +6,11 @@ public class EnemyShoot : MonoBehaviour
 {
     public float projectileSpeed;
     public float projectileMaxLifeTime;
-    public int damage = 15;
+    public int damage = 5;
     public GameObject hitEffect;
     protected Transform player;
     protected Vector2 target;
+    private bool hasHit = false;
 
     protected void Start()
     {
@@ -18,33 +19,48 @@ public class EnemyShoot : MonoBehaviour
     }
 
     protected void ShootAndFollowPlayer(){
-        transform.position = Vector2.MoveTowards(transform.position, player.position, projectileSpeed* Time.deltaTime);
+        if (Player.Instance.canBeAttacked)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, player.position, projectileSpeed * Time.deltaTime);
+        }
     }
 
     protected void ShootOnPlayer()
     {
-        transform.position = Vector2.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
+        if (Player.Instance.canBeAttacked)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target, projectileSpeed * Time.deltaTime);
+        }
     }
 
     protected void ShootToDirection(Vector2 direction)
     {
-        transform.position += (Vector3)direction * projectileSpeed * Time.deltaTime;
-
+        if (Player.Instance.canBeAttacked)
+        {
+            transform.position += (Vector3)direction * projectileSpeed * Time.deltaTime;
+        }
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (hasHit) return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
+            hasHit = true;
+
             Player character = collision.gameObject.GetComponent<Player>();
             if (character != null)
             {
+                Debug.Log("Damage taken: " + damage);
                 character.TakeDamage(damage);
+                Destroy(gameObject);
             }
         }
-
-        Destroy(gameObject);
     }
+
+
 
     private void OnDestroy()
     {

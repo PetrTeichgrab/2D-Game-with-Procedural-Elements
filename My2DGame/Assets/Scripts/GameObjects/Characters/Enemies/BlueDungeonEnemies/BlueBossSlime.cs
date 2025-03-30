@@ -34,7 +34,7 @@ public class BlueBossSlime : MeleeEnemy
 
         if (isAlive)
         {
-            if (IsInApproachDistance())
+            if (IsInApproachDistance() && Player.Instance.canBeAttacked)
             {
                 animator.SetTrigger("move");
                 MoveToPlayer();

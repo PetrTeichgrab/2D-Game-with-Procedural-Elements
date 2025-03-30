@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GreenSlime : MeleeEnemy
 {
+    private float damageCooldown = 1.0f;
+    private float lastDamageTime = -Mathf.Infinity;
+
     void Update()
     {
         if (isDashing)
@@ -13,7 +16,7 @@ public class GreenSlime : MeleeEnemy
 
         if (isAlive)
         {
-            if (IsInApproachDistance())
+            if (IsInApproachDistance() && Player.Instance.canBeAttacked)
             {
                 animator.SetBool("move", true);
                 MoveToPlayer();
@@ -38,14 +41,21 @@ public class GreenSlime : MeleeEnemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!isAlive) return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
             Player character = collision.gameObject.GetComponent<Player>();
-            if (character != null && isAlive)
+            if (character != null)
             {
-                animator.SetTrigger("attack");
-                character.TakeDamage(damage);
+                if (Time.time - lastDamageTime >= damageCooldown)
+                {
+                    lastDamageTime = Time.time;
+                    animator.SetTrigger("attack");
+                    character.TakeDamage(damage);
+                }
             }
         }
     }
 }
+

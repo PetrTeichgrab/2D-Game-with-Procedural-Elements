@@ -93,6 +93,8 @@ public class BlueDungeon : DungeonBehaviour
     {
         portal = Instantiate(portalPrefab);
         generator.SetLargeItemToRandomPosition(portal, blueDungeon, 2, 2, 1);
+        portal2 = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal2, blueDungeon, 2, 2, 1);
         // Inicializace hlavního bosse
         BlueBossSlimeInstance = Instantiate(this.blueBossSlime, this.blueBossSlime.transform.position,
                 this.blueBossSlime.transform.rotation);
@@ -112,7 +114,6 @@ public class BlueDungeon : DungeonBehaviour
 
         GenerateObjects(itemConfigs);
         GenerateEnemies(blueDungeon, enemyConfigs);
-        generator.Player.transform.position = new Vector3(portal.Position.x + 1, portal.Position.y + 1);
 
     }
 

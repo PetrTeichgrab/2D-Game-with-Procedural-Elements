@@ -185,4 +185,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 5
   projectileMaxLifeTime: 3
+  damage: 10
   hitEffect: {fileID: 7834466692352800024, guid: fd4f0e7e8cc180449a8acc9729445040, type: 3}

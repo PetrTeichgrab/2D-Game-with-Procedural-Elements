@@ -13,7 +13,7 @@ public class DirectionProjectileGreen : EnemyShoot
 
     void Update()
     {
-        if (direction != Vector2.zero)
+        if (direction != Vector2.zero && Player.Instance.canBeAttacked)
         {
             ShootToDirection(direction);
         }

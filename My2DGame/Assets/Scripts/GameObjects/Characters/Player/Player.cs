@@ -16,7 +16,7 @@ public class Player : Character
     public static float DEF_DASH_SPEED = 12f;
     public static float DEF_DASH_TIME = 0.2f;
     public static float DEF_DASH_CD = 3f;
-    public static float DEF_JUMP_FORCE = 5f;
+    public static float DEF_JUMP_FORCE = 10f;
     public static float DEF_MOVEMENT_SPEED = 3f;
     public static int DEF_MAX_HP = 100;
     public static int DEF_MONEY_AMOUNT = 0;
@@ -78,6 +78,8 @@ public class Player : Character
 
     public CastSpell spell;
 
+    public bool canBeAttacked = true;
+
     public static Player Instance { get; private set; }
 
     [SerializeField]
@@ -94,6 +96,7 @@ public class Player : Character
         DisableGravityMode();
         SetTransparency(1f);
         cantUseSpells = false;
+        canBeAttacked = true;
         abilities.UpdateSpellsVisibility();
     }
 
@@ -117,6 +120,9 @@ public class Player : Character
         {
             return;
         }
+
+        Debug.Log(maxHPpermanent + " MAX HP");
+
 
         CheckGrounded();
 
@@ -366,7 +372,10 @@ public class Player : Character
 
     public override void TakeDamage(int damage)
     {
-        currentHP -= damage;
+        if(currentHP > 0)
+        {
+            currentHP -= damage;
+        }
         if (animator != null)
         {
             animator.SetTrigger("hit");
@@ -396,6 +405,7 @@ public class Player : Character
     }
     public void Respawn()
     {
+        canBeAttacked = false;
         currentHP = maxHPpermanent/2;
         isAlive = true;
         transform.position = deathPosition;
@@ -426,8 +436,10 @@ public class Player : Character
             playerCollider.enabled = true;
         }
 
+
         SetTransparency(1f);
 
+        canBeAttacked = true;
     }
 
     public void ReduceDashCD(float duration)

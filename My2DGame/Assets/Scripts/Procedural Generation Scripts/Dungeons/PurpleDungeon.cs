@@ -25,6 +25,12 @@ public class PurpleDungeon : DungeonBehaviour
     [SerializeField]
     Item yellowMushroomMed;
 
+    [SerializeField]
+    ColorCore purpleColorCore;
+
+    [SerializeField]
+    ColorCore purpleColorCoreInstance;
+
     private void Update()
     {
 
@@ -38,50 +44,53 @@ public class PurpleDungeon : DungeonBehaviour
 
     public override void CreateAndSetPositions()
     {
+        purpleColorCoreInstance = Instantiate(purpleColorCore);
+        generator.SetItemToRandomPosition(purpleColorCoreInstance, purpleDungeon, 1);
+
         portal = Instantiate(portalPrefab);
         generator.SetLargeItemToRandomPosition(portal, purpleDungeon, 2, 2, 1);
 
+        portal2 = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal2, purpleDungeon, 2, 2, 1);
+
         foreach (var room in purpleDungeon.RoomList)
         {
-            float roomRatio = (float)room.FloorList.Count / purpleDungeon.Floor.FloorList.Count;
+            int roomSize = room.FloorList.Count;
+            int dungeonSize = purpleDungeon.Floor.FloorList.Count;
+            float roomRatio = (float)roomSize / dungeonSize;
 
-            int smallMushrooms = Mathf.RoundToInt(20 * roomRatio);
-            int mediumMushrooms = Mathf.RoundToInt(10 * roomRatio);
-            int largeMushrooms = Mathf.RoundToInt(5 * roomRatio);
+            List<(Item prefab, int width, int height)> itemPool = new List<(Item, int, int)>();
 
-            for (int i = 0; i < smallMushrooms; i++)
+            int smallCount = Mathf.RoundToInt(50 * roomRatio);
+            int mediumCount = Mathf.RoundToInt(35 * roomRatio);
+            int largeCount = Mathf.RoundToInt(25 * roomRatio);
+            int yellowSmallCount = Mathf.RoundToInt(45 * roomRatio);
+            int yellowMediumCount = Mathf.RoundToInt(35 * roomRatio);
+
+            for (int i = 0; i < smallCount; i++) itemPool.Add((purpleMushroomSmall, 1, 1));
+            for (int i = 0; i < mediumCount; i++) itemPool.Add((purpleMushroomMed, 1, 1));
+            for (int i = 0; i < largeCount; i++) itemPool.Add((purpleMushroomLarge, 2, 2));
+            for (int i = 0; i < yellowSmallCount; i++) itemPool.Add((yellowMushroomSmall, 1, 1));
+            for (int i = 0; i < yellowMediumCount; i++) itemPool.Add((yellowMushroomMed, 1, 1));
+
+            for (int i = 0; i < itemPool.Count; i++)
             {
-                var item = Instantiate(purpleMushroomSmall);
-                generator.SetItemToRoomPosition(item, room, 1, 1, 0, 1);
+                int randomIndex = UnityEngine.Random.Range(i, itemPool.Count);
+                (itemPool[i], itemPool[randomIndex]) = (itemPool[randomIndex], itemPool[i]);
             }
 
-            for (int i = 0; i < mediumMushrooms; i++)
+            foreach (var (prefab, width, height) in itemPool)
             {
-                var item = Instantiate(purpleMushroomMed);
-                generator.SetItemToRoomPosition(item, room, 1, 1, 0, 1);
-            }
-
-            for (int i = 0; i < largeMushrooms; i++)
-            {
-                var item = Instantiate(purpleMushroomLarge);
-                generator.SetItemToRoomPosition(item, room, 1, 1, 0, 1);
-            }
-
-            for (int i = 0; i < Mathf.RoundToInt(5 * roomRatio); i++)
-            {
-                var item = Instantiate(yellowMushroomMed);
-                generator.SetItemToRoomPosition(item, room, 1, 1, 0, 1);
-            }
-
-            for (int i = 0; i < Mathf.RoundToInt(8 * roomRatio); i++)
-            {
-                var item = Instantiate(yellowMushroomSmall);
-                generator.SetItemToRoomPosition(item, room, 1, 1, 0, 1);
+                var item = Instantiate(prefab);
+                generator.SetItemToRoomPosition(item, room, width, height, 1, 1);
             }
         }
 
-        Debug.Log("Purple dungeon objekty vygenerovány podle velikosti místností.");
+        generator.Player.transform.position = new Vector3(portal.Position.x + 1, portal.Position.y + 1);
+        Debug.Log("Purple dungeon objekty vygenerovány promíchanì jako v Green dungeon stylu.");
     }
+
+
 
 }
 

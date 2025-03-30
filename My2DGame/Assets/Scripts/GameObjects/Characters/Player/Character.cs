@@ -6,7 +6,6 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
     public int maxHPpermanent;
-    public int maxHP;
 
     public int currentHP;
 

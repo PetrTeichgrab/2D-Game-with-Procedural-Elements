@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f5edcfe68727e4db80e934067c29f9, type: 3}
   m_Name: PurpleDungeon
   m_EditorClassIdentifier: 
-  iterations: 1000
-  minLength: 30
-  maxLength: 35
+  iterations: 80
+  minLength: 45
+  maxLength: 90
   corridorLength: 5
   amountOfCorridors: 30
   startRandom: 0

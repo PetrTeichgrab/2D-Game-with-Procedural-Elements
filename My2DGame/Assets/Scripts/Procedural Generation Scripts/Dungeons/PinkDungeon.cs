@@ -83,6 +83,8 @@ public class PinkDungeon : DungeonBehaviour
     {
         portal = Instantiate(portalPrefab);
         generator.SetLargeItemToRandomPosition(portal, pinkDungeon, 2, 2, 1);
+        portal2 = Instantiate(portalPrefab);
+        generator.SetLargeItemToRandomPosition(portal2, pinkDungeon, 2, 2, 1);
         // Inicializace hlavního bosse
         PinkMushroomBossInstance = Instantiate(this.pinkMushroomBoss, this.pinkMushroom.transform.position,
                 this.pinkMushroom.transform.rotation);

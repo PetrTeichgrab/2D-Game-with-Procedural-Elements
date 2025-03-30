@@ -9,8 +9,9 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
     [SerializeField]
     protected Item portalPrefab;
 
-    [SerializeField]
     public Item portal;
+
+    public Item portal2;
     public bool Completed {  get; set; }
 
     protected void HandleBossInstance(Character bossInstance, ColorCore colorCore)
@@ -25,8 +26,23 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
     {
         var portalBehaviour = portal.GetComponent<PortalBehaviour>();
         portalBehaviour.TargetDungeon = target;
-        portalBehaviour.TargetPosition = target.portal.transform;
+        portalBehaviour.TargetPosition = target.GetAvailablePortalTransform();
+
+        if (portal2 != null)
+        {
+            var portalBehaviour2 = portal2.GetComponent<PortalBehaviour>();
+            portalBehaviour2.TargetDungeon = target;
+            portalBehaviour2.TargetPosition = target.GetAvailablePortalTransform();
+        }
     }
+
+    public Transform GetAvailablePortalTransform()
+    {
+        if (portal != null) return portal.transform;
+        if (portal2 != null) return portal2.transform;
+        return this.transform;
+    }
+
 
 
     private int CalculateEnemyCount(int floorCount, int baseCount, float scalingFactor, int minCount, int maxCount)

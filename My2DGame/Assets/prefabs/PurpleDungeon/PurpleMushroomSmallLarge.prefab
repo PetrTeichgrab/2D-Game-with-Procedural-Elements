@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1114806510004454592}
   - component: {fileID: 3088043116570809274}
   - component: {fileID: 4417098368189808957}
+  - component: {fileID: 8096553767937710969}
   m_Layer: 0
   m_Name: PurpleMushroomSmallLarge
   m_TagString: Untagged
@@ -72,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 998682351
-  m_SortingLayer: 7
+  m_SortingLayerID: 2132577559
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 763ceeeb2a4237f4b8b878a37680618e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -157,3 +158,16 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &8096553767937710969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867691998082245067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9abfe6c742d99ea48887cbbad8c52acd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: 

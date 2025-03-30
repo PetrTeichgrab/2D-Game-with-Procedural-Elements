@@ -113,7 +113,7 @@ public class FinalLevelGenerator : MonoBehaviour
         {
             player.transform.position = new Vector3(dungeonParts[3].MonumentPosition.x + 1, dungeonParts[3].MonumentPosition.y + 1, 0);
         }
-        if (AllCoresPlaced())
+        if (AllCoresPlaced() && isTeleportedToFinalLevel)
         {
             FadeManager.Instance.FadeToScene("GameEnding");
         }
