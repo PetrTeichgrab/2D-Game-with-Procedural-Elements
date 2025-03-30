@@ -19,7 +19,7 @@ public class Player : Character
     public static float DEF_JUMP_FORCE = 5f;
     public static float DEF_MOVEMENT_SPEED = 3f;
     public static int DEF_MAX_HP = 100;
-    public static int DEF_MONEY_AMOUNT = 5500;
+    public static int DEF_MONEY_AMOUNT = 0;
 
     [SerializeField]
     public float dashSpeedPermanent = DEF_DASH_SPEED;
@@ -146,7 +146,7 @@ public class Player : Character
 
         if (HasAllColorCores())
         {
-            AlertText.Instance.ShowAlert("TELEPORT TO FINAL DESTINATION BY PRESSING [G]");
+            AlertText.Instance.ShowAlert("TELEPORT TO FINAL DESTINATION BY PRESSING [G]", 3f);
         }
 
     }

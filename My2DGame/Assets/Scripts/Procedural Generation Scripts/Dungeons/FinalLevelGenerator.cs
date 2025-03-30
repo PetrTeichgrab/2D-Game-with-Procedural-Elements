@@ -81,7 +81,7 @@ public class FinalLevelGenerator : MonoBehaviour
             countdown.remainingTime = 240;
             countdown.StartCountdown = true;
             countdown.isCountdownForFinalLevel = true;
-            AlertText.Instance.ShowAlert("PLACE ALL COLOR CORES TO THEIR RIGHT PLACE! CAREFUL! YOUR TIME IS LIMITED!");
+            AlertText.Instance.ShowAlert("PLACE ALL COLOR CORES TO THEIR RIGHT PLACE! CAREFUL! YOUR TIME IS LIMITED!", 5f);
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -101,7 +101,7 @@ public class FinalLevelGenerator : MonoBehaviour
         }
         if (AllCoresPlaced())
         {
-            FadeManager.Instance.FadeToScene("Endscene");
+            FadeManager.Instance.FadeToScene("GameEnding");
         }
 
     }

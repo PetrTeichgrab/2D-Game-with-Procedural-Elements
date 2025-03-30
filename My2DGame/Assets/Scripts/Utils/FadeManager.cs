@@ -18,6 +18,12 @@ public class FadeManager : MonoBehaviour
             return;
         }
         Instance = this;
+        if (fadeCanvasGroup != null)
+        {
+            fadeCanvasGroup.alpha = 0f;
+            fadeCanvasGroup.blocksRaycasts = false;
+            fadeCanvasGroup.interactable = false;
+        }
     }
 
     public void FadeToScene(string sceneName)
@@ -27,7 +33,6 @@ public class FadeManager : MonoBehaviour
 
     private IEnumerator FadeAndLoadScene(string sceneName)
     {
-        // Fade to black
         float time = 0f;
         while (time < fadeDuration)
         {

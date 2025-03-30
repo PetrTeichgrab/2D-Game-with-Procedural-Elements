@@ -83,7 +83,11 @@ public class SaveSystem : MonoBehaviour
             movementSpeed = Player.DEF_MOVEMENT_SPEED,
             jumpForce = Player.DEF_JUMP_FORCE,
             maxHP = Player.DEF_MAX_HP,
-            money = Player.DEF_MONEY_AMOUNT
+            money = Player.DEF_MONEY_AMOUNT,
+            hasAttackSpeedSpell = false,
+            hasHealSpell = false,
+            hasMovementSpeedSpell = false,
+            hasTimeSlowSpell = false
         };
         PlayerSpellData playerSpellData = new PlayerSpellData
         {
