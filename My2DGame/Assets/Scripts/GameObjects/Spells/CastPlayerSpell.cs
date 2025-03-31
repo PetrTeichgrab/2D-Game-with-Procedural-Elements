@@ -47,7 +47,7 @@ public class CastSpell : MonoBehaviour
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90f;
         castPoint.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
             if (Time.time >= lastCastTime + cooldownTimePermanent + cooldownTime)
             {
@@ -56,6 +56,7 @@ public class CastSpell : MonoBehaviour
                 lastCastTime = Time.time;
             }
         }
+
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {

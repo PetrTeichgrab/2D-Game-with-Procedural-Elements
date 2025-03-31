@@ -40,8 +40,9 @@ public class UndergroundBehaviour : DungeonBehaviour
     {
         if (!Player.isPlayerInUnderground && !Player.isAlive)
         {
+            countdownStarded = false;
             InitDungeon();
-            AlertText.Instance.ShowAlert("FIND YOUR BODY!");
+            AlertText.Instance.ShowAlert("FIND YOUR BODY! USE [F] TO LOCATE IT. CAREFUL! YOUR TIME IS LIMITED!", 4f);
         }
 
         if (Input.GetKeyUp(KeyCode.F))
