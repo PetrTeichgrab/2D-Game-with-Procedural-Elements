@@ -37,6 +37,15 @@ public class GreenSlime : MeleeEnemy
         {
             animator.SetBool("isAlive", isAlive);
         }
+
+        if (!isAlive && rewardMoney != 0)
+        {
+            if (Player.Instance != null)
+            {
+                Player.Instance.AddMoney(rewardMoney);
+                rewardMoney = 0;
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

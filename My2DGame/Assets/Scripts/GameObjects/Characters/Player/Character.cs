@@ -15,6 +15,8 @@ public abstract class Character : MonoBehaviour
 
     protected AudioManager audioManager;
 
+    public int rewardMoney = 10;
+
     public Vector2Int Position { get; set; }
     private void Start()
     {

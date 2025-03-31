@@ -11,6 +11,8 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject shop;
 
+    public GameObject controlls;
+
     private void Start()
     {
         pauseMenu.SetActive(false);
@@ -51,6 +53,11 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
         isPaused = true;
+    }
+
+    public void ShowControlls()
+    {
+        controlls.gameObject.SetActive(true);
     }
 
     public void PauseGameWithoutShowingMenu()

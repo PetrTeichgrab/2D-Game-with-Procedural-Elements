@@ -36,6 +36,14 @@ public class EnemyMushroomGreen : RangeEnemy
             }
             animator.SetBool("appeard", Appeard);
         }
+        if (!isAlive && rewardMoney != 0)
+        {
+            if (Player.Instance != null)
+            {
+                Player.Instance.AddMoney(rewardMoney);
+                rewardMoney = 0;
+            }
+        }
         animator.SetBool("alive", isAlive);
     }
 

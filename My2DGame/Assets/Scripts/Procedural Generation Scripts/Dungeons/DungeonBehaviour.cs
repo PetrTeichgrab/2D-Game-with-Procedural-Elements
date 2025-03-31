@@ -48,10 +48,7 @@ public class DungeonBehaviour : MonoBehaviour, IDungeonBehaviour
     private int CalculateEnemyCount(int floorCount, int baseCount, float scalingFactor, int minCount, int maxCount)
     {
         int enemyCount = Mathf.RoundToInt(baseCount + floorCount * scalingFactor);
-        Debug.Log("floorCount " + floorCount);
-        Debug.Log("enemyCount " + enemyCount);
         int count = Mathf.Clamp(enemyCount, minCount, maxCount);
-        Debug.Log("Poèet enemies v místnosti: " + count);
         return count;
     }
 

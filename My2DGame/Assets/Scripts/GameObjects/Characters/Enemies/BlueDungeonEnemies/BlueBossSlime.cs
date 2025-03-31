@@ -27,7 +27,7 @@ public class BlueBossSlime : MeleeEnemy
     }
     void Update()
     {
-        if (isDashing)
+        if (isDashing || rewardMoney == 0)
         {
             return;
         }
@@ -62,6 +62,11 @@ public class BlueBossSlime : MeleeEnemy
         else
         {
             StopOnCurrentPosition();
+            if (Player.Instance != null)
+            {
+                Player.Instance.AddMoney(rewardMoney);
+                rewardMoney = 0;
+            }
             animator.SetTrigger("die");
         }
 

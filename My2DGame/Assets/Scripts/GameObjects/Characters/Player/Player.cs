@@ -124,16 +124,13 @@ public class Player : Character
             return;
         }
 
-        Debug.Log(maxHPpermanent + " MAX HP");
-
-
         CheckGrounded();
 
         ProcessInputs();
         animator.SetFloat("verticalSpeed", moveY);
         animator.SetFloat("horizontalSpeed", moveX);
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && canDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && canDash)
         {
             StartCoroutine(Dash());
         }
@@ -146,6 +143,16 @@ public class Player : Character
         if (Input.GetKeyUp(KeyCode.Delete))
         {
             ResetStats();
+        }
+
+        if (Input.GetKeyUp(KeyCode.M))
+        {
+            money += 5000;
+        }
+
+        if (Input.GetKeyUp(KeyCode.N))
+        {
+            currentHP += 100;
         }
 
         if (usesGravity && Input.GetKeyDown(KeyCode.Space))

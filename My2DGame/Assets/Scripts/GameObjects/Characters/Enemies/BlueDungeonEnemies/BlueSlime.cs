@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BlueSlime : MeleeEnemy
 {
-    public int rewardMoney = 1;
     void Update()
     {
         if (isDashing || rewardMoney == 0)

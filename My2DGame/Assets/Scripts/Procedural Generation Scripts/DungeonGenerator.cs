@@ -156,7 +156,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
                 var portalB = portals[j];
                 var dungeonB = FindDungeonByPortal(portalB);
 
-                if (dungeonA != dungeonB)
+                if (dungeonA != dungeonB && !AlreadyLinked(dungeonA, dungeonB))
                 {
                     var behaviourA = portalA.GetComponent<PortalBehaviour>();
                     var behaviourB = portalB.GetComponent<PortalBehaviour>();
@@ -167,6 +167,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
                     behaviourB.TargetDungeon = dungeonA;
                     behaviourB.TargetPosition = portalA.transform;
 
+                    Debug.Log($"Propojeno: {dungeonA.name} ({portalA.name}) <--> {dungeonB.name} ({portalB.name})");
+
                     portals.RemoveAt(j);
                     portals.RemoveAt(i);
                     i--;
@@ -175,7 +177,17 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             }
         }
 
+        Debug.Log("---- Výpis portálù po propojení ----");
+        foreach (var portal in portals)
+        {
+            var pb = portal.GetComponent<PortalBehaviour>();
+            string targetName = pb.TargetDungeon != null ? pb.TargetDungeon.name : "NULL";
+            string targetPos = pb.TargetPosition != null ? pb.TargetPosition.name : "NULL";
+            Debug.Log($"{portal.name} -> Dungeon: {targetName}, Position: {targetPos}");
+        }
+        Debug.Log("---- Konec výpisu ----");
     }
+
 
     private DungeonBehaviour FindDungeonByPortal(Item portal)
     {
