@@ -183,10 +183,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c971fb6d89e104448b45ebffa3425d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 4
+  projectileSpeed: 3
   projectileMaxLifeTime: 3
   damage: 8
   hitEffect: {fileID: 5698847610394566747, guid: 5e80cdec505e9484dbbf0dc9e051e0bf, type: 3}
   projectilePrefab: {fileID: -522995674547071508, guid: 0dea46c37e8b32447b53b4b3d6f10729, type: 3}
-  spawnInterval: 2
+  spawnInterval: 3.5
   numberOfProjectiles: 8

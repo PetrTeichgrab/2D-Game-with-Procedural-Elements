@@ -25,12 +25,14 @@ public class UndergroundBehaviour : DungeonBehaviour
 
     private float cameraCooldown = 7f;
     private float lastCameraMoveTime = -Mathf.Infinity;
+    private bool countdownStarded = false;
 
     AudioManager audioManager;
 
     private void Start()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        countdownStarded = false;
     }
 
 
@@ -172,9 +174,12 @@ public class UndergroundBehaviour : DungeonBehaviour
 
         Destroy(tempFollow);
 
-        countdown.ResetRemainingTime();
-
-        countdown.StartCountdown = true;
+        if (!countdownStarded)
+        {
+            countdownStarded = true;
+            countdown.StartCountdown = true;
+            countdown.remainingTime = 30;
+        }
 
         countdown.isCountdownForUnderground = true;
 

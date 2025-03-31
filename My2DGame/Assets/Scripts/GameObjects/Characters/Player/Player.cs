@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
+//using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -85,6 +85,8 @@ public class Player : Character
     [SerializeField]
     Abilities abilities;
 
+    private bool messageWasShown = false;
+
 
     void Start()
     {
@@ -98,6 +100,7 @@ public class Player : Character
         cantUseSpells = false;
         canBeAttacked = true;
         abilities.UpdateSpellsVisibility();
+        messageWasShown = false;
     }
 
     private void Awake()
@@ -130,7 +133,7 @@ public class Player : Character
         animator.SetFloat("verticalSpeed", moveY);
         animator.SetFloat("horizontalSpeed", moveX);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && canDash)
+        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && canDash)
         {
             StartCoroutine(Dash());
         }
@@ -150,9 +153,10 @@ public class Player : Character
             Jump();
         }
 
-        if (HasAllColorCores())
+        if (HasAllColorCores() && !messageWasShown)
         {
             AlertText.Instance.ShowAlert("TELEPORT TO FINAL DESTINATION BY PRESSING [G]", 3f);
+            messageWasShown = true;
         }
 
     }
