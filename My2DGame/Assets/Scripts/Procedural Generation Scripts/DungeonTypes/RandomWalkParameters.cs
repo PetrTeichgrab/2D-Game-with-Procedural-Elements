@@ -11,9 +11,5 @@ public class RandomWalkParameters : ScriptableObject
 
     public int maxLength = 30;
 
-    public int corridorLength = 5;
-
-    public int amountOfCorridors = 30;
-
     public bool startRandom = false;
 }

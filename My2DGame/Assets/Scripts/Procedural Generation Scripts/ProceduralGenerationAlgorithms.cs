@@ -34,27 +34,33 @@ public static class ProceduralGenerationAlgorithms
             {
                 splitHorizontally = UnityEngine.Random.value > 0.5f;
             }
-            else
+            else if (toBeSplitObject.size.x >= minWidth * 2)
             {
-                splitHorizontally = toBeSplitObject.size.y >= minHeight * 2;
+                splitHorizontally = false;
             }
-
-            if (splitHorizontally && toBeSplitObject.size.y >= minHeight * 2)
+            else if (toBeSplitObject.size.y >= minHeight * 2)
             {
-                SplitHorizontally(minHeight, toBeSplitObjects, toBeSplitObject);
-            }
-            else if (!splitHorizontally && toBeSplitObject.size.x >= minWidth * 2)
-            {
-                SplitVertically(minWidth, toBeSplitObjects, toBeSplitObject);
+                splitHorizontally = true;
             }
             else
             {
                 splittedObjects.Add(toBeSplitObject);
+                continue;
+            }
+
+            if (splitHorizontally)
+            {
+                SplitHorizontally(minHeight, toBeSplitObjects, toBeSplitObject);
+            }
+            else
+            {
+                SplitVertically(minWidth, toBeSplitObjects, toBeSplitObject);
             }
         }
 
         return splittedObjects;
     }
+
 
 
 

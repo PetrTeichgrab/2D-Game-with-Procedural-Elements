@@ -7,19 +7,6 @@ using UnityEngine;
 
 public static class FloorGenerator
 {
-    
-    public static void CreateRooms(RandomWalkParameters parameters, HashSet<Vector2Int> rooms)
-    {
-        HashSet<Vector2Int> roomsTmp = new HashSet<Vector2Int>();
-
-        foreach (var room in rooms)
-        {
-            var roomFloor = RandomWalkAlgorithms.RandomWalk(parameters, room);
-            roomsTmp.UnionWith(roomFloor);
-        }
-        rooms.UnionWith(roomsTmp);
-    }
-
     public static HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
     {
         HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();

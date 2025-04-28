@@ -171,7 +171,7 @@ public class LevelUpMenu : MonoBehaviour
                 player.movementSpeedPermanent += 0.6f;
                 break;
             case DungeonColor.Green:
-                spellCasting.ReduceCooldownPermanent(1.25f);
+                spellCasting.ReduceCooldownPermanent(0.2f);
                 break;
             case DungeonColor.LightGreen:
                 spellCasting.IncreaseDamagePermanent();

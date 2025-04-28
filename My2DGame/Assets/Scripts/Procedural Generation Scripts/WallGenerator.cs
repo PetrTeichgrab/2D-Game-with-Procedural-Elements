@@ -8,16 +8,16 @@ public static class WallGenerator
 {
     public static void CreateAndDrawWalls(Dungeon dungeon, MapCreator mapCreator)
     {
-        HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(dungeon.Floor.FloorList, dungeon.Floor.Edges ,dungeon.Floor.AnotherDungeonsEntrances);
+        HashSet<Vector2Int> cardinalWalls = FindWallsInCardinalDirections(dungeon.Floor.FloorList, dungeon.Floor.Edges);
 
-        HashSet<Vector2Int> diagonalWalls = FindWallsInDiagonalDirections(dungeon.Floor.FloorList, cardinalWalls, dungeon.Floor.AnotherDungeonsEntrances);
+        HashSet<Vector2Int> diagonalWalls = FindWallsInDiagonalDirections(dungeon.Floor.FloorList, cardinalWalls);
 
         mapCreator.DrawCardinalWalls(cardinalWalls, dungeon.Floor.FloorList, dungeon.Color);
 
         mapCreator.DrawDiagonalWalls(diagonalWalls, dungeon.Floor.FloorList, dungeon.Color);
     }
 
-    private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor, HashSet<Vector2Int> edges,  List<Vector2Int> anotherDungeonsEntrances)
+    private static HashSet<Vector2Int> FindWallsInCardinalDirections(HashSet<Vector2Int> floor, HashSet<Vector2Int> edges)
     {
         HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
 
@@ -25,7 +25,7 @@ public static class WallGenerator
 
             foreach (Vector2Int direction in Directions.cardinalDirectionsList)
             {
-                if((!floor.Contains(position + direction)) && !anotherDungeonsEntrances.Contains(position + direction))
+                if((!floor.Contains(position + direction)))
                 {
                     walls.Add(position + direction);
                     edges.Add(position);
@@ -35,29 +35,19 @@ public static class WallGenerator
         return walls;
     }
 
-    private static HashSet<Vector2Int> FindWallsInDiagonalDirections(HashSet<Vector2Int> floor, HashSet<Vector2Int> cardinalWalls, List<Vector2Int> anotherDungeonsEntrances)
+    private static HashSet<Vector2Int> FindWallsInDiagonalDirections(HashSet<Vector2Int> floor, HashSet<Vector2Int> cardinalWalls)
     {
         HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
-        bool isEntrance = false;
 
         foreach (Vector2Int position in floor)
         {
-            foreach (Vector2Int direction in Directions.cardinalDirectionsList)
-            {
-                if (anotherDungeonsEntrances.Contains(position + direction))
-                {
-                    isEntrance = true;
-                    break;
-                }
-            }
             foreach (Vector2Int direction in Directions.diagonalDirectionsList)
             {
-                if (!floor.Contains(position + direction) && !cardinalWalls.Contains(position + direction) && !isEntrance)
+                if (!floor.Contains(position + direction) && !cardinalWalls.Contains(position + direction))
                 {
                     walls.Add(position + direction);
                 }
             }
-            isEntrance = false;
         }
         return walls;
     }
