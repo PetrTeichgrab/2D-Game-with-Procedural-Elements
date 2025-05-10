@@ -55,6 +55,8 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private bool isTeleportedToFinalLevel;
 
+    private float hintCooldown = 5f;
+    private float nextHintTime = 0f;
     private void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
@@ -63,13 +65,26 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private void Update()
     {
+        Vector2 playerPosition = player.transform.position;
+
+        foreach (var part in dungeonParts)
+        {
+            if (Vector2.Distance(playerPosition, part.MonumentPosition) < 1.5f)
+            {
+                if (Time.time >= nextHintTime)
+                {
+                    AlertText.Instance.ShowAlert("USE [E] TO INPUT COLOR", 1.5f);
+                    nextHintTime = Time.time + hintCooldown;
+                }
+                break;
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Vector2Int playerPosition = Vector2Int.FloorToInt(new Vector2(player.transform.position.x, player.transform.position.y));
-
             foreach (var part in dungeonParts)
             {
-                if (Vector2Int.Distance(playerPosition, part.MonumentPosition) < 1.5f)
+                if (Vector2.Distance(playerPosition, part.MonumentPosition) < 1.5f)
                 {
                     CompletePart(part);
                     audioManager.PlaySFX(audioManager.placeColorCore);

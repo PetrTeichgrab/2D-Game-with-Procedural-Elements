@@ -22,9 +22,9 @@ public abstract class MeleeEnemy : Character
     protected bool isDashing;
     [SerializeField]
     private float lastAttackTime = 0f;
-    private Vector2 avoidDirection; // Pamatuje si aktuální smìr vyhýbání
-    private float avoidTimer = 0f;  // Èas vyhýbání pøekážce
-    private const float avoidDuration = 0.3f; // Délka èasu, po kterou se nepøítel vyhýbá pøekážce
+    private Vector2 avoidDirection;
+    private float avoidTimer = 0f; 
+    private const float avoidDuration = 0.3f;
     protected float dashCooldownTimer = 0f;
     private Vector2 lastKnownPlayerPosition;
     private bool isAvoidingObstacle = false;

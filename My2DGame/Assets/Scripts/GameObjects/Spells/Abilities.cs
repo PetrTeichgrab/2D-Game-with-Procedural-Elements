@@ -7,25 +7,25 @@ public class Abilities : MonoBehaviour
 {
     [Header("Ability 1 - Movement Speed")]
     public Image abilityImage1;
-    public float cooldown1 = 10;
+    public float cooldown1 = 25;
     private bool isCooldown1 = false;
     public KeyCode ability1 = KeyCode.Alpha1;
 
     [Header("Ability 2 - Attack Speed")]
     public Image abilityImage2;
-    public float cooldown2 = 10;
+    public float cooldown2 = 35;
     private bool isCooldown2 = false;
     public KeyCode ability2 = KeyCode.Alpha3;
 
     [Header("Ability 3 - Heal")]
     public Image abilityImage3;
-    public float cooldown3 = 15;
+    public float cooldown3 = 45;
     private bool isCooldown3 = false;
     public KeyCode ability3 = KeyCode.Alpha2;
 
     [Header("Ability 4 - Time Slow")]
     public Image abilityImage4;
-    public float cooldown4 = 20;
+    public float cooldown4 = 15;
     private bool isCooldown4 = false;
     public KeyCode ability4 = KeyCode.Alpha4;
 
