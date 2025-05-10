@@ -110,6 +110,7 @@ public class Player : Character
             Instance = this;
         }
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        
     }
 
     void Update()
@@ -135,22 +136,22 @@ public class Player : Character
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyUp(KeyCode.End))
+        if (Input.GetKeyUp(KeyCode.End) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             Suicide();
         }
 
-        if (Input.GetKeyUp(KeyCode.Delete))
+        if (Input.GetKeyUp(KeyCode.Delete) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             ResetStats();
         }
 
-        if (Input.GetKeyUp(KeyCode.M))
+        if (Input.GetKeyUp(KeyCode.M) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             money += 5000;
         }
 
-        if (Input.GetKeyUp(KeyCode.N))
+        if (Input.GetKeyUp(KeyCode.N) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             currentHP += 100;
         }

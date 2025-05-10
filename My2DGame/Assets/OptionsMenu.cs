@@ -1,12 +1,21 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
 {
     public TMP_Dropdown displayModeDropdown;
 
+    [SerializeField] private Toggle devToolsToggle;
+    [SerializeField] private Image toggleBackground;
+
     void Start()
     {
+        bool enabled = PlayerPrefs.GetInt("DevTools", 0) == 1;
+        devToolsToggle.isOn = enabled;
+        devToolsToggle.onValueChanged.AddListener(SetDevTools);
+        UpdateToggleColor(enabled);
+
         displayModeDropdown.onValueChanged.AddListener(SetDisplayMode);
         displayModeDropdown.value = Screen.fullScreen ? 0 : 1;
 
@@ -31,5 +40,17 @@ public class OptionsMenu : MonoBehaviour
             Screen.fullScreenMode = FullScreenMode.Windowed;
         else
             Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+    }
+    public void SetDevTools(bool isEnabled)
+    {
+        PlayerPrefs.SetInt("DevTools", isEnabled ? 1 : 0);
+        PlayerPrefs.Save();
+        UpdateToggleColor(isEnabled);
+    }
+
+    private void UpdateToggleColor(bool isEnabled)
+    {
+        if (toggleBackground != null)
+            toggleBackground.color = isEnabled ? Color.green : Color.white;
     }
 }

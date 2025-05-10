@@ -66,12 +66,12 @@ public class GreenDungeon : DungeonBehaviour
                 Completed = true;
             }
         }
-        if (Input.GetKeyDown(KeyCode.F3))
+        if (Input.GetKeyDown(KeyCode.F3) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             generator.Player.transform.position = new Vector3(GreenMushroomBossInstance.Position.x + 5, GreenMushroomBossInstance.Position.y + 5);
         }
 
-        if (Input.GetKeyDown(KeyCode.F4))
+        if (Input.GetKeyDown(KeyCode.F4) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             generator.Player.transform.position = new Vector3(GreenSlimeBossInstance.Position.x + 5, GreenSlimeBossInstance.Position.y + 5);
         }

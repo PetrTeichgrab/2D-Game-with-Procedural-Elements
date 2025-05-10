@@ -58,7 +58,7 @@ public class UndergroundBehaviour : DungeonBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.F5))
+        if (Input.GetKeyUp(KeyCode.F5) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             Player.transform.position = playerSaveInstance.transform.position + new Vector3(2,0,0);
         }

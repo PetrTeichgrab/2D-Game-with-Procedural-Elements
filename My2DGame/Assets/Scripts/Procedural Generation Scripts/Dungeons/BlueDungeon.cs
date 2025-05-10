@@ -51,7 +51,7 @@ public class BlueDungeon : DungeonBehaviour
                 Completed = true;
             }
         }
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             generator.Player.transform.position = new Vector3(BlueBossSlimeInstance.Position.x + 5, BlueBossSlimeInstance.Position.y + 5);
         }

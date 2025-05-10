@@ -112,21 +112,24 @@ public class FinalLevelGenerator : MonoBehaviour
             countdown.isCountdownForFinalLevel = true;
             AlertText.Instance.ShowAlert("PLACE ALL COLOR CORES TO THEIR RIGHT PLACE! CAREFUL! YOUR TIME IS LIMITED!", 5f);
         }
-        if (Input.GetKeyDown(KeyCode.U))
+        if (PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
-            player.transform.position = new Vector3(dungeonParts[0].MonumentPosition.x + 1, dungeonParts[0].MonumentPosition.y + 1, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            player.transform.position = new Vector3(dungeonParts[1].MonumentPosition.x + 1, dungeonParts[1].MonumentPosition.y + 1, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            player.transform.position = new Vector3(dungeonParts[2].MonumentPosition.x + 1, dungeonParts[2].MonumentPosition.y + 1, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            player.transform.position = new Vector3(dungeonParts[3].MonumentPosition.x + 1, dungeonParts[3].MonumentPosition.y + 1, 0);
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                player.transform.position = new Vector3(dungeonParts[0].MonumentPosition.x + 1, dungeonParts[0].MonumentPosition.y + 1, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                player.transform.position = new Vector3(dungeonParts[1].MonumentPosition.x + 1, dungeonParts[1].MonumentPosition.y + 1, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                player.transform.position = new Vector3(dungeonParts[2].MonumentPosition.x + 1, dungeonParts[2].MonumentPosition.y + 1, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                player.transform.position = new Vector3(dungeonParts[3].MonumentPosition.x + 1, dungeonParts[3].MonumentPosition.y + 1, 0);
+            }
         }
         if (AllCoresPlaced() && isTeleportedToFinalLevel)
         {

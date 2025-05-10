@@ -58,7 +58,7 @@ public class CastSpell : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKeyDown(KeyCode.Delete) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
             resetStats();
         }

@@ -63,12 +63,6 @@ public class LevelUpMenu : MonoBehaviour
             hasDisplayedLevelUp = true;
             StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
         }
-
-        //if (Input.GetKeyUp(KeyCode.M))
-        //{
-        //    hasDisplayedLevelUp = true;
-        //    StartCoroutine(ShowLevelUpButtonsAfterDelay(4f));
-        //}
     }
 
     private IEnumerator ShowLevelUpButtonsAfterDelay(float delay)
