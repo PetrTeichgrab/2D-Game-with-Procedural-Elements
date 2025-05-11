@@ -25,8 +25,11 @@ public class PortalBehaviour : MonoBehaviour
         {
             collision.transform.position = TargetPosition.position;
             Debug.Log("Teleportováno do " + TargetDungeon.name);
-            audioManager.PlaySFX(audioManager.teleport);
-            StartCoroutine(StartTeleportCooldown(player));
+            if (audioManager != null && audioManager.teleport != null)
+            {
+                audioManager.PlaySFX(audioManager.teleport);
+                StartCoroutine(StartTeleportCooldown(player));
+            }
         }
     }
 

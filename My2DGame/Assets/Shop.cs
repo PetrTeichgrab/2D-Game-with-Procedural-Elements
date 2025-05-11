@@ -39,6 +39,17 @@ public class Shop : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        if (player != null)
+        {
+            buyMovementSpeedSpellBtn.interactable = !player.hasMovementSpeedSpell && player.money >= MOVEMENT_SPEED_SPELL_PRICE;
+            buyAttackSpeedSpellBtn.interactable = !player.hasAttackSpeedSpell && player.money >= ATTACK_SPEED_SPELL_PRICE;
+            buyHealSpellBtn.interactable = !player.hasHealSpell && player.money >= HEAL_SPELL_PRICE;
+            buyTimeSlowSpellBtn.interactable = !player.hasTimeSlowSpell && player.money >= TIMESLOW_SPELL_PRICE;
+        }
+    }
+
     private void CloseShop()
     {
         gameObject.SetActive(false);

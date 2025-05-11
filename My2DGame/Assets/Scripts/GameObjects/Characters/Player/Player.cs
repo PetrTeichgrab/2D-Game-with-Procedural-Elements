@@ -136,7 +136,7 @@ public class Player : Character
             StartCoroutine(Dash());
         }
 
-        if (Input.GetKeyUp(KeyCode.End) && PlayerPrefs.GetInt("DevTools", 0) == 1)
+        if (Input.GetKeyUp(KeyCode.End))
         {
             Suicide();
         }
@@ -148,7 +148,7 @@ public class Player : Character
 
         if (Input.GetKeyUp(KeyCode.M) && PlayerPrefs.GetInt("DevTools", 0) == 1)
         {
-            money += 5000;
+            money += 100;
         }
 
         if (Input.GetKeyUp(KeyCode.N) && PlayerPrefs.GetInt("DevTools", 0) == 1)

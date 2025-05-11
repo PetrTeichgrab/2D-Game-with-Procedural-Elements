@@ -225,24 +225,21 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private Vector2Int PlaceMonumentInBounds(BoundsInt bounds)
     {
-        // Najít støed èásti
         Vector2Int center = new Vector2Int(bounds.xMin + bounds.size.x / 2, bounds.yMin + bounds.size.y / 2);
 
-        // Vytvoøit 3x3 místnost (podlahu)
         for (int x = center.x - 1; x <= center.x + 1; x++)
         {
             for (int y = center.y - 1; y <= center.y + 1; y++)
             {
                 Vector2Int position = new Vector2Int(x, y);
 
-                // Nastavit podlahu pouze v této oblasti
                 mazeFloor.Add(position);
                 mapCreator.DrawTile(floorTile, new Vector2Int(x, y));
-                colliderMap.SetTile(new Vector3Int(x, y, 0), null); // Odstranit kolizní dlaždici
+                colliderMap.SetTile(new Vector3Int(x, y, 0), null);
             }
         }
 
-        // Pøidat zdi kolem 3x3 místnosti, ale nezahrnovat je do mazeFloor
+        // Pøidat zdi kolem 3x3 místnosti
         for (int x = center.x - 2; x <= center.x + 2; x++)
         {
             for (int y = center.y - 2; y <= center.y + 2; y++)
@@ -251,41 +248,40 @@ public class FinalLevelGenerator : MonoBehaviour
                 if (x >= center.x - 1 && x <= center.x + 1 && y >= center.y - 1 && y <= center.y + 1)
                     continue;
 
-                // Ignorovat pozice vchodù
-                if ((x == center.x && y == center.y - 2) || // Dolní vchod
-                    (x == center.x && y == center.y + 2) || // Horní vchod
-                    (x == center.x - 2 && y == center.y) || // Levý vchod
-                    (x == center.x + 2 && y == center.y))   // Pravý vchod
+                if ((x == center.x && y == center.y - 2) ||
+                    (x == center.x && y == center.y + 2) ||
+                    (x == center.x - 2 && y == center.y) ||
+                    (x == center.x + 2 && y == center.y))  
                     continue;
 
                 Vector2Int wallPosition = new Vector2Int(x, y);
 
-                // Nastavit zdi (ale ne do mazeFloor)
-                mapCreator.DrawTile(wallTile, wallPosition); // Nastavit dlaždici zdi
+                // Nastavit zdi
+                mapCreator.DrawTile(wallTile, wallPosition);
                 mazeFloor.Remove(wallPosition);
-                AddCollider(wallPosition); // Pøidat kolizní dlaždici
+                AddCollider(wallPosition);
             }
         }
 
         // Pøidat vchody a zahrnout je do mazeFloor
         Vector2Int[] entrancePositions = new Vector2Int[]
         {
-        new Vector2Int(center.x, center.y - 2), // Spodní vchod
-        new Vector2Int(center.x - 2, center.y), // Levý vchod
-        new Vector2Int(center.x + 2, center.y), // Pravý vchod
-        new Vector2Int(center.x, center.y + 2),  // Horní vchod
-        new Vector2Int(center.x, center.y - 3), // Spodní vchod
-        new Vector2Int(center.x - 3, center.y), // Levý vchod
-        new Vector2Int(center.x + 3, center.y), // Pravý vchod
-        new Vector2Int(center.x, center.y + 3)  // Horní vchod
+        new Vector2Int(center.x, center.y - 2),
+        new Vector2Int(center.x - 2, center.y),
+        new Vector2Int(center.x + 2, center.y),
+        new Vector2Int(center.x, center.y + 2),
+        new Vector2Int(center.x, center.y - 3),
+        new Vector2Int(center.x - 3, center.y),
+        new Vector2Int(center.x + 3, center.y),
+        new Vector2Int(center.x, center.y + 3) 
         };
 
         Vector2Int[] cornerPositions = new Vector2Int[]
         {
-            new Vector2Int(center.x - 1, center.y - 1), // Levý dolní roh
-            new Vector2Int(center.x - 1, center.y + 1), // Levý horní roh
-            new Vector2Int(center.x + 1, center.y - 1), // Pravý dolní roh
-            new Vector2Int(center.x + 1, center.y + 1)  // Pravý horní roh
+            new Vector2Int(center.x - 1, center.y - 1),
+            new Vector2Int(center.x - 1, center.y + 1),
+            new Vector2Int(center.x + 1, center.y - 1),
+            new Vector2Int(center.x + 1, center.y + 1)
         };
 
         foreach (Vector2Int corner in cornerPositions)
@@ -305,14 +301,13 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private UnityEngine.Tilemaps.Tile GetColoredFloorTile(DungeonColor color)
     {
-        // Vrátit dlaždici na základì barvy
         return color switch
         {
-            DungeonColor.Pink => pinkFloorTile, // Rùžová dlaždice
-            DungeonColor.Blue => blueFloorTile, // Modrá dlaždice
-            DungeonColor.Green => greenFloorTile, // Zelená dlaždice
-            DungeonColor.Purple => purpleFloorTile, // Fialová dlaždice
-            _ => floorTile // Výchozí dlaždice
+            DungeonColor.Pink => pinkFloorTile,
+            DungeonColor.Blue => blueFloorTile,
+            DungeonColor.Green => greenFloorTile,
+            DungeonColor.Purple => purpleFloorTile,
+            _ => floorTile
         };
     }
 
@@ -362,7 +357,6 @@ public class FinalLevelGenerator : MonoBehaviour
             }
         }
 
-        // Pokud poèet navštívených políèek odpovídá poètu políèek v mazeFloor, bludištì je souvislé
         return visited.Count == mazeFloor.Count;
     }
 
@@ -373,7 +367,7 @@ public class FinalLevelGenerator : MonoBehaviour
             Vector2Int wallPosition = position + direction;
             if (!mazeFloor.Contains(wallPosition))
             {
-                mazeFloor.Add(wallPosition); // Zdi se považují za souèást "zaplnìných" pozic
+                mazeFloor.Add(wallPosition);
             }
         }
 
@@ -456,25 +450,19 @@ public class FinalLevelGenerator : MonoBehaviour
 
     private IEnumerator GradualFloorReplacement(FinalDungeonPart part)
     {
-        // Najít støed èásti
         Vector2Int center = new Vector2Int(part.Bounds.xMin + part.Bounds.size.x / 2, part.Bounds.yMin + part.Bounds.size.y / 2);
 
-        // Všechny pozice uvnitø hranic
         List<Vector2Int> positions = new List<Vector2Int>(GetPositionsInBounds(part.Bounds));
 
-        // Seøadit pozice podle vzdálenosti od støedu
         positions.Sort((a, b) => Vector2Int.Distance(a, center).CompareTo(Vector2Int.Distance(b, center)));
 
         float duration = 0.1f;
-        // Postupnì nahrazovat dlaždice
         foreach (var position in positions)
         {
             if (mazeFloor.Contains(position))
             {
-                // Nahradí dlaždici odpovídající barvou
                 mapCreator.DrawTile(GetColoredFloorTile(part.Color), position);
 
-                // Krátká prodleva mezi nahrazením dlaždic
                 yield return new WaitForSeconds(duration);
                 duration -= 0.001f;
             }

@@ -326,11 +326,10 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             Vector3 topLeft = new Vector3(bounds.min.x, bounds.max.y, 0);
             Vector3 topRight = new Vector3(bounds.max.x, bounds.max.y, 0);
 
-            // Draw lines to form the rectangle
-            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.red, 10f); // Bottom
-            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.red, 10f);  // Right
-            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.red, 10f);      // Top
-            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.red, 10f);    // Left
+            Debug.DrawLine(bottomLeft, bottomRight, UnityEngine.Color.red, 10f); 
+            Debug.DrawLine(bottomRight, topRight, UnityEngine.Color.red, 10f);  
+            Debug.DrawLine(topRight, topLeft, UnityEngine.Color.red, 10f);      
+            Debug.DrawLine(topLeft, bottomLeft, UnityEngine.Color.red, 10f);    
         }
     }
 
@@ -475,7 +474,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             {
                 var checkPos = new Vector2Int(position.x + x, position.y + y);
 
-                // Ovìøení, zda pozice je v místnosti a není obsazená
                 if (!room.FloorList.Contains(checkPos) || occupiedPositions.Contains(checkPos))
                 {
                     return false;
@@ -811,17 +809,14 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
 
     private void AddRandomHolesToFloor(HashSet<Vector2Int> floor, int minClusters, int maxClusters, int minClusterSize, int maxClusterSize)
     {
-        // Poèet shlukù dìr
         int clusterCount = UnityEngine.Random.Range(minClusters, maxClusters);
 
         List<Vector2Int> floorList = new List<Vector2Int>(floor);
 
         for (int i = 0; i < clusterCount; i++)
         {
-            // Vyber náhodnou poèáteèní pozici pro shluk
             Vector2Int clusterCenter = floorList[UnityEngine.Random.Range(0, floorList.Count)];
 
-            // Vytvoø díry okolo clusterCenter
             CreateClusterOfHoles(floor, clusterCenter, UnityEngine.Random.Range(minClusterSize, maxClusterSize));
         }
     }
@@ -834,7 +829,6 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerator
             {
                 Vector2Int holePosition = center + new Vector2Int(x, y);
 
-                // Odstranìní pozice pouze pokud existuje v podlaze
                 if (floor.Contains(holePosition))
                 {
                     floor.Remove(holePosition);
